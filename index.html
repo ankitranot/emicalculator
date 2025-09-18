@@ -10,13 +10,14 @@
         body {
             font-family: "Poppins", sans-serif;
             background: #f2f7f3;
+            /* Changed to align content at the top */
             display: flex;
-            justify-content: center;
+            justify-content: flex-start; /* Aligns content to the start (top) */
             align-items: center;
             flex-direction: column;
-            min-height: 100vh;
+            /* Removed min-height: 100vh to allow content to flow naturally */
             margin: 0;
-            padding: 15px;
+            padding: 15px; /* Add some padding to the body */
         }
         .card {
             background: #fff;
@@ -27,6 +28,7 @@
             max-width: 420px;
             transition: max-width 0.6s ease;
             position: relative;
+            margin-top: 50px; /* Add some top margin for spacing from the top of the page */
         }
         .card.expanded { max-width: 950px; }
         h2 {
@@ -163,27 +165,31 @@
         }
         .result-label {
             font-weight: 600;
-            font-size: 20px; /* Increased for mobile */
+            font-size: 20px;
             color: #555;
             display: block;
         }
         .result-value {
-            font-size: 32px; /* Increased for mobile */
+            font-size: 32px;
             font-weight: 700;
             color: #0b3d1c;
         }
         .result-label.highlighted {
-            font-size: 24px; /* Increased for mobile */
+            font-size: 24px;
         }
         .result-value.highlighted {
-            font-size: 44px; /* Increased for mobile */
+            font-size: 44px;
             font-weight: 900;
         }
 
-        /* Mobile-specific adjustments */
+        /* Mobile-specific adjustments to spacing and fonts */
         @media (max-width: 600px) {
             body { padding: 10px; }
-            .card { padding: 25px; border-radius: 14px; }
+            .card { 
+                padding: 25px; 
+                border-radius: 14px; 
+                margin-top: 20px; /* Reduced top margin for mobile */
+            }
             h2 { font-size: 24px; }
             label { font-size: 16px; margin-top: 20px; }
             input { padding: 16px; font-size: 16px; }
@@ -196,7 +202,11 @@
 
             table { font-size: 12px; }
             th, td { padding: 8px; }
-            .footer { font-size: 16px; padding: 10px; }
+            .footer { 
+                font-size: 16px; 
+                padding: 10px; 
+                margin-top: 15px; /* Reduced top margin for footer on mobile */
+            }
         }
     </style>
 </head>
