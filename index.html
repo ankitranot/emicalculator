@@ -132,14 +132,13 @@
             margin-top: 25px;
             transition: width 0.3s ease;
         }
-
-        /* NEW CSS for layout and styling */
+        
+        /* Layout for results and chart */
         .results-and-chart {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-
         @media (min-width: 768px) {
             .results-and-chart {
                 flex-direction: row;
@@ -158,42 +157,46 @@
             }
         }
         
+        /* Styling for the result text */
         .result-item {
             margin: 20px 0;
         }
         .result-label {
             font-weight: 600;
-            font-size: 20px;
+            font-size: 20px; /* Increased for mobile */
             color: #555;
             display: block;
         }
         .result-value {
-            font-size: 32px;
+            font-size: 32px; /* Increased for mobile */
             font-weight: 700;
             color: #0b3d1c;
         }
         .result-label.highlighted {
-            font-size: 24px;
+            font-size: 24px; /* Increased for mobile */
         }
         .result-value.highlighted {
-            font-size: 44px;
+            font-size: 44px; /* Increased for mobile */
             font-weight: 900;
         }
 
-        /* Media Queries for smaller screens */
+        /* Mobile-specific adjustments */
         @media (max-width: 600px) {
-            .card { padding: 20px; border-radius: 14px; }
-            h2 { font-size: 20px; }
-            input { padding: 12px; font-size: 14px; }
-            .btn { padding: 12px; font-size: 14px; }
-            .results-content { font-size: 13px; }
-            table { font-size: 11px; }
-            .footer { font-size: 18px; padding: 15px; }
+            body { padding: 10px; }
+            .card { padding: 25px; border-radius: 14px; }
+            h2 { font-size: 24px; }
+            label { font-size: 16px; margin-top: 20px; }
+            input { padding: 16px; font-size: 16px; }
+            .btn { padding: 16px; font-size: 18px; }
             
-            .result-label { font-size: 16px; }
-            .result-value { font-size: 24px; }
-            .result-label.highlighted { font-size: 18px; }
-            .result-value.highlighted { font-size: 30px; }
+            .result-label { font-size: 18px; }
+            .result-value { font-size: 28px; }
+            .result-label.highlighted { font-size: 22px; }
+            .result-value.highlighted { font-size: 36px; }
+
+            table { font-size: 12px; }
+            th, td { padding: 8px; }
+            .footer { font-size: 16px; padding: 10px; }
         }
     </style>
 </head>
@@ -306,7 +309,6 @@
                 }
             });
 
-            // Amortization schedule (YEAR-WISE collapsible)
             let balance = P;
             let scheduleHTML = "<h3>📑 Amortization Schedule</h3>";
             let currentDate = new Date();
