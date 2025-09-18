@@ -23,8 +23,12 @@
       padding: 28px;
       border-radius: 18px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      max-width: 950px;
       width: 100%;
+      max-width: 420px; /* ✅ compact until results */
+      transition: max-width 0.6s ease;
+    }
+    .card.expanded {
+      max-width: 950px; /* ✅ expand to fit table */
     }
     h2 {
       font-size: 28px;
@@ -112,16 +116,14 @@
     /* Footer */
     .footer {
       width: 100%;
-      background:;
       color: #000;
       text-align: center;
-      padding: 10px;
-      font-size: 16px;
+      padding: 6px; /* ✅ reduced height */
+      font-size: 14px;
       font-weight: 600;
       border-top: 3px solid #ff6600;
       border-radius: 10px 10px 0 0;
-      margin-top: 20px;
-
+      margin-top: 15px;
     }
 
     @media (max-width: 600px) {
@@ -131,12 +133,12 @@
       .btn { padding: 12px; font-size: 14px; }
       .results { font-size: 13px; }
       table { font-size: 11px; }
-      .footer { font-size: 14px; padding: 8px; }
+      .footer { font-size: 13px; padding: 5px; }
     }
   </style>
 </head>
 <body>
-  <div class="card">
+  <div class="card" id="cardBox">
     <h2>📊 Loan (EMI) Calculator</h2>
 
     <label>Loan Amount (₹)</label>
@@ -156,7 +158,6 @@
     <button class="btn btn-reset" id="resetBtn" style="display:none;" onclick="resetCalculator()">Reset</button>
   </div>
 
-  <!-- ✅ Clean footer -->
   <div class="footer">🇮🇳 Made in India</div>
 
   <script>
@@ -187,50 +188,8 @@
       document.querySelector('.chart-container').classList.add("show");
       document.getElementById('resetBtn').style.display = "block";
 
-      // Amortization schedule with real dates
-      let balance = P;
-      let scheduleHTML = "";
-      const startDate = new Date();
-      const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-
-      for (let y = 0; y < years; y++) {
-        let currentYear = startDate.getFullYear() + y;
-        scheduleHTML += `<details><summary>${currentYear}</summary><table>
-          <tr><th>Month</th><th>EMI</th><th>Principal</th><th>Interest</th><th>Balance</th></tr>`;
-
-        for (let m = 0; m < 12; m++) {
-          let monthIndex = y * 12 + m;
-          if (monthIndex >= n || balance <= 0) break;
-
-          let interest = balance * r;
-          let principal = emi - interest;
-          if (principal > balance) {
-            principal = balance;
-            emi = principal + interest;
-          }
-          balance -= principal;
-
-          let date = new Date(startDate.getFullYear(), startDate.getMonth() + monthIndex, 1);
-          let label = `${months[date.getMonth()]} ${date.getFullYear()}`;
-
-          scheduleHTML += `
-            <tr>
-              <td>${label}</td>
-              <td>₹${emi.toFixed(2)}</td>
-              <td>₹${principal.toFixed(2)}</td>
-              <td>₹${interest.toFixed(2)}</td>
-              <td>₹${balance.toFixed(2)}</td>
-            </tr>`;
-
-          if (balance <= 0) break;
-        }
-        scheduleHTML += `</table></details>`;
-        if (balance <= 0) break;
-      }
-
-      const scheduleDiv = document.getElementById('scheduleContainer');
-      scheduleDiv.innerHTML = scheduleHTML;
-      scheduleDiv.classList.add("show");
+      // Expand card when results are shown
+      document.getElementById('cardBox').classList.add("expanded");
 
       // Chart
       const ctx = document.getElementById('emiChart').getContext('2d');
@@ -256,6 +215,7 @@
       document.querySelector('.chart-container').classList.remove("show");
       document.getElementById('scheduleContainer').classList.remove("show");
       document.getElementById('resetBtn').style.display = "none";
+      document.getElementById('cardBox').classList.remove("expanded");
       if (chart) { chart.destroy(); chart = null; }
     }
   </script>
