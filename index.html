@@ -10,14 +10,12 @@
         body {
             font-family: "Poppins", sans-serif;
             background: #f2f7f3;
-            /* Changed to align content at the top */
             display: flex;
-            justify-content: flex-start; /* Aligns content to the start (top) */
+            justify-content: flex-start;
             align-items: center;
             flex-direction: column;
-            /* Removed min-height: 100vh to allow content to flow naturally */
             margin: 0;
-            padding: 15px; /* Add some padding to the body */
+            padding: 15px;
         }
         .card {
             background: #fff;
@@ -28,7 +26,7 @@
             max-width: 420px;
             transition: max-width 0.6s ease;
             position: relative;
-            margin-top: 50px; /* Add some top margin for spacing from the top of the page */
+            margin-top: 50px;
         }
         .card.expanded { max-width: 950px; }
         h2 {
@@ -135,7 +133,6 @@
             transition: width 0.3s ease;
         }
         
-        /* Layout for results and chart */
         .results-and-chart {
             display: flex;
             flex-direction: column;
@@ -159,7 +156,6 @@
             }
         }
         
-        /* Styling for the result text */
         .result-item {
             margin: 20px 0;
         }
@@ -203,9 +199,20 @@
             table { font-size: 12px; }
             th, td { padding: 8px; }
             .footer { 
-                font-size: 16px; 
-                padding: 10px; 
-                margin-top: 15px; /* Reduced top margin for footer on mobile */
+                /* Remove fixed width and border from the main footer container */
+                width: auto;
+                border-top: none;
+                
+                /* Adjust padding, font, and margin for mobile */
+                font-size: 18px; 
+                padding: 10px 0; 
+                margin-top: 15px;
+            }
+            .footer-content {
+                display: inline-block;
+                border-top: 6px solid #ff6600;
+                border-radius: 8px; /* Added border-radius for the orange line */
+                padding-top: 10px; /* Space between text and line */
             }
         }
     </style>
@@ -235,7 +242,9 @@
         <button class="btn btn-reset" id="resetBtn" style="display:none;" onclick="resetCalculator()">Reset</button>
     </div>
 
-    <div class="footer" id="footerLine">🇮🇳 Made in India</div>
+    <div class="footer" id="footerLine">
+        <span class="footer-content">🇮🇳 Made in India</span>
+    </div>
 
     <script>
         let chart;
@@ -244,7 +253,11 @@
         const footer = document.getElementById('footerLine');
 
         function adjustFooterWidth() {
-            footer.style.width = card.offsetWidth + 'px';
+            if (window.innerWidth > 600) {
+                footer.style.width = card.offsetWidth + 'px';
+            } else {
+                footer.style.width = '100%';
+            }
         }
 
         window.addEventListener('resize', adjustFooterWidth);
