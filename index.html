@@ -1,293 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loan (EMI) Calculator</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: #f2f7f3;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      min-height: 100vh;
-      margin: 0;
-      padding: 15px;
-    }
-    .card {
-      background: #fff;
-      padding: 38px;
-      border-radius: 18px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      width: 100%;
-      max-width: 420px;
-      transition: max-width 0.6s ease;
-      position: relative;
-    }
-    .card.expanded { max-width: 950px; }
-    h2 {
-      font-size: 28px;
-      margin-bottom: 15px;
-      font-weight: 800;
-      color: #0b3d1c;
-      text-align: center;
-    }
-    label {
-      display: block;
-      text-align: left;
-      font-weight: 500;
-      margin-top: 15px;
-      color: #0b3d1c;
-      font-size: 14px;
-    }
-    input {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      margin-top: 6px;
-      font-size: 15px;
-      font-family: "Poppins", sans-serif;
-      box-sizing: border-box;
-      transition: all 0.2s ease-in-out;
-    }
-    input:focus {
-      border-color: #0b3d1c;
-      outline: none;
-      box-shadow: 0 0 5px rgba(11, 61, 28, 0.2);
-    }
-    .btn {
-      margin-top: 22px;
-      width: 100%;
-      padding: 14px;
-      background: #0b3d1c;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-family: "Poppins", sans-serif;
-      transition: background 0.3s;
-    }
-    .btn:hover { background: #062e14; }
-    .btn-reset { background: #ff6600; margin-top: 12px; }
-    .btn-reset:hover { background: #cc5200; }
-    .results, .chart-container, .schedule-container {
-      max-height: 0;
-      opacity: 0;
-      overflow: hidden;
-      transition: all 0.6s ease;
-    }
-    .results.show, .chart-container.show, .schedule-container.show {
-      max-height: 3000px;
-      opacity: 1;
-      margin-top: 20px;
-    }
-    .results { font-size: 14px; font-weight: 500; line-height: 1.6; }
-    .chart-container { position: relative; width: 100%; height: 280px; margin-top: 15px; }
-    canvas { width: 100% !important; height: 100% !important; }
-    details {
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 8px;
-      background: #f9fdf9;
-    }
-    summary { font-weight: 600; cursor: pointer; padding: 6px; color: #0b3d1c; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      margin-top: 8px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 6px;
-      text-align: center;
-    }
-    th { background: #0b3d1c; color: #fff; position: sticky; top: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan (EMI) Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #f2f7f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 15px;
+        }
+        .card {
+            background: #fff;
+            padding: 38px;
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 420px;
+            transition: max-width 0.6s ease;
+            position: relative;
+        }
+        .card.expanded { max-width: 950px; }
+        h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: 800;
+            color: #0b3d1c;
+            text-align: center;
+        }
+        label {
+            display: block;
+            text-align: left;
+            font-weight: 500;
+            margin-top: 15px;
+            color: #0b3d1c;
+            font-size: 14px;
+        }
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            margin-top: 6px;
+            font-size: 15px;
+            font-family: "Poppins", sans-serif;
+            box-sizing: border-box;
+            transition: all 0.2s ease-in-out;
+        }
+        input:focus {
+            border-color: #0b3d1c;
+            outline: none;
+            box-shadow: 0 0 5px rgba(11, 61, 28, 0.2);
+        }
+        .btn {
+            margin-top: 22px;
+            width: 100%;
+            padding: 14px;
+            background: #0b3d1c;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: "Poppins", sans-serif;
+            transition: background 0.3s;
+        }
+        .btn:hover { background: #062e14; }
+        .btn-reset { background: #ff6600; margin-top: 12px; }
+        .btn-reset:hover { background: #cc5200; }
+        .results-container, .schedule-container {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.6s ease;
+        }
+        .results-container.show, .schedule-container.show {
+            max-height: 3000px;
+            opacity: 1;
+            margin-top: 20px;
+        }
+        .results-content { 
+            font-size: 14px; 
+            font-weight: 500; 
+            line-height: 1.6; 
+            text-align: left;
+        }
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            height: 280px; 
+            margin-top: 15px; 
+        }
+        canvas { width: 100% !important; height: 100% !important; }
+        details {
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 8px;
+            background: #f9fdf9;
+        }
+        summary { font-weight: 600; cursor: pointer; padding: 6px; color: #0b3d1c; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: center;
+        }
+        th { background: #0b3d1c; color: #fff; position: sticky; top: 0; }
+        .footer {
+            color: #000;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 22px;
+            font-weight: 800;
+            border-top: 6px solid #ff6600;
+            border-radius: 10px 10px 0 0;
+            margin-top: 25px;
+            transition: width 0.3s ease;
+        }
 
-    /* Footer */
-    .footer {
-      color: #000;
-      text-align: center;
-      padding: 20px 0;
-      font-size: 22px;
-      font-weight: 800;
-      border-top: 6px solid #ff6600;
-      border-radius: 10px 10px 0 0;
-      margin-top: 25px;
-      transition: width 0.3s ease;
-    }
+        /* NEW CSS for layout and styling */
+        .results-and-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    @media (max-width: 600px) {
-      .card { padding: 20px; border-radius: 14px; }
-      h2 { font-size: 20px; }
-      input { padding: 12px; font-size: 14px; }
-      .btn { padding: 12px; font-size: 14px; }
-      .results { font-size: 13px; }
-      table { font-size: 11px; }
-      .footer { font-size: 18px; padding: 15px; }
-    }
-  </style>
+        @media (min-width: 768px) {
+            .results-and-chart {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 40px;
+            }
+            .results-content {
+                flex: 1;
+                order: 0;
+            }
+            .chart-container {
+                flex: 1;
+                order: 1;
+                height: 350px;
+            }
+        }
+        
+        .result-item {
+            margin: 20px 0;
+        }
+        .result-label {
+            font-weight: 600;
+            font-size: 20px;
+            color: #555;
+            display: block;
+        }
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0b3d1c;
+        }
+        .result-label.highlighted {
+            font-size: 24px;
+        }
+        .result-value.highlighted {
+            font-size: 44px;
+            font-weight: 900;
+        }
+
+        /* Media Queries for smaller screens */
+        @media (max-width: 600px) {
+            .card { padding: 20px; border-radius: 14px; }
+            h2 { font-size: 20px; }
+            input { padding: 12px; font-size: 14px; }
+            .btn { padding: 12px; font-size: 14px; }
+            .results-content { font-size: 13px; }
+            table { font-size: 11px; }
+            .footer { font-size: 18px; padding: 15px; }
+            
+            .result-label { font-size: 16px; }
+            .result-value { font-size: 24px; }
+            .result-label.highlighted { font-size: 18px; }
+            .result-value.highlighted { font-size: 30px; }
+        }
+    </style>
 </head>
 <body>
-  <div class="card" id="cardBox">
-    <h2>📊 Loan (EMI) Calculator</h2>
+    <div class="card" id="cardBox">
+        <h2>📊 Loan (EMI) Calculator</h2>
 
-    <label>Loan Amount (₹)</label>
-    <input type="number" id="loanAmount" placeholder="Enter loan amount">
+        <label>Loan Amount (₹)</label>
+        <input type="number" id="loanAmount" placeholder="Enter loan amount">
 
-    <label>Annual Interest Rate (%)</label>
-    <input type="number" id="interestRate" step="0.01" placeholder="e.g. 8.5">
+        <label>Annual Interest Rate (%)</label>
+        <input type="number" id="interestRate" step="0.01" placeholder="e.g. 8.5">
 
-    <label>Loan Tenure (Years)</label>
-    <input type="number" id="loanTenure" placeholder="e.g. 5">
+        <label>Loan Tenure (Years)</label>
+        <input type="number" id="loanTenure" placeholder="e.g. 5">
 
-    <button class="btn" onclick="calculateEMI()">Calculate</button>
+        <button class="btn" onclick="calculateEMI()">Calculate</button>
 
-    <div class="results" id="results"></div>
-    <div class="chart-container"><canvas id="emiChart"></canvas></div>
-    <div class="schedule-container" id="scheduleContainer"></div>
-    <button class="btn btn-reset" id="resetBtn" style="display:none;" onclick="resetCalculator()">Reset</button>
-  </div>
+        <div class="results-container" id="resultsContainer">
+            <div class="results-and-chart">
+                <div class="results-content" id="results"></div>
+                <div class="chart-container"><canvas id="emiChart"></canvas></div>
+            </div>
+        </div>
+        <div class="schedule-container" id="scheduleContainer"></div>
+        <button class="btn btn-reset" id="resetBtn" style="display:none;" onclick="resetCalculator()">Reset</button>
+    </div>
 
-  <div class="footer" id="footerLine">🇮🇳 Made in India</div>
+    <div class="footer" id="footerLine">🇮🇳 Made in India</div>
 
-  <script>
-    let chart;
+    <script>
+        let chart;
 
-    const card = document.getElementById('cardBox');
-    const footer = document.getElementById('footerLine');
+        const card = document.getElementById('cardBox');
+        const footer = document.getElementById('footerLine');
 
-    function adjustFooterWidth() {
-      footer.style.width = card.offsetWidth + 'px';
-    }
-
-    window.addEventListener('resize', adjustFooterWidth);
-    adjustFooterWidth(); // initial call
-
-    function calculateEMI() {
-      const P = parseFloat(document.getElementById('loanAmount').value);
-      const annualRate = parseFloat(document.getElementById('interestRate').value);
-      const years = parseInt(document.getElementById('loanTenure').value);
-
-      if (!P || !annualRate || !years) {
-        alert("Please enter all values.");
-        return;
-      }
-
-      const n = years * 12; // total months
-      const daysInYear = 365;
-      const dailyRate = annualRate / 100 / daysInYear;
-      let balance = P;
-      let emi = 0;
-      let totalPayment = 0;
-
-      // Monthly EMI using daily reducing balance
-      for (let month = 1; month <= n; month++) {
-        let days = 30; // approximate days in month
-        let interest = balance * dailyRate * days;
-        let principal = P / n;
-        let monthlyEMI = principal + interest;
-        emi = monthlyEMI; // last EMI as reference
-        totalPayment += monthlyEMI;
-        balance -= principal;
-      }
-
-      const totalInterest = totalPayment - P;
-
-      document.getElementById('results').innerHTML = `
-        <p><strong>Monthly EMI:</strong> ₹${emi.toFixed(2)}</p>
-        <p><strong>Total Payment:</strong> ₹${totalPayment.toFixed(2)}</p>
-        <p><strong>Total Interest:</strong> ₹${totalInterest.toFixed(2)}</p>
-      `;
-      document.getElementById('results').classList.add("show");
-      document.querySelector('.chart-container').classList.add("show");
-      document.getElementById('resetBtn').style.display = "block";
-      document.getElementById('cardBox').classList.add("expanded");
-
-      adjustFooterWidth();
-
-      // Chart
-      const ctx = document.getElementById('emiChart').getContext('2d');
-      if (chart) chart.destroy();
-      chart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Principal', 'Interest'],
-          datasets: [{ data: [P, totalInterest], backgroundColor: ['#0b3d1c', '#ff6600'], borderWidth: 2 }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom', labels: { font: { family: "Poppins", size: 13 } } } }
-        }
-      });
-
-      // Amortization schedule (YEAR-WISE collapsible)
-      balance = P;
-      let scheduleHTML = "<h3>📑 Amortization Schedule</h3>";
-      let currentDate = new Date();
-      let startMonth = currentDate.getMonth();
-      let startYear = currentDate.getFullYear();
-      const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-
-      for (let year = 0; year < years; year++) {
-        scheduleHTML += `<details open><summary>Year ${startYear + year}</summary>`;
-        scheduleHTML += "<table><tr><th>Month</th><th>Principal (₹)</th><th>Interest (₹)</th><th>Balance (₹)</th></tr>";
-
-        for (let m = 0; m < 12; m++) {
-          let monthIndex = year * 12 + m;
-          if (monthIndex >= n) break;
-
-          let days = 30;
-          let interest = balance * dailyRate * days;
-          let principal = P / n;
-          let monthlyEMI = principal + interest;
-          balance -= principal;
-
-          let displayMonth = (startMonth + monthIndex) % 12;
-          let displayYear = startYear + Math.floor((startMonth + monthIndex) / 12);
-
-          scheduleHTML += `<tr>
-            <td>${monthNames[displayMonth]} ${displayYear}</td>
-            <td>${principal.toFixed(2)}</td>
-            <td>${interest.toFixed(2)}</td>
-            <td>${balance.toFixed(2)}</td>
-          </tr>`;
+        function adjustFooterWidth() {
+            footer.style.width = card.offsetWidth + 'px';
         }
 
-        scheduleHTML += "</table></details>";
-      }
+        window.addEventListener('resize', adjustFooterWidth);
+        adjustFooterWidth(); // initial call
 
-      const scheduleContainer = document.getElementById('scheduleContainer');
-      scheduleContainer.innerHTML = scheduleHTML;
-      scheduleContainer.classList.add("show");
-    }
+        function calculateEMI() {
+            const P = parseFloat(document.getElementById('loanAmount').value);
+            const annualRate = parseFloat(document.getElementById('interestRate').value);
+            const years = parseInt(document.getElementById('loanTenure').value);
 
-    function resetCalculator() {
-      document.getElementById('loanAmount').value = "";
-      document.getElementById('interestRate').value = "";
-      document.getElementById('loanTenure').value = "";
-      document.getElementById('results').classList.remove("show");
-      document.querySelector('.chart-container').classList.remove("show");
-      document.getElementById('scheduleContainer').classList.remove("show");
-      document.getElementById('resetBtn').style.display = "none";
+            if (!P || !annualRate || !years) {
+                alert("Please enter all values.");
+                return;
+            }
 
-      // Remove expanded class
-      document.getElementById('cardBox').classList.remove("expanded");
+            const n = years * 12; // total months
+            const dailyRate = annualRate / 100 / 365;
+            let totalInterest = 0;
+            let emi = 0;
 
-      // Destroy chart if exists
-      if (chart) { chart.destroy(); chart = null; }
+            const r = annualRate / 100 / 12;
+            const emiCalc = P * r * (Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+            emi = emiCalc;
+            const totalPayment = emi * n;
+            totalInterest = totalPayment - P;
 
-      // Adjust footer width after card shrink transition
-      setTimeout(adjustFooterWidth, 610); // slightly more than CSS transition (0.6s)
-    }
-  </script>
+            document.getElementById('results').innerHTML = `
+                <div class="result-item">
+                    <span class="result-label highlighted">Monthly <strong>EMI</strong>:</span>
+                    <span class="result-value highlighted">₹${emi.toFixed(2)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Payment:</span>
+                    <span class="result-value">₹${totalPayment.toFixed(2)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Interest:</span>
+                    <span class="result-value">₹${totalInterest.toFixed(2)}</span>
+                </div>
+            `;
+            document.getElementById('resultsContainer').classList.add("show");
+            document.getElementById('resetBtn').style.display = "block";
+            document.getElementById('cardBox').classList.add("expanded");
+            
+            adjustFooterWidth();
+
+            const ctx = document.getElementById('emiChart').getContext('2d');
+            if (chart) chart.destroy();
+            chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Principal', 'Interest'],
+                    datasets: [{ data: [P, totalInterest], backgroundColor: ['#0b3d1c', '#ff6600'], borderWidth: 2 }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: "Poppins", size: 13 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    let label = tooltipItem.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += '₹' + tooltipItem.raw.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Amortization schedule (YEAR-WISE collapsible)
+            let balance = P;
+            let scheduleHTML = "<h3>📑 Amortization Schedule</h3>";
+            let currentDate = new Date();
+            let startMonth = currentDate.getMonth();
+            let startYear = currentDate.getFullYear();
+            const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+            for (let year = 0; year < years; year++) {
+                scheduleHTML += `<details open><summary>Year ${startYear + year}</summary>`;
+                scheduleHTML += "<table><tr><th>Month</th><th>Principal (₹)</th><th>Interest (₹)</th><th>Balance (₹)</th></tr>";
+
+                for (let m = 0; m < 12; m++) {
+                    let monthIndex = year * 12 + m;
+                    if (monthIndex >= n) break;
+
+                    let monthlyInterest = balance * r;
+                    let monthlyPrincipal = emi - monthlyInterest;
+                    balance -= monthlyPrincipal;
+
+                    let displayMonth = (startMonth + monthIndex) % 12;
+                    let displayYear = startYear + Math.floor((startMonth + monthIndex) / 12);
+                    
+                    scheduleHTML += `<tr>
+                        <td>${monthNames[displayMonth]} ${displayYear}</td>
+                        <td>${monthlyPrincipal.toFixed(2)}</td>
+                        <td>${monthlyInterest.toFixed(2)}</td>
+                        <td>${Math.abs(balance.toFixed(2))}</td>
+                    </tr>`;
+                }
+
+                scheduleHTML += "</table></details>";
+            }
+
+            const scheduleContainer = document.getElementById('scheduleContainer');
+            scheduleContainer.innerHTML = scheduleHTML;
+            scheduleContainer.classList.add("show");
+        }
+
+        function resetCalculator() {
+            document.getElementById('loanAmount').value = "";
+            document.getElementById('interestRate').value = "";
+            document.getElementById('loanTenure').value = "";
+            document.getElementById('resultsContainer').classList.remove("show");
+            document.getElementById('scheduleContainer').classList.remove("show");
+            document.getElementById('resetBtn').style.display = "none";
+            document.getElementById('cardBox').classList.remove("expanded");
+            if (chart) { chart.destroy(); chart = null; }
+            setTimeout(adjustFooterWidth, 610);
+        }
+    </script>
 </body>
 </html>
