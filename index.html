@@ -13,6 +13,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
       min-height: 100vh;
       margin: 0;
       padding: 15px;
@@ -107,6 +108,22 @@
       text-align: center;
     }
     th { background: #0b3d1c; color: #fff; position: sticky; top: 0; }
+
+    /* Footer */
+    .footer {
+      width: 100%;
+      background:;
+      color: #000;
+      text-align: center;
+      padding: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      border-top: 3px solid #ff6600;
+      border-radius: 10px 10px 0 0;
+      margin-top: 20px;
+
+    }
+
     @media (max-width: 600px) {
       .card { padding: 20px; border-radius: 14px; }
       h2 { font-size: 20px; }
@@ -114,6 +131,7 @@
       .btn { padding: 12px; font-size: 14px; }
       .results { font-size: 13px; }
       table { font-size: 11px; }
+      .footer { font-size: 14px; padding: 8px; }
     }
   </style>
 </head>
@@ -137,6 +155,9 @@
     <div class="schedule-container" id="scheduleContainer"></div>
     <button class="btn btn-reset" id="resetBtn" style="display:none;" onclick="resetCalculator()">Reset</button>
   </div>
+
+  <!-- ✅ Clean footer -->
+  <div class="footer">🇮🇳 Made in India</div>
 
   <script>
     let chart;
