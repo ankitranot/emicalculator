@@ -24,12 +24,10 @@
       border-radius: 18px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.08);
       width: 100%;
-      max-width: 420px; /* ✅ compact until results */
+      max-width: 420px;
       transition: max-width 0.6s ease;
     }
-    .card.expanded {
-      max-width: 950px; /* ✅ expand to fit table */
-    }
+    .card.expanded { max-width: 950px; }
     h2 {
       font-size: 28px;
       margin-bottom: 15px;
@@ -118,9 +116,9 @@
       width: 100%;
       color: #000;
       text-align: center;
-      padding: 24px; /* ✅ reduced height */
-      font-size: 14px;
-      font-weight: 600;
+      padding: 30px;
+      font-size: 22px; /* ✅ Bigger font */
+      font-weight: 800; /* ✅ Bold */
       border-top: 6px solid #ff6600;
       border-radius: 10px 10px 0 0;
       margin-top: 25px;
@@ -133,7 +131,7 @@
       .btn { padding: 12px; font-size: 14px; }
       .results { font-size: 13px; }
       table { font-size: 11px; }
-      .footer { font-size: 13px; padding: 5px; }
+      .footer { font-size: 18px; padding: 15px; }
     }
   </style>
 </head>
@@ -187,8 +185,6 @@
       document.getElementById('results').classList.add("show");
       document.querySelector('.chart-container').classList.add("show");
       document.getElementById('resetBtn').style.display = "block";
-
-      // Expand card when results are shown
       document.getElementById('cardBox').classList.add("expanded");
 
       // Chart
@@ -205,6 +201,42 @@
           plugins: { legend: { position: 'bottom', labels: { font: { family: "Poppins", size: 13 } } } }
         }
       });
+
+      // Amortization schedule
+      let balance = P;
+      let scheduleHTML = "<h3>📑 Amortization Schedule</h3>";
+      let currentDate = new Date();
+      let startMonth = currentDate.getMonth();
+      let startYear = currentDate.getFullYear();
+      const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+      for (let year = 0; year < years; year++) {
+        scheduleHTML += `<details open><summary>Year ${startYear + year}</summary>`;
+        scheduleHTML += "<table><tr><th>Month</th><th>Principal (₹)</th><th>Interest (₹)</th><th>Balance (₹)</th></tr>";
+
+        for (let m = 0; m < 12; m++) {
+          if (year * 12 + m >= n) break;
+
+          let interest = balance * r;
+          let principal = emi - interest;
+          balance -= principal;
+
+          let displayMonth = (startMonth + m + (year*12)) % 12;
+          let displayYear = startYear + Math.floor((startMonth + m + (year*12)) / 12);
+
+          scheduleHTML += `<tr>
+            <td>${monthNames[displayMonth]} ${displayYear}</td>
+            <td>${principal.toFixed(2)}</td>
+            <td>${interest.toFixed(2)}</td>
+            <td>${balance.toFixed(2)}</td>
+          </tr>`;
+        }
+        scheduleHTML += "</table></details>";
+      }
+
+      const scheduleContainer = document.getElementById('scheduleContainer');
+      scheduleContainer.innerHTML = scheduleHTML;
+      scheduleContainer.classList.add("show");
     }
 
     function resetCalculator() {
