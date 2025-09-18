@@ -278,9 +278,15 @@
       document.querySelector('.chart-container').classList.remove("show");
       document.getElementById('scheduleContainer').classList.remove("show");
       document.getElementById('resetBtn').style.display = "none";
+
+      // Remove expanded class
       document.getElementById('cardBox').classList.remove("expanded");
+
+      // Destroy chart if exists
       if (chart) { chart.destroy(); chart = null; }
-      adjustFooterWidth();
+
+      // Adjust footer width after card shrink transition
+      setTimeout(adjustFooterWidth, 610); // slightly more than CSS transition (0.6s)
     }
   </script>
 </body>
