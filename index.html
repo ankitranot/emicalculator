@@ -262,7 +262,34 @@
         }
         .faq-section {
             margin-top: 25px;
-            max-width: 500px;
+            width: 100%;
+            max-width: 950px; /* match the card width */
+        }
+
+        .faq-section details {
+            width: 100%;
+        }
+
+        .faq-section summary {
+            display: block;        /* makes summary take full width */
+            width: 100%;
+            padding: 10px 15px;  /* padding for readability */
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .faq-section details[open] summary {
+            background: #e6f0e6; /* slightly different background when expanded */
+        }
+
+        /* Optional: make answer text full width */
+        .faq-section details p,
+        .faq-section details ul {
+            margin-left: 20px;
+            margin-top: 8px;
+            margin-bottom: 12px;
         }
         .contact-text {
             max-width: 950px;
@@ -664,65 +691,81 @@
             for (let year = 0; year < years; year++) {
                 scheduleHTML += `<details><summary>${currentText.year} ${startYear + year}</summary>`;
                 scheduleHTML += `<table><tr><th>${currentText.month}</th><th>${currentText.principal}</th><th>${currentText.interest}</th><th>${currentText.balance}</th></tr>`;
-                for (let m = 0; m < 12; m++) {
-                    let monthIndex = year * 12 + m;
-                    if (monthIndex >= n) break;
-                    let monthlyInterest = balance * r;
-                    let monthlyPrincipal = emiCalc - monthlyInterest;
-                    balance -= monthlyPrincipal;
-                    let displayMonth = (startMonth + monthIndex) % 12;
-                    let displayYear = startYear + Math.floor((startMonth + monthIndex) / 12);
+                
+                const monthsInYear = (year === years - 1) ? (n % 12 === 0 ? 12 : n % 12) : 12;
+
+                for (let i = 0; i < monthsInYear; i++) {
+                    const interestPayment = balance * r;
+                    const principalPayment = emiCalc - interestPayment;
+                    balance -= principalPayment;
+                    if (balance < 0) balance = 0; // Prevent negative balance
+
+                    const monthIndex = (startMonth + i) % 12;
+                    const displayMonth = months[monthIndex];
+                    
                     scheduleHTML += `<tr>
-                        <td>${months[displayMonth]} ${displayYear}</td>
-                        <td>${Math.round(monthlyPrincipal).toLocaleString('en-IN')}</td>
-                        <td>${Math.round(monthlyInterest).toLocaleString('en-IN')}</td>
-                        <td>${Math.round(Math.abs(balance)).toLocaleString('en-IN')}</td>
+                        <td>${displayMonth}</td>
+                        <td>₹${Math.round(principalPayment).toLocaleString('en-IN')}</td>
+                        <td>₹${Math.round(interestPayment).toLocaleString('en-IN')}</td>
+                        <td>₹${Math.round(balance).toLocaleString('en-IN')}</td>
                     </tr>`;
                 }
-                scheduleHTML += "</table></details>";
+                scheduleHTML += `</table></details>`;
             }
             generatedScheduleHTML = scheduleHTML;
-            
+
+            // Show results and resize card
             card.classList.add('expanded');
             resultsAndChartContainer.classList.add('show');
+            document.getElementById('resetBtn').style.display = 'block';
             showScheduleBtn.style.display = 'block';
-            document.getElementById('resetBtn').style.display = "block";
+            
+            // Hide schedule if it was open
+            scheduleContainer.classList.remove('show');
+            scheduleContainer.innerHTML = '';
+
+            adjustFooterWidth();
             
             if (scrollToResults) {
-                setTimeout(() => {
-                    const resultsElement = document.getElementById('results');
-                    if (resultsElement) {
-                        resultsElement.scrollIntoView({ behavior: 'smooth' });
-                    }
-                }, 600); 
+                resultsAndChartContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
 
         function showAmortizationTable() {
             scheduleContainer.innerHTML = generatedScheduleHTML;
-            scheduleContainer.classList.add('show');
-            showScheduleBtn.style.display = 'none';
+            scheduleContainer.classList.toggle('show');
+            
+            if (scheduleContainer.classList.contains('show')) {
+                const lang = document.getElementById('language-select').value;
+                const currentText = translations[lang];
+                document.getElementById('showScheduleBtn').textContent = "Hide Amortization Schedule";
+                // Scroll to the schedule to make it visible
+                scheduleContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                const lang = document.getElementById('language-select').value;
+                const currentText = translations[lang];
+                document.getElementById('showScheduleBtn').textContent = currentText.showSchedule;
+            }
         }
 
         function resetCalculator() {
-            document.getElementById('loanAmount').value = "";
-            document.getElementById('interestRate').value = "";
-            document.getElementById('loanTenure').value = "";
-            
+            document.getElementById('loanAmount').value = '';
+            document.getElementById('interestRate').value = '';
+            document.getElementById('loanTenure').value = '';
+            resultsDiv.innerHTML = '';
+            scheduleContainer.innerHTML = '';
+            card.classList.remove('expanded');
             resultsAndChartContainer.classList.remove('show');
             scheduleContainer.classList.remove('show');
+            document.getElementById('resetBtn').style.display = 'none';
             showScheduleBtn.style.display = 'none';
-            resultsDiv.innerHTML = '';
-            
-            card.classList.remove('expanded');
-            document.getElementById('resetBtn').style.display = "none";
-            if (chart) { chart.destroy(); chart = null; }
-            setTimeout(adjustFooterWidth, 610);
+            if (chart) chart.destroy();
+            adjustFooterWidth();
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
+        // Initialize language on page load
+        document.addEventListener('DOMContentLoaded', () => {
             setLanguage();
-            adjustFooterWidth();
         });
     </script>
 </body>
