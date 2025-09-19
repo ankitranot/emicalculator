@@ -20,13 +20,13 @@
         .card {
             background: #fff;
             padding: 38px;
-            border-radius: 18px; /* Default border-radius for larger screens */
+            border-radius: 18px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             width: 100%;
             max-width: 420px;
             transition: max-width 0.6s ease;
             position: relative;
-            margin-top: 50px;
+            margin-top: 0; /* Changed to 0 */
         }
         .card.expanded { max-width: 950px; }
         h2 {
@@ -88,17 +88,17 @@
             opacity: 1;
             margin-top: 20px;
         }
-        .results-content { 
-            font-size: 14px; 
-            font-weight: 500; 
-            line-height: 1.6; 
+        .results-content {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.6;
             text-align: left;
         }
-        .chart-container { 
-            position: relative; 
-            width: 100%; 
-            height: 280px; 
-            margin-top: 15px; 
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            margin-top: 15px;
         }
         canvas { width: 100% !important; height: 100% !important; }
         details {
@@ -129,10 +129,10 @@
             font-weight: 800;
             border-top: 6px solid #ff6600;
             border-radius: 10px 10px 0 0;
-            margin-top: 25px;
+            margin: 25px 0 25px 0; /* Adjusted for equal spacing */
             transition: width 0.3s ease;
         }
-        
+
         .results-and-chart {
             display: flex;
             flex-direction: column;
@@ -155,7 +155,7 @@
                 height: 350px;
             }
         }
-        
+
         .result-item {
             margin: 20px 0;
         }
@@ -177,35 +177,73 @@
             font-size: 44px;
             font-weight: 900;
         }
-
+        .emi-info {
+            max-width: 950px;
+            margin-top: 30px;
+            /* Removed the following lines to remove the card background */
+            /* padding: 20px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08); */
+            line-height: 1.6;
+        }
+        .emi-info h3, .emi-info h4 {
+            color: #0b3d1c;
+            font-weight: 700;
+        }
+        .emi-info ul {
+            padding-left: 20px;
+        }
+        .language-switcher {
+            text-align: center;
+            margin: 25px 0 25px 0; /* Adjusted for equal spacing */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .language-switcher select {
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-family: "Poppins", sans-serif;
+        }
+        .language-switcher label {
+            margin: 0;
+            font-weight: 500;
+            color: #0b3d1c;
+            font-size: 14px;
+        }
+        
         /* Mobile-specific adjustments */
         @media (max-width: 600px) {
-            body { 
-                padding: 10px 20px; /* Increased horizontal padding */
+            body {
+                padding: 10px 20px;
             }
-            .card { 
-                padding: 20px; /* Reduced padding to make the card smaller */
-                border-radius: 30px; /* Unified border-radius for a consistent curve */
-                margin-top: 20px; /* Reduced top margin for mobile */
+            .card {
+                padding: 20px;
+                max-width: 100%;
+                border-radius: 30px;
+                margin-top: 0; /* Changed to 0 */
             }
-            h2 { font-size: 22px; } /* Smaller font size for heading */
-            label { font-size: 14px; margin-top: 15px; } /* Smaller font size for labels */
-            input { padding: 12px; font-size: 14px; } /* Smaller input fields */
-            .btn { padding: 14px; font-size: 16px; } /* Smaller button */
-            
-            .result-label { font-size: 16px; } /* Smaller result labels */
-            .result-value { font-size: 24px; } /* Smaller result values */
+            h2 { font-size: 22px; }
+            label { font-size: 14px; margin-top: 15px; }
+            input { padding: 12px; font-size: 14px; }
+            .btn { padding: 14px; font-size: 16px; }
+
+            .result-label { font-size: 16px; }
+            .result-value { font-size: 24px; }
             .result-label.highlighted { font-size: 20px; }
             .result-value.highlighted { font-size: 32px; }
 
-            table { font-size: 11px; } /* Smaller table font */
-            th, td { padding: 6px; } /* Smaller table padding */
-            .footer { 
+            table { font-size: 11px; }
+            th, td { padding: 6px; }
+            .footer {
                 width: auto;
                 border-top: none;
-                font-size: 16px; 
-                padding: 10px 0; 
-                margin-top: 15px;
+                font-size: 16px;
+                padding: 10px 0;
+                margin: 15px 0; /* Adjusted for equal spacing */
             }
             .footer-content {
                 display: inline-block;
@@ -213,19 +251,35 @@
                 border-radius: 8px;
                 padding-top: 10px;
             }
+            .emi-info {
+                max-width: 100%;
+                padding: 15px;
+                margin-top: 20px;
+            }
+            .language-switcher {
+                text-align: center;
+                margin: 15px 0; /* Adjusted for equal spacing */
+            }
         }
     </style>
 </head>
 <body>
+    <div class="language-switcher">
+        <label for="language-select">Language:</label>
+        <select id="language-select" onchange="setLanguage()">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+        </select>
+    </div>
     <div class="card" id="cardBox">
-        <h2>📊 Loan (EMI) Calculator</h2>
-        <label>Loan Amount (₹)</label>
+        <h2 id="calculatorTitle">📊 Loan (EMI) Calculator</h2>
+        <label id="labelLoanAmount">Loan Amount (₹)</label>
         <input type="number" id="loanAmount" placeholder="Enter loan amount">
-        <label>Annual Interest Rate (%)</label>
+        <label id="labelInterestRate">Annual Interest Rate (%)</label>
         <input type="number" id="interestRate" step="0.01" placeholder="e.g. 8.5">
-        <label>Loan Tenure (Years)</label>
+        <label id="labelLoanTenure">Loan Tenure (Years)</label>
         <input type="number" id="loanTenure" placeholder="e.g. 5">
-        <button class="btn" onclick="calculateEMI()">Calculate</button>
+        <button class="btn" id="calculateBtn" onclick="calculateEMI()">Calculate</button>
         <div class="results-container" id="resultsContainer">
             <div class="results-and-chart">
                 <div class="results-content" id="results"></div>
@@ -236,30 +290,134 @@
         <button class="btn btn-reset" id="resetBtn" style="display:none;" onclick="resetCalculator()">Reset</button>
     </div>
     <div class="footer" id="footerLine">
-        <span class="footer-content">🇮🇳 Made in India</span>
+        <span class="footer-content" id="footerText">🇮🇳 Made in India</span>
     </div>
     <div class="emi-info">
-        <h3>What is EMI?</h3>
-        <p>An <b>Equated Monthly Installment (EMI)</b> is a fixed payment you make to a lender each month to repay a loan over a set period. It's designed to simplify your repayment schedule by combining both the <b>principal loan amount</b> and the <b>interest</b> due into a single, predictable monthly payment.</p>
-        <p>Think of it as a consistent, manageable sum that helps you systematically pay off your debt.</p>
-        <p>Over time, the composition of your EMI changes. In the early stages of your loan, a larger portion of your EMI goes toward paying off the <b>interest</b>. As you continue to make payments, this proportion shifts, and a greater share of each EMI is allocated to reducing the <b>principal</b> balance. While the monthly amount you pay remains the same, the breakdown of principal and interest within that amount is constantly adjusting. This process is known as <b>amortization</b>.</p>
-        <h4>The EMI Formula</h4>
-        <p>The standard formula for calculating EMI is:
+        <h3 id="emiInfoTitle">What is EMI?</h3>
+        <p id="emiInfoPara1">An <b>Equated Monthly Installment (EMI)</b> is a fixed payment you make to a lender each month to repay a loan over a set period. It's designed to simplify your repayment schedule by combining both the <b>principal loan amount</b> and the <b>interest</b> due into a single, predictable monthly payment.</p>
+        <p id="emiInfoPara2">Think of it as a consistent, manageable sum that helps you systematically pay off your debt.</p>
+        <p id="emiInfoPara3">Over time, the composition of your EMI changes. In the early stages of your loan, a larger portion of your EMI goes toward paying off the <b>interest</b>. As you continue to make payments, this proportion shifts, and a greater share of each EMI is allocated to reducing the <b>principal</b> balance. While the monthly amount you pay remains the same, the breakdown of principal and interest within that amount is constantly adjusting. This process is known as <b>amortization</b>.</p>
+        <h4 id="emiFormulaTitle">The EMI Formula</h4>
+        <p id="emiFormulaPara1">The standard formula for calculating EMI is:
         $EMI = P \times \frac{r \times (1+r)^n}{(1+r)^n - 1}$</p>
-        <p>Where:
+        <p id="emiFormulaPara2">Where:
         <ul>
             <li>$P$ = Principal Loan Amount</li>
             <li>$r$ = Monthly Interest Rate (Annual Rate / 12 / 100)</li>
             <li>$n$ = Loan Tenure in Months</li>
         </ul>
         </p>
-        <p>For example, if you borrow ₹10,00,000 at an annual interest rate of 10.5% for 10 years (120 months), your monthly EMI would be approximately ₹13,493. This means you will pay a total of ₹16,19,220 over the loan term, with ₹6,19,220 of that being the interest.</p>
-        <p>Calculating this manually can be tedious and prone to errors. Our EMI calculator automates this process, providing you with instant, accurate results along with a detailed amortization schedule and visual charts to help you understand your loan repayment journey.</p>
+        <p id="emiExamplePara">For example, if you borrow ₹10,00,000 at an annual interest rate of 10.5% for 10 years (120 months), your monthly EMI would be approximately ₹13,493. This means you will pay a total of ₹16,19,220 over the loan term, with ₹6,19,220 of that being the interest.</p>
+        <p id="emiConclusionPara">Calculating this manually can be tedious and prone to errors. Our EMI calculator automates this process, providing you with instant, accurate results along with a detailed amortization schedule and visual charts to help you understand your loan repayment journey.</p>
     </div>
     <script>
         let chart;
         const card = document.getElementById('cardBox');
         const footer = document.getElementById('footerLine');
+
+        const translations = {
+            en: {
+                title: "📊 Loan (EMI) Calculator",
+                loanAmount: "Loan Amount (₹)",
+                interestRate: "Annual Interest Rate (%)",
+                loanTenure: "Loan Tenure (Years)",
+                calculate: "Calculate",
+                reset: "Reset",
+                monthlyEmi: "Monthly <strong>EMI</strong>:",
+                totalPayment: "Total Payment:",
+                totalInterest: "Total Interest:",
+                amortizationSchedule: "📑 Amortization Schedule",
+                year: "Year",
+                month: "Month",
+                principal: "Principal (₹)",
+                interest: "Interest (₹)",
+                balance: "Balance (₹)",
+                madeInIndia: "🇮🇳 Made in India",
+                chartPrincipal: "Principal",
+                chartInterest: "Interest",
+                infoTitle: "What is EMI?",
+                infoPara1: "An <b>Equated Monthly Installment (EMI)</b> is a fixed payment you make to a lender each month to repay a loan over a set period. It's designed to simplify your repayment schedule by combining both the <b>principal loan amount</b> and the <b>interest</b> due into a single, predictable monthly payment.",
+                infoPara2: "Think of it as a consistent, manageable sum that helps you systematically pay off your debt.",
+                infoPara3: "Over time, the composition of your EMI changes. In the early stages of your loan, a larger portion of your EMI goes toward paying off the <b>interest</b>. As you continue to make payments, this proportion shifts, and a greater share of each EMI is allocated to reducing the <b>principal</b> balance. While the monthly amount you pay remains the same, the breakdown of principal and interest within that amount is constantly adjusting. This process is known as <b>amortization</b>.",
+                formulaTitle: "The EMI Formula",
+                formulaPara1: "The standard formula for calculating EMI is:",
+                formulaPara2: "Where:",
+                examplePara: "For example, if you borrow ₹10,00,000 at an annual interest rate of 10.5% for 10 years (120 months), your monthly EMI would be approximately ₹13,493. This means you will pay a total of ₹16,19,220 over the loan term, with ₹6,19,220 of that being the interest.",
+                conclusionPara: "Calculating this manually can be tedious and prone to errors. Our EMI calculator automates this process, providing you with instant, accurate results along with a detailed amortization schedule and visual charts to help you understand your loan repayment journey."
+            },
+            hi: {
+                title: "📊 लोन (EMI) कैलकुलेटर",
+                loanAmount: "लोन की राशि (₹)",
+                interestRate: "वार्षिक ब्याज दर (%)",
+                loanTenure: "लोन की अवधि (साल)",
+                calculate: "गणना करें",
+                reset: "रीसेट करें",
+                monthlyEmi: "मासिक <strong>ईएमआई</strong>:",
+                totalPayment: "कुल भुगतान:",
+                totalInterest: "कुल ब्याज:",
+                amortizationSchedule: "📑 चुकौती सारणी",
+                year: "वर्ष",
+                month: "महीना",
+                principal: "मूलधन (₹)",
+                interest: "ब्याज (₹)",
+                balance: "बकाया (₹)",
+                madeInIndia: "🇮🇳 भारत में निर्मित",
+                chartPrincipal: "मूलधन",
+                chartInterest: "ब्याज",
+                infoTitle: "ईएमआई क्या है?",
+                infoPara1: "<b>समान मासिक किस्त (ईएमआई)</b> एक निश्चित भुगतान है जो आप एक निश्चित अवधि में ऋण चुकाने के लिए हर महीने एक ऋणदाता को करते हैं। इसे आपके चुकौती कार्यक्रम को सरल बनाने के लिए डिज़ाइन किया गया है, जिसमें <b>मूल ऋण राशि</b> और देय <b>ब्याज</b> दोनों को एक ही, अनुमानित मासिक भुगतान में जोड़ा जाता है।",
+                infoPara2: "इसे एक सुसंगत, प्रबंधनीय राशि के रूप में सोचें जो आपको व्यवस्थित रूप से अपना ऋण चुकाने में मदद करती है।",
+                infoPara3: "समय के साथ, आपकी ईएमआई की संरचना बदल जाती है। आपके ऋण के शुरुआती चरणों में, आपकी ईएमआई का एक बड़ा हिस्सा <b>ब्याज</b> चुकाने में जाता है। जैसे-जैसे आप भुगतान करना जारी रखते हैं, यह अनुपात बदलता है, और प्रत्येक ईएमआई का एक बड़ा हिस्सा <b>मूलधन</b> शेष को कम करने के लिए आवंटित किया जाता है। जबकि आपके द्वारा भुगतान की जाने वाली मासिक राशि समान रहती है, उस राशि के भीतर मूलधन और ब्याज का विभाजन लगातार समायोजित हो रहा है। इस प्रक्रिया को <b>ऋण परिशोधन</b> कहा जाता है।",
+                formulaTitle: "ईएमआई सूत्र",
+                formulaPara1: "ईएमआई की गणना का मानक सूत्र है:",
+                formulaPara2: "जहाँ:",
+                examplePara: "उदाहरण के लिए, यदि आप 10 साल (120 महीने) के लिए 10.5% की वार्षिक ब्याज दर पर ₹10,00,000 उधार लेते हैं, तो आपकी मासिक ईएमआई लगभग ₹13,493 होगी। इसका मतलब है कि आप ऋण अवधि के दौरान कुल ₹16,19,220 का भुगतान करेंगे, जिसमें से ₹6,19,220 ब्याज होगा।",
+                conclusionPara: "इसकी मैन्युअल रूप से गणना करना थकाऊ और त्रुटियों की संभावना वाला हो सकता है। हमारा ईएमआई कैलकुलेटर इस प्रक्रिया को स्वचालित करता है, जो आपको अपनी ऋण चुकौती यात्रा को समझने में मदद करने के लिए एक विस्तृत चुकौती सारणी और दृश्य चार्ट के साथ तुरंत, सटीक परिणाम प्रदान करता है।"
+            }
+        };
+
+        const monthNames = {
+            en: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+            hi: ["जनवरी","फरवरी","मार्च","अप्रैल","मई","जून","जुलाई","अगस्त","सितंबर","अक्टूबर","नवंबर","दिसंबर"]
+        };
+
+        function setLanguage() {
+            const lang = document.getElementById('language-select').value;
+            const currentText = translations[lang];
+
+            document.title = currentText.title.replace('📊 ', '');
+            document.getElementById('calculatorTitle').textContent = currentText.title;
+            document.getElementById('labelLoanAmount').textContent = currentText.loanAmount;
+            document.getElementById('loanAmount').placeholder = lang === 'en' ? "Enter loan amount" : "लोन की राशि दर्ज करें";
+            document.getElementById('labelInterestRate').textContent = currentText.interestRate;
+            document.getElementById('interestRate').placeholder = "e.g. 8.5";
+            document.getElementById('labelLoanTenure').textContent = currentText.loanTenure;
+            document.getElementById('loanTenure').placeholder = lang === 'en' ? "e.g. 5" : "उदा. 5";
+            document.getElementById('calculateBtn').textContent = currentText.calculate;
+            document.getElementById('resetBtn').textContent = currentText.reset;
+            document.getElementById('footerText').textContent = currentText.madeInIndia;
+            document.getElementById('emiInfoTitle').textContent = currentText.infoTitle;
+            document.getElementById('emiInfoPara1').innerHTML = currentText.infoPara1;
+            document.getElementById('emiInfoPara2').textContent = currentText.infoPara2;
+            document.getElementById('emiInfoPara3').innerHTML = currentText.infoPara3;
+            document.getElementById('emiFormulaTitle').textContent = currentText.formulaTitle;
+            document.getElementById('emiFormulaPara1').textContent = currentText.formulaPara1;
+            document.getElementById('emiFormulaPara2').textContent = currentText.formulaPara2;
+            document.getElementById('emiExamplePara').textContent = currentText.examplePara;
+            document.getElementById('emiConclusionPara').textContent = currentText.conclusionPara;
+
+            const P = parseFloat(document.getElementById('loanAmount').value);
+            const annualRate = parseFloat(document.getElementById('interestRate').value);
+            const years = parseInt(document.getElementById('loanTenure').value);
+
+            if (P && annualRate && years) {
+                calculateEMI();
+            } else {
+                document.getElementById('results').innerHTML = '';
+                document.getElementById('scheduleContainer').innerHTML = '';
+            }
+        }
+
         function adjustFooterWidth() {
             if (window.innerWidth > 600) {
                 footer.style.width = card.offsetWidth + 'px';
@@ -269,31 +427,39 @@
         }
         window.addEventListener('resize', adjustFooterWidth);
         adjustFooterWidth();
+
         function calculateEMI() {
             const P = parseFloat(document.getElementById('loanAmount').value);
             const annualRate = parseFloat(document.getElementById('interestRate').value);
             const years = parseInt(document.getElementById('loanTenure').value);
+
             if (!P || !annualRate || !years) {
-                alert("Please enter all values.");
+                const lang = document.getElementById('language-select').value;
+                alert(lang === 'en' ? "Please enter all values." : "कृपया सभी मान दर्ज करें।");
                 return;
             }
+
             const n = years * 12;
             const r = annualRate / 100 / 12;
             const emiCalc = P * r * (Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
             const emi = Math.round(emiCalc);
             const totalPayment = Math.round(emiCalc * n);
             const totalInterest = Math.round(totalPayment - P);
+
+            const lang = document.getElementById('language-select').value;
+            const currentText = translations[lang];
+
             document.getElementById('results').innerHTML = `
                 <div class="result-item">
-                    <span class="result-label highlighted">Monthly <strong>EMI</strong>:</span>
+                    <span class="result-label highlighted">${currentText.monthlyEmi}</span>
                     <span class="result-value highlighted">₹${emi.toLocaleString('en-IN')}</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Total Payment:</span>
+                    <span class="result-label">${currentText.totalPayment}</span>
                     <span class="result-value">₹${totalPayment.toLocaleString('en-IN')}</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Total Interest:</span>
+                    <span class="result-label">${currentText.totalInterest}</span>
                     <span class="result-value">₹${totalInterest.toLocaleString('en-IN')}</span>
                 </div>
             `;
@@ -306,7 +472,7 @@
             chart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Principal', 'Interest'],
+                    labels: [currentText.chartPrincipal, currentText.chartInterest],
                     datasets: [{ data: [P, totalInterest], backgroundColor: ['#0b3d1c', '#ff6600'], borderWidth: 2 }]
                 },
                 options: {
@@ -327,14 +493,15 @@
                 }
             });
             let balance = P;
-            let scheduleHTML = "<h3>📑 Amortization Schedule</h3>";
+            let scheduleHTML = `<h3>${currentText.amortizationSchedule}</h3>`;
             let currentDate = new Date();
             let startMonth = currentDate.getMonth();
             let startYear = currentDate.getFullYear();
-            const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            const months = monthNames[lang];
+
             for (let year = 0; year < years; year++) {
-                scheduleHTML += `<details open><summary>Year ${startYear + year}</summary>`;
-                scheduleHTML += "<table><tr><th>Month</th><th>Principal (₹)</th><th>Interest (₹)</th><th>Balance (₹)</th></tr>";
+                scheduleHTML += `<details open><summary>${currentText.year} ${startYear + year}</summary>`;
+                scheduleHTML += `<table><tr><th>${currentText.month}</th><th>${currentText.principal}</th><th>${currentText.interest}</th><th>${currentText.balance}</th></tr>`;
                 for (let m = 0; m < 12; m++) {
                     let monthIndex = year * 12 + m;
                     if (monthIndex >= n) break;
@@ -344,7 +511,7 @@
                     let displayMonth = (startMonth + monthIndex) % 12;
                     let displayYear = startYear + Math.floor((startMonth + monthIndex) / 12);
                     scheduleHTML += `<tr>
-                        <td>${monthNames[displayMonth]} ${displayYear}</td>
+                        <td>${months[displayMonth]} ${displayYear}</td>
                         <td>${Math.round(monthlyPrincipal).toLocaleString('en-IN')}</td>
                         <td>${Math.round(monthlyInterest).toLocaleString('en-IN')}</td>
                         <td>${Math.round(Math.abs(balance)).toLocaleString('en-IN')}</td>
@@ -367,6 +534,9 @@
             if (chart) { chart.destroy(); chart = null; }
             setTimeout(adjustFooterWidth, 610);
         }
+        document.addEventListener("DOMContentLoaded", function() {
+            setLanguage();
+        });
     </script>
 </body>
 </html>
