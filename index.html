@@ -7,6 +7,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
         body {
             font-family: "Poppins", sans-serif;
             background: #f2f7f3;
@@ -28,7 +31,6 @@
             position: relative;
             margin-top: 0;
         }
-        .card.expanded { max-width: 950px; }
         h2 {
             font-size: 28px;
             margin-bottom: 15px;
@@ -109,6 +111,7 @@
             background: #f9fdf9;
         }
         summary { font-weight: 600; cursor: pointer; padding: 6px; color: #0b3d1c; }
+        summary::marker { color: #ff6600; }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -132,7 +135,6 @@
             margin: 25px 0 25px 0;
             transition: width 0.3s ease;
         }
-
         .results-and-chart {
             display: flex;
             flex-direction: column;
@@ -155,7 +157,6 @@
                 height: 350px;
             }
         }
-
         .result-item {
             margin: 20px 0;
         }
@@ -169,6 +170,7 @@
             font-size: 32px;
             font-weight: 700;
             color: #0b3d1c;
+            display: block;
         }
         .result-label.highlighted {
             font-size: 24px;
@@ -256,9 +258,82 @@
                 margin: 15px 0;
             }
         }
+        
+        /* New and Updated Navigation Bar Styles */
+        .main-nav {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 20px;
+            box-sizing: border-box;
+        }
+        .main-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 20px;
+        }
+        .main-nav li a {
+            text-decoration: none;
+            color: #0b3d1c;
+            font-weight: 800;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+        .main-nav li a:hover {
+            color: #ff6600;
+        }
+        .emi-info {
+            max-width: 950px;
+            margin-top: 30px;
+            line-height: 1.6;
+        }
+        .contact-text {
+            max-width: 950px;
+            margin-top: 30px;
+            line-height: 1.6;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        /* Orange Banner Section */
+        .orange-banner {
+            width: 100%;
+            max-width: 950px;
+            background-color: #ff6600;
+            color: #fff;
+            text-align: center;
+            padding: 25px 20px;
+            border-radius: 12px;
+            margin-top: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px; /* Added space below the banner */
+        }
+        .orange-banner h3 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .orange-banner p {
+            margin: 10px 0 0;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-top: 25px; /* Added space above the FAQ section */
+        }
     </style>
 </head>
 <body>
+    <nav class="main-nav">
+        <ul>
+            <li><a href="#faq-start">FAQ</a></li>
+            <li><a href="#contact-section">Contact</a></li>
+        </ul>
+    </nav>
     <div class="language-switcher">
         <label for="language-select">Language:</label>
         <select id="language-select" onchange="setLanguage()">
@@ -287,7 +362,7 @@
     <div class="footer" id="footerLine">
         <span class="footer-content" id="footerText">🇮🇳 Made in India</span>
     </div>
-    <div class="emi-info">
+    <div class="emi-info" id="emi-info-section">
         <h3 id="emiInfoTitle">What is EMI?</h3>
         <p id="emiInfoPara1">An <b>Equated Monthly Installment (EMI)</b> is a fixed payment you make to a lender each month to repay a loan over a set period. It's designed to simplify your repayment schedule by combining both the <b>principal loan amount</b> and the <b>interest</b> due into a single, predictable monthly payment.</p>
         <p id="emiInfoPara2">Think of it as a consistent, manageable sum that helps you systematically pay off your debt.</p>
@@ -299,6 +374,62 @@
         <p id="emiFormulaPara2"></p>
         <p id="emiExamplePara">For example, if you borrow ₹10,00,000 at an annual interest rate of 10.5% for 10 years (120 months), your monthly EMI would be approximately ₹13,493. This means you will pay a total of ₹16,19,220 over the loan term, with ₹6,19,220 of that being the interest.</p>
         <p id="emiConclusionPara">Calculating this manually can be tedious and prone to errors. Our EMI calculator automates this process, providing you with instant, accurate results along with a detailed amortization schedule and visual charts to help you understand your loan repayment journey.</p>
+    </div>
+    <div class="orange-banner" id="faq-start">
+        <h3>Loan Calculator FAQs 🏦</h3>
+        <p>Here are some frequently asked questions (FAQs) about using this EMI calculator, based on common queries.</p>
+    </div>
+    <div class="faq-section">
+        <details>
+            <summary>What is an EMI and how is it calculated?</summary>
+            <p><strong>EMI</strong> stands for <strong>Equated Monthly Installment</strong>. It's a fixed payment made to a lender every month on a set date to repay a loan. Each EMI payment consists of both **principal** (the original loan amount) and **interest**.</p>
+        </details>
+        <details>
+            <summary>How does this EMI calculator work?</summary>
+            <p>Our calculator simplifies the process by automating the EMI formula. You simply enter three key values:</p>
+            <ul>
+                <li><strong>Loan Amount:</strong> The total amount you wish to borrow.</li>
+                <li><strong>Interest Rate:</strong> The annual interest rate offered by your bank or financial institution.</li>
+                <li><strong>Loan Tenure:</strong> The total number of years you plan to take to repay the loan.</li>
+            </ul>
+            <p>The calculator then instantly provides your monthly EMI, the total amount of interest you'll pay, and the total repayment amount. It also generates a visual chart showing the breakdown of your principal and interest, and a detailed **amortization schedule** to show how your loan balance decreases over time.</p>
+        </details>
+        <details>
+            <summary>What is an amortization schedule?</summary>
+            <p>An **amortization schedule** is a table that provides a detailed breakdown of your loan repayment over its entire tenure. For each month, it shows:</p>
+            <ul>
+                <li>The portion of your EMI that goes towards the **principal**.</li>
+                <li>The portion that goes towards the **interest**.</li>
+                <li>The remaining loan balance.</li>
+            </ul>
+            <p>In the early years of the loan, a larger part of your EMI pays off the interest. As you continue to make payments, this shifts, and more of your EMI is applied to the principal. The amortization schedule clearly illustrates this process, helping you track your progress.</p>
+        </details>
+        <details>
+            <summary>Can I use this calculator for different types of loans?</summary>
+            <p>Yes! This calculator is versatile and can be used for a wide range of loans, including:</p>
+            <ul>
+                <li>Home Loans 🏡</li>
+                <li>Car Loans 🚗</li>
+                <li>Personal Loans 🤝</li>
+                <li>Business Loans 💼</li>
+            </ul>
+            <p>Any other loan that uses a fixed interest rate and equal monthly installments.</p>
+        </details>
+        <details>
+            <summary>Is it better to choose a longer or shorter loan tenure?</summary>
+            <p>That depends on your financial goals.</p>
+            <ul>
+                <li><strong>Shorter tenure:</strong> Results in a higher monthly EMI but a lower total interest paid. This lets you become debt-free faster and saves you money in the long run.</li>
+                <li><strong>Longer tenure:</strong> Results in a lower monthly EMI but a higher total interest paid. This reduces your monthly financial burden, making it easier to manage cash flow.</li>
+            </ul>
+            <p>Use the calculator to compare different scenarios and find the right balance for your budget.</p>
+        </details>
+    </div>
+    <div class="contact-text" id="contact-section">
+        <h3>Contact Us</h3>
+        <p>If you have any questions, feel free to reach out to us:</p>
+        <p>Email: <a href="mailto:support@example.com">support@example.com</a></p>
+        
     </div>
     <script>
         let chart;
@@ -357,7 +488,7 @@
                 infoTitle: "ईएमआई क्या है?",
                 infoPara1: "<b>समान मासिक किस्त (ईएमआई)</b> एक निश्चित भुगतान है जो आप एक निश्चित अवधि में ऋण चुकाने के लिए हर महीने एक ऋणदाता को करते हैं। इसे आपके चुकौती कार्यक्रम को सरल बनाने के लिए डिज़ाइन किया गया है, जिसमें <b>मूल ऋण राशि</b> और देय <b>ब्याज</b> दोनों को एक ही, अनुमानित मासिक भुगतान में जोड़ा जाता है।",
                 infoPara2: "इसे एक सुसंगत, प्रबंधनीय राशि के रूप में सोचें जो आपको व्यवस्थित रूप से अपना ऋण चुकाने में मदद करती है।",
-                infoPara3: "समय के साथ, आपकी ईएमआई की संरचना बदल जाती है। आपके ऋण के शुरुआती चरणों में, आपकी ईएमआई का एक बड़ा हिस्सा <b>ब्याज</b> चुकाने में जाता है। जैसे-जैसे आप भुगतान करना जारी रखते हैं, यह अनुपात बदलता है, और प्रत्येक ईएमआई का एक बड़ा हिस्सा <b>मूलधन</b> शेष को कम करने के लिए आवंटित किया जाता है। जबकि आपके द्वारा भुगतान की जाने वाली मासिक राशि समान रहती है, उस राशि के भीतर मूलधन और ब्याज का विभाजन लगातार समायोजित हो रहा है। इस प्रक्रिया को <b>ऋण परिशोधन</b> कहा जाता है।",
+                infoPara3: "समय के साथ, आपकी ईएमआई की संरचना बदल जाती है। आपके ऋण के शुरुआती चरणों में, आपकी ईएमआई का एक बड़ा हिस्सा <b>ब्याज</b> चुकाने में जाता है। जैसे-जैसे आप भुगतान करना जारी रखते हैं, यह अनुपात बदलता है, और प्रत्येक ईएमआई का एक बड़ा हिस्सा <b>मूलधन</b> शेष को कम करने के लिए आवंटित किया जाता है। इस प्रक्रिया को <b>ऋण परिशोधन</b> कहा जाता है।",
                 formulaTitle: "ईएमआई सूत्र",
                 formulaPara1: "गणना का मानक सूत्र है: EMI = [P x R x (1+R)^N] / [(1+R)^N-1]",
                 formulaPara2: "जहाँ: <ul><li><b>P</b> = मूल ऋण राशि</li><li><b>R</b> = मासिक ब्याज दर (वार्षिक दर / 12 / 100)</li><li><b>N</b> = ऋण अवधि महीनों में</li></ul>",
@@ -455,8 +586,7 @@
             `;
             document.getElementById('resultsContainer').classList.add("show");
             document.getElementById('resetBtn').style.display = "block";
-            document.getElementById('cardBox').classList.add("expanded");
-            adjustFooterWidth();
+            
             const ctx = document.getElementById('emiChart').getContext('2d');
             if (chart) chart.destroy();
             chart = new Chart(ctx, {
@@ -520,7 +650,6 @@
             document.getElementById('resultsContainer').classList.remove("show");
             document.getElementById('scheduleContainer').classList.remove("show");
             document.getElementById('resetBtn').style.display = "none";
-            document.getElementById('cardBox').classList.remove("expanded");
             if (chart) { chart.destroy(); chart = null; }
             setTimeout(adjustFooterWidth, 610);
         }
