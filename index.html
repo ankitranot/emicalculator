@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loan (EMI) Calculator</title>
@@ -29,7 +26,7 @@
             max-width: 420px;
             transition: max-width 0.6s ease;
             position: relative;
-            margin-top: 0; /* Changed to 0 */
+            margin-top: 0;
         }
         .card.expanded { max-width: 950px; }
         h2 {
@@ -132,7 +129,7 @@
             font-weight: 800;
             border-top: 6px solid #ff6600;
             border-radius: 10px 10px 0 0;
-            margin: 25px 0 25px 0; /* Adjusted for equal spacing */
+            margin: 25px 0 25px 0;
             transition: width 0.3s ease;
         }
 
@@ -183,11 +180,6 @@
         .emi-info {
             max-width: 950px;
             margin-top: 30px;
-            /* Removed the following lines to remove the card background */
-            /* padding: 20px;
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08); */
             line-height: 1.6;
         }
         .emi-info h3, .emi-info h4 {
@@ -199,7 +191,7 @@
         }
         .language-switcher {
             text-align: center;
-            margin: 25px 0 25px 0; /* Adjusted for equal spacing */
+            margin: 25px 0 25px 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -227,7 +219,7 @@
                 padding: 20px;
                 max-width: 100%;
                 border-radius: 30px;
-                margin-top: 0; /* Changed to 0 */
+                margin-top: 0;
             }
             h2 { font-size: 22px; }
             label { font-size: 14px; margin-top: 15px; }
@@ -246,7 +238,7 @@
                 border-top: none;
                 font-size: 16px;
                 padding: 10px 0;
-                margin: 15px 0; /* Adjusted for equal spacing */
+                margin: 15px 0;
             }
             .footer-content {
                 display: inline-block;
@@ -261,7 +253,7 @@
             }
             .language-switcher {
                 text-align: center;
-                margin: 15px 0; /* Adjusted for equal spacing */
+                margin: 15px 0;
             }
         }
     </style>
@@ -301,13 +293,14 @@
         <p id="emiInfoPara2">Think of it as a consistent, manageable sum that helps you systematically pay off your debt.</p>
         <p id="emiInfoPara3">Over time, the composition of your EMI changes. In the early stages of your loan, a larger portion of your EMI goes toward paying off the <b>interest</b>. As you continue to make payments, this proportion shifts, and a greater share of each EMI is allocated to reducing the <b>principal</b> balance. While the monthly amount you pay remains the same, the breakdown of principal and interest within that amount is constantly adjusting. This process is known as <b>amortization</b>.</p>
         <h4 id="emiFormulaTitle">The EMI Formula</h4>
-        <p id="emiFormulaPara1">The standard formula for calculating EMI is:
-        EMI = P \times \frac{r \times (1+r)^n}{(1+r)^n - 1} </p>
+        <p id="emiFormulaPara1">
+        The standard formula for calculating is: EMI = [P x R x (1+R)^N] / [(1+R)^N-1]
+        </p>
         <p id="emiFormulaPara2">Where:
         <ul>
             <li><b>P</b> = Principal Loan Amount</li>
-            <li><b>r</b> = Monthly Interest Rate (Annual Rate / 12 / 100)</li>
-            <li><b>n</b> = Loan Tenure in Months</li>
+            <li><b>R</b> = Monthly Interest Rate (Annual Rate / 12 / 100)</li>
+            <li><b>N</b> = Loan Tenure in Months</li>
         </ul>
         </p>
         <p id="emiExamplePara">For example, if you borrow ₹10,00,000 at an annual interest rate of 10.5% for 10 years (120 months), your monthly EMI would be approximately ₹13,493. This means you will pay a total of ₹16,19,220 over the loan term, with ₹6,19,220 of that being the interest.</p>
@@ -343,7 +336,7 @@
                 infoPara2: "Think of it as a consistent, manageable sum that helps you systematically pay off your debt.",
                 infoPara3: "Over time, the composition of your EMI changes. In the early stages of your loan, a larger portion of your EMI goes toward paying off the <b>interest</b>. As you continue to make payments, this proportion shifts, and a greater share of each EMI is allocated to reducing the <b>principal</b> balance. While the monthly amount you pay remains the same, the breakdown of principal and interest within that amount is constantly adjusting. This process is known as <b>amortization</b>.",
                 formulaTitle: "The EMI Formula",
-                formulaPara1: "The standard formula for calculating EMI is:",
+                formulaPara1: "The standard formula for calculating is: EMI = [P x R x (1+R)^N] / [(1+R)^N-1]",
                 formulaPara2: "Where:",
                 examplePara: "For example, if you borrow ₹10,00,000 at an annual interest rate of 10.5% for 10 years (120 months), your monthly EMI would be approximately ₹13,493. This means you will pay a total of ₹16,19,220 over the loan term, with ₹6,19,220 of that being the interest.",
                 conclusionPara: "Calculating this manually can be tedious and prone to errors. Our EMI calculator automates this process, providing you with instant, accurate results along with a detailed amortization schedule and visual charts to help you understand your loan repayment journey."
@@ -372,7 +365,7 @@
                 infoPara2: "इसे एक सुसंगत, प्रबंधनीय राशि के रूप में सोचें जो आपको व्यवस्थित रूप से अपना ऋण चुकाने में मदद करती है।",
                 infoPara3: "समय के साथ, आपकी ईएमआई की संरचना बदल जाती है। आपके ऋण के शुरुआती चरणों में, आपकी ईएमआई का एक बड़ा हिस्सा <b>ब्याज</b> चुकाने में जाता है। जैसे-जैसे आप भुगतान करना जारी रखते हैं, यह अनुपात बदलता है, और प्रत्येक ईएमआई का एक बड़ा हिस्सा <b>मूलधन</b> शेष को कम करने के लिए आवंटित किया जाता है। जबकि आपके द्वारा भुगतान की जाने वाली मासिक राशि समान रहती है, उस राशि के भीतर मूलधन और ब्याज का विभाजन लगातार समायोजित हो रहा है। इस प्रक्रिया को <b>ऋण परिशोधन</b> कहा जाता है।",
                 formulaTitle: "ईएमआई सूत्र",
-                formulaPara1: "ईएमआई की गणना का मानक सूत्र है:",
+                formulaPara1: "ईएमआई की गणना का मानक सूत्र है: EMI = [P x R x (1+R)^N] / [(1+R)^N-1]",
                 formulaPara2: "जहाँ:",
                 examplePara: "उदाहरण के लिए, यदि आप 10 साल (120 महीने) के लिए 10.5% की वार्षिक ब्याज दर पर ₹10,00,000 उधार लेते हैं, तो आपकी मासिक ईएमआई लगभग ₹13,493 होगी। इसका मतलब है कि आप ऋण अवधि के दौरान कुल ₹16,19,220 का भुगतान करेंगे, जिसमें से ₹6,19,220 ब्याज होगा।",
                 conclusionPara: "इसकी मैन्युअल रूप से गणना करना थकाऊ और त्रुटियों की संभावना वाला हो सकता है। हमारा ईएमआई कैलकुलेटर इस प्रक्रिया को स्वचालित करता है, जो आपको अपनी ऋण चुकौती यात्रा को समझने में मदद करने के लिए एक विस्तृत चुकौती सारणी और दृश्य चार्ट के साथ तुरंत, सटीक परिणाम प्रदान करता है।"
