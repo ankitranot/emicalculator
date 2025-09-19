@@ -1,531 +1,771 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMI & SIP Calculator</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: "Poppins", sans-serif;
-            background: #f2f7f3;
-            margin: 0;
-            padding-top: 60px; /* Add padding to body to prevent content from hiding under fixed navbar */
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            flex-direction: column;
-            padding-bottom: 50px; /* Space for the footer */
-        }
-        
-        /* Navigation Bar */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: #ff6600;
-            color: #fff;
-            padding: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
 
-        .navbar-brand {
-            font-size: 20px;
-            font-weight: 700;
-            color: #fff;
-            text-decoration: none;
-        }
+    <meta charset="UTF-8">
 
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .nav-link {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 16px;
-            transition: color 0.3s ease;
-        }
+    <title>Loan (EMI) Calculator</title>
 
-        
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        /* Main Content */
-        .main-content {
-            width: 100%;
-            max-width: 950px;
-            padding: 20px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-        .card {
-            background: #fff;
-            padding: 38px;
-            border-radius: 18px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            width: 100%;
-            max-width: 420px;
-            transition: max-width 0.6s ease;
-            position: relative;
-            margin-top: 50px;
-        }
-        .card.expanded { max-width: 950px; }
-        
-        h2 {
-            font-size: 28px;
-            margin-bottom: 15px;
-            font-weight: 800;
-            color: #0b3d1c;
-            text-align: center;
-        }
-        label {
-            display: block;
-            text-align: left;
-            font-weight: 500;
-            margin-top: 15px;
-            color: #0b3d1c;
-            font-size: 14px;
-        }
-        input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #ccc;
-            border-radius: 12px;
-            margin-top: 6px;
-            font-size: 15px;
-            font-family: "Poppins", sans-serif;
-            box-sizing: border-box;
-            transition: all 0.2s ease-in-out;
-        }
-        input:focus {
-            border-color: #0b3d1c;
-            outline: none;
-            box-shadow: 0 0 5px rgba(11, 61, 28, 0.2);
-        }
-        .btn {
-            margin-top: 22px;
-            width: 100%;
-            padding: 14px;
-            background: #0b3d1c;
-            color: #fff;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-family: "Poppins", sans-serif;
-            transition: background 0.3s;
-        }
-        .btn:hover { background: #062e14; }
-        .btn-reset { background: #ff6600; margin-top: 12px; }
-        .btn-reset:hover { background: #cc5200; }
-        .results-container, .schedule-container {
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: all 0.6s ease;
-        }
-        .results-container.show, .schedule-container.show {
-            max-height: 3000px;
-            opacity: 1;
-            margin-top: 20px;
-        }
-        .results-content { 
-            font-size: 14px; 
-            font-weight: 500; 
-            line-height: 1.6; 
-            text-align: left;
-        }
-        .chart-container { 
-            position: relative; 
-            width: 100%; 
-            height: 280px; 
-            margin-top: 15px; 
-        }
-        canvas { width: 100% !important; height: 100% !important; }
-        details {
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 8px;
-            background: #f9fdf9;
-        }
-        summary { font-weight: 600; cursor: pointer; padding: 6px; color: #0b3d1c; }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-            margin-top: 8px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 6px;
-            text-align: center;
-        }
-        th { background: #0b3d1c; color: #fff; position: sticky; top: 0; }
-        .footer {
-            color: #000;
-            text-align: center;
-            padding: 20px 0;
-            font-size: 22px;
-            font-weight: 800;
-            border-top: 6px solid #ff6600;
-            border-radius: 10px 10px 0 0;
-            margin-top: 25px;
-            transition: width 0.3s ease;
-        }
-        
-        .results-and-chart {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        @media (min-width: 768px) {
-            .results-and-chart {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: flex-start;
-                gap: 40px;
-            }
-            .results-content {
-                flex: 1;
-                order: 0;
-            }
-            .chart-container {
-                flex: 1;
-                order: 1;
-                height: 350px;
-            }
-        }
-        
-        .result-item {
-            margin: 20px 0;
-        }
-        .result-label {
-            font-weight: 600;
-            font-size: 20px;
-            color: #555;
-            display: block;
-        }
-        .result-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: #0b3d1c;
-        }
-        .result-label.highlighted {
-            font-size: 24px;
-        }
-        .result-value.highlighted {
-            font-size: 44px;
-            font-weight: 900;
-        }
+    <style>
 
-        /* New styles for the separate calculator sections */
-        .calculator-section {
-            width: 100%;
-            max-width: 950px;
-            margin: 50px auto;
-            background: #fff;
-            padding: 38px;
-            border-radius: 18px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            box-sizing: border-box;
-        }
+        body {
 
-        /* Mobile-specific adjustments */
-        @media (max-width: 600px) {
-            body { padding: 10px; padding-top: 60px; }
-            .navbar { padding: 10px; }
-            .nav-brand { font-size: 18px; }
-            .nav-link { font-size: 14px; }
-            .main-content { padding: 10px; }
-            .card { 
-                padding: 25px; 
-                border-radius: 14px; 
-                margin-top: 20px;
-            }
-            h2 { font-size: 24px; }
-            label { font-size: 16px; margin-top: 20px; }
-            input { padding: 16px; font-size: 16px; }
-            .btn { padding: 16px; font-size: 18px; }
-            .result-label { font-size: 18px; }
-            .result-value { font-size: 28px; }
-            .result-label.highlighted { font-size: 22px; }
-            .result-value.highlighted { font-size: 36px; }
-            table { font-size: 12px; }
-            th, td { padding: 8px; }
-            .footer { 
-                width: auto;
-                border-top: none;
-                font-size: 18px; 
-                padding: 10px 0; 
-                margin-top: 15px;
-            }
-            .footer-content {
-                display: inline-block;
-                border-top: 6px solid #ff6600;
-                border-radius: 8px;
-                padding-top: 10px;
-            }
-            .calculator-section {
-                padding: 25px;
-                margin: 30px auto;
-            }
-        }
-    </style>
+            font-family: "Poppins", sans-serif;
+
+            background: #f2f7f3;
+
+            display: flex;
+
+            justify-content: flex-start;
+
+            align-items: center;
+
+            flex-direction: column;
+
+            margin: 0;
+
+            padding: 15px;
+
+        }
+
+        .card {
+
+            background: #fff;
+
+            padding: 38px;
+
+            border-radius: 18px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+
+            width: 100%;
+
+            max-width: 420px;
+
+            transition: max-width 0.6s ease;
+
+            position: relative;
+
+            margin-top: 50px;
+
+        }
+
+        .card.expanded { max-width: 950px; }
+
+        h2 {
+
+            font-size: 28px;
+
+            margin-bottom: 15px;
+
+            font-weight: 800;
+
+            color: #0b3d1c;
+
+            text-align: center;
+
+        }
+
+        label {
+
+            display: block;
+
+            text-align: left;
+
+            font-weight: 500;
+
+            margin-top: 15px;
+
+            color: #0b3d1c;
+
+            font-size: 14px;
+
+        }
+
+        input {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 12px;
+
+            margin-top: 6px;
+
+            font-size: 15px;
+
+            font-family: "Poppins", sans-serif;
+
+            box-sizing: border-box;
+
+            transition: all 0.2s ease-in-out;
+
+        }
+
+        input:focus {
+
+            border-color: #0b3d1c;
+
+            outline: none;
+
+            box-shadow: 0 0 5px rgba(11, 61, 28, 0.2);
+
+        }
+
+        .btn {
+
+            margin-top: 22px;
+
+            width: 100%;
+
+            padding: 14px;
+
+            background: #0b3d1c;
+
+            color: #fff;
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+            border: none;
+
+            border-radius: 12px;
+
+            cursor: pointer;
+
+            font-family: "Poppins", sans-serif;
+
+            transition: background 0.3s;
+
+        }
+
+        .btn:hover { background: #062e14; }
+
+        .btn-reset { background: #ff6600; margin-top: 12px; }
+
+        .btn-reset:hover { background: #cc5200; }
+
+        .results-container, .schedule-container {
+
+            max-height: 0;
+
+            opacity: 0;
+
+            overflow: hidden;
+
+            transition: all 0.6s ease;
+
+        }
+
+        .results-container.show, .schedule-container.show {
+
+            max-height: 3000px;
+
+            opacity: 1;
+
+            margin-top: 20px;
+
+        }
+
+        .results-content { 
+
+            font-size: 14px; 
+
+            font-weight: 500; 
+
+            line-height: 1.6; 
+
+            text-align: left;
+
+        }
+
+        .chart-container { 
+
+            position: relative; 
+
+            width: 100%; 
+
+            height: 280px; 
+
+            margin-top: 15px; 
+
+        }
+
+        canvas { width: 100% !important; height: 100% !important; }
+
+        details {
+
+            margin: 10px 0;
+
+            border: 1px solid #ccc;
+
+            border-radius: 8px;
+
+            padding: 8px;
+
+            background: #f9fdf9;
+
+        }
+
+        summary { font-weight: 600; cursor: pointer; padding: 6px; color: #0b3d1c; }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            font-size: 13px;
+
+            margin-top: 8px;
+
+        }
+
+        th, td {
+
+            border: 1px solid #ccc;
+
+            padding: 6px;
+
+            text-align: center;
+
+        }
+
+        th { background: #0b3d1c; color: #fff; position: sticky; top: 0; }
+
+        .footer {
+
+            color: #000;
+
+            text-align: center;
+
+            padding: 20px 0;
+
+            font-size: 22px;
+
+            font-weight: 800;
+
+            border-top: 6px solid #ff6600;
+
+            border-radius: 10px 10px 0 0;
+
+            margin-top: 25px;
+
+            transition: width 0.3s ease;
+
+        }
+
+        
+
+        .results-and-chart {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+        }
+
+        @media (min-width: 768px) {
+
+            .results-and-chart {
+
+                flex-direction: row;
+
+                justify-content: space-between;
+
+                align-items: flex-start;
+
+                gap: 40px;
+
+            }
+
+            .results-content {
+
+                flex: 1;
+
+                order: 0;
+
+            }
+
+            .chart-container {
+
+                flex: 1;
+
+                order: 1;
+
+                height: 350px;
+
+            }
+
+        }
+
+        
+
+        .result-item {
+
+            margin: 20px 0;
+
+        }
+
+        .result-label {
+
+            font-weight: 600;
+
+            font-size: 20px;
+
+            color: #555;
+
+            display: block;
+
+        }
+
+        .result-value {
+
+            font-size: 32px;
+
+            font-weight: 700;
+
+            color: #0b3d1c;
+
+        }
+
+        .result-label.highlighted {
+
+            font-size: 24px;
+
+        }
+
+        .result-value.highlighted {
+
+            font-size: 44px;
+
+            font-weight: 900;
+
+        }
+
+
+
+        /* Mobile-specific adjustments to spacing and fonts */
+
+        @media (max-width: 600px) {
+
+            body { padding: 10px; }
+
+            .card { 
+
+                padding: 25px; 
+
+                border-radius: 14px; 
+
+                margin-top: 20px; /* Reduced top margin for mobile */
+
+            }
+
+            h2 { font-size: 24px; }
+
+            label { font-size: 16px; margin-top: 20px; }
+
+            input { padding: 16px; font-size: 16px; }
+
+            .btn { padding: 16px; font-size: 18px; }
+
+            
+
+            .result-label { font-size: 18px; }
+
+            .result-value { font-size: 28px; }
+
+            .result-label.highlighted { font-size: 22px; }
+
+            .result-value.highlighted { font-size: 36px; }
+
+
+
+            table { font-size: 12px; }
+
+            th, td { padding: 8px; }
+
+            .footer { 
+
+                /* Remove fixed width and border from the main footer container */
+
+                width: auto;
+
+                border-top: none;
+
+                
+
+                /* Adjust padding, font, and margin for mobile */
+
+                font-size: 18px; 
+
+                padding: 10px 0; 
+
+                margin-top: 15px;
+
+            }
+
+            .footer-content {
+
+                display: inline-block;
+
+                border-top: 6px solid #ff6600;
+
+                border-radius: 8px; /* Added border-radius for the orange line */
+
+                padding-top: 10px; /* Space between text and line */
+
+            }
+
+        }
+
+    </style>
+
 </head>
+
 <body>
 
-    <div class="navbar">
-        <a href="#home" class="navbar-brand">Calculators</a>
-        <div class="nav-links">
-            <a href="#emi" class="nav-link">EMI Calculator</a>
-            <a href="#sip" class="nav-link">SIP Calculator</a>
-        </div>
-    </div>
+    <div class="card" id="cardBox">
 
-    <div class="main-content">
+        <h2>📊 Loan (EMI) Calculator</h2>
 
-        <div id="emi" class="calculator-section">
-            <h2>📊 Loan (EMI) Calculator</h2>
-            <label>Loan Amount (₹)</label>
-            <input type="number" id="emiLoanAmount" placeholder="Enter loan amount">
-            <label>Annual Interest Rate (%)</label>
-            <input type="number" id="emiInterestRate" step="0.01" placeholder="e.g. 8.5">
-            <label>Loan Tenure (Years)</label>
-            <input type="number" id="emiLoanTenure" placeholder="e.g. 5">
-            <button class="btn" onclick="calculateEMI()">Calculate</button>
-            <div class="results-container" id="emiResultsContainer">
-                <div class="results-and-chart">
-                    <div class="results-content" id="emiResults"></div>
-                    <div class="chart-container"><canvas id="emiChart"></canvas></div>
-                </div>
-            </div>
-            <div class="schedule-container" id="emiScheduleContainer"></div>
-            <button class="btn btn-reset" id="emiResetBtn" style="display:none;" onclick="resetEMI()">Reset</button>
-        </div>
 
-        <div id="sip" class="calculator-section">
-            <h2>📈 SIP Calculator</h2>
-            <label>Monthly Investment (₹)</label>
-            <input type="number" id="sipMonthlyInvestment" placeholder="e.g. 5000">
-            <label>Expected Annual Return (%)</label>
-            <input type="number" id="sipReturnRate" step="0.01" placeholder="e.g. 12">
-            <label>Investment Tenure (Years)</label>
-            <input type="number" id="sipTenure" placeholder="e.g. 15">
-            <button class="btn" onclick="calculateSIP()">Calculate</button>
-            <div class="results-container" id="sipResultsContainer">
-                <div class="results-and-chart">
-                    <div class="results-content" id="sipResults"></div>
-                    <div class="chart-container"><canvas id="sipChart"></canvas></div>
-                </div>
-            </div>
-            <button class="btn btn-reset" id="sipResetBtn" style="display:none;" onclick="resetSIP()">Reset</button>
-        </div>
-    </div>
 
-    <div class="footer">
-        <span class="footer-content">🇮🇳 Made in India</span>
-    </div>
+        <label>Loan Amount (₹)</label>
 
-    <script>
-        let emiChart, sipChart;
+        <input type="number" id="loanAmount" placeholder="Enter loan amount">
 
-        // Function to handle smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
 
-        // --- EMI Calculator Functions ---
-        function calculateEMI() {
-            const P = parseFloat(document.getElementById('emiLoanAmount').value);
-            const annualRate = parseFloat(document.getElementById('emiInterestRate').value);
-            const years = parseInt(document.getElementById('emiLoanTenure').value);
 
-            if (!P || !annualRate || !years) {
-                alert("Please enter all values for the EMI calculator.");
-                return;
-            }
+        <label>Annual Interest Rate (%)</label>
 
-            const n = years * 12;
-            const r = annualRate / 100 / 12;
-            const emiCalc = P * r * (Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-            const emi = Math.round(emiCalc);
-            const totalPayment = Math.round(emi * n);
-            const totalInterest = Math.round(totalPayment - P);
+        <input type="number" id="interestRate" step="0.01" placeholder="e.g. 8.5">
 
-            document.getElementById('emiResults').innerHTML = `
-                <div class="result-item">
-                    <span class="result-label highlighted">Monthly <strong>EMI</strong>:</span>
-                    <span class="result-value highlighted">₹${emi.toLocaleString('en-IN')}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Total Payment:</span>
-                    <span class="result-value">₹${totalPayment.toLocaleString('en-IN')}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Total Interest:</span>
-                    <span class="result-value">₹${totalInterest.toLocaleString('en-IN')}</span>
-                </div>
-            `;
-            document.getElementById('emiResultsContainer').classList.add("show");
-            document.getElementById('emiResetBtn').style.display = "block";
-            
-            const ctx = document.getElementById('emiChart').getContext('2d');
-            if (emiChart) emiChart.destroy();
-            emiChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Principal', 'Interest'],
-                    datasets: [{ data: [P, totalInterest], backgroundColor: ['#0b3d1c', '#ff6600'], borderWidth: 2 }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { font: { family: "Poppins", size: 13 } } },
-                        tooltip: {
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    let label = tooltipItem.label || '';
-                                    if (label) { label += ': '; }
-                                    label += '₹' + Math.round(tooltipItem.raw).toLocaleString('en-IN');
-                                    return label;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
 
-            let balance = P;
-            let scheduleHTML = "<h3>📑 Amortization Schedule</h3>";
-            let currentDate = new Date();
-            let startMonth = currentDate.getMonth();
-            let startYear = currentDate.getFullYear();
-            const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-            for (let year = 0; year < years; year++) {
-                scheduleHTML += `<details open><summary>Year ${startYear + year}</summary>`;
-                scheduleHTML += "<table><tr><th>Month</th><th>Principal (₹)</th><th>Interest (₹)</th><th>Balance (₹)</th></tr>";
-                for (let m = 0; m < 12; m++) {
-                    let monthIndex = year * 12 + m;
-                    if (monthIndex >= n) break;
-                    let monthlyInterest = balance * r;
-                    let monthlyPrincipal = emiCalc - monthlyInterest;
-                    balance -= monthlyPrincipal;
-                    let displayMonth = (startMonth + monthIndex) % 12;
-                    let displayYear = startYear + Math.floor((startMonth + monthIndex) / 12);
-                    scheduleHTML += `<tr>
-                        <td>${monthNames[displayMonth]} ${displayYear}</td>
-                        <td>${Math.round(monthlyPrincipal)}</td>
-                        <td>${Math.round(monthlyInterest)}</td>
-                        <td>${Math.round(Math.abs(balance))}</td>
-                    </tr>`;
-                }
-                scheduleHTML += "</table></details>";
-            }
-            const scheduleContainer = document.getElementById('emiScheduleContainer');
-            scheduleContainer.innerHTML = scheduleHTML;
-            scheduleContainer.classList.add("show");
-        }
+        <label>Loan Tenure (Years)</label>
 
-        function resetEMI() {
-            document.getElementById('emiLoanAmount').value = "";
-            document.getElementById('emiInterestRate').value = "";
-            document.getElementById('emiLoanTenure').value = "";
-            document.getElementById('emiResultsContainer').classList.remove("show");
-            document.getElementById('emiScheduleContainer').classList.remove("show");
-            document.getElementById('emiResetBtn').style.display = "none";
-            if (emiChart) { emiChart.destroy(); emiChart = null; }
-        }
+        <input type="number" id="loanTenure" placeholder="e.g. 5">
 
-        // --- SIP Calculator Functions ---
-        function calculateSIP() {
-            const monthlyInvestment = parseFloat(document.getElementById('sipMonthlyInvestment').value);
-            const annualReturnRate = parseFloat(document.getElementById('sipReturnRate').value);
-            const years = parseInt(document.getElementById('sipTenure').value);
 
-            if (!monthlyInvestment || !annualReturnRate || !years) {
-                alert("Please enter all values for the SIP calculator.");
-                return;
-            }
 
-            const totalMonths = years * 12;
-            const monthlyReturnRate = annualReturnRate / 100 / 12;
+        <button class="btn" onclick="calculateEMI()">Calculate</button>
 
-            let futureValue = 0;
-            futureValue = monthlyInvestment * (Math.pow(1 + monthlyReturnRate, totalMonths) - 1) * (1 + monthlyReturnRate) / monthlyReturnRate;
 
-            const totalInvested = monthlyInvestment * totalMonths;
-            const totalReturns = futureValue - totalInvested;
 
-            document.getElementById('sipResults').innerHTML = `
-                <div class="result-item">
-                    <span class="result-label highlighted">Total Wealth:</span>
-                    <span class="result-value highlighted">₹${Math.round(futureValue).toLocaleString('en-IN')}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Invested Amount:</span>
-                    <span class="result-value">₹${Math.round(totalInvested).toLocaleString('en-IN')}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Estimated Returns:</span>
-                    <span class="result-value">₹${Math.round(totalReturns).toLocaleString('en-IN')}</span>
-                </div>
-            `;
-            document.getElementById('sipResultsContainer').classList.add("show");
-            document.getElementById('sipResetBtn').style.display = "block";
+        <div class="results-container" id="resultsContainer">
 
-            const ctx = document.getElementById('sipChart').getContext('2d');
-            if (sipChart) sipChart.destroy();
-            sipChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Invested Amount', 'Estimated Returns'],
-                    datasets: [{ data: [totalInvested, totalReturns], backgroundColor: ['#0b3d1c', '#ff6600'], borderWidth: 2 }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { font: { family: "Poppins", size: 13 } } },
-                        tooltip: {
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    let label = tooltipItem.label || '';
-                                    if (label) { label += ': '; }
-                                    label += '₹' + Math.round(tooltipItem.raw).toLocaleString('en-IN');
-                                    return label;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
+            <div class="results-and-chart">
 
-        function resetSIP() {
-            document.getElementById('sipMonthlyInvestment').value = "";
-            document.getElementById('sipReturnRate').value = "";
-            document.getElementById('sipTenure').value = "";
-            document.getElementById('sipResultsContainer').classList.remove("show");
-            document.getElementById('sipResetBtn').style.display = "none";
-            if (sipChart) { sipChart.destroy(); sipChart = null; }
-        }
-    </script>
+                <div class="results-content" id="results"></div>
+
+                <div class="chart-container"><canvas id="emiChart"></canvas></div>
+
+            </div>
+
+        </div>
+
+        <div class="schedule-container" id="scheduleContainer"></div>
+
+        <button class="btn btn-reset" id="resetBtn" style="display:none;" onclick="resetCalculator()">Reset</button>
+
+    </div>
+
+
+
+    <div class="footer" id="footerLine">
+
+        <span class="footer-content">🇮🇳 Made in India</span>
+
+    </div>
+
+
+
+    <script>
+
+        let chart;
+
+
+
+        const card = document.getElementById('cardBox');
+
+        const footer = document.getElementById('footerLine');
+
+
+
+        function adjustFooterWidth() {
+
+            if (window.innerWidth > 600) {
+
+                footer.style.width = card.offsetWidth + 'px';
+
+            } else {
+
+                footer.style.width = '100%';
+
+            }
+
+        }
+
+
+
+        window.addEventListener('resize', adjustFooterWidth);
+
+        adjustFooterWidth(); // initial call
+
+
+
+        function calculateEMI() {
+
+            const P = parseFloat(document.getElementById('loanAmount').value);
+
+            const annualRate = parseFloat(document.getElementById('interestRate').value);
+
+            const years = parseInt(document.getElementById('loanTenure').value);
+
+
+
+            if (!P || !annualRate || !years) {
+
+                alert("Please enter all values.");
+
+                return;
+
+            }
+
+
+
+            const n = years * 12; // total months
+
+            const dailyRate = annualRate / 100 / 365;
+
+            let totalInterest = 0;
+
+            let emi = 0;
+
+
+
+            const r = annualRate / 100 / 12;
+
+            const emiCalc = P * r * (Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+
+            emi = emiCalc;
+
+            const totalPayment = emi * n;
+
+            totalInterest = totalPayment - P;
+
+
+
+            document.getElementById('results').innerHTML = `
+
+                <div class="result-item">
+
+                    <span class="result-label highlighted">Monthly <strong>EMI</strong>:</span>
+
+                    <span class="result-value highlighted">₹${emi.toFixed(2)}</span>
+
+                </div>
+
+                <div class="result-item">
+
+                    <span class="result-label">Total Payment:</span>
+
+                    <span class="result-value">₹${totalPayment.toFixed(2)}</span>
+
+                </div>
+
+                <div class="result-item">
+
+                    <span class="result-label">Total Interest:</span>
+
+                    <span class="result-value">₹${totalInterest.toFixed(2)}</span>
+
+                </div>
+
+            `;
+
+            document.getElementById('resultsContainer').classList.add("show");
+
+            document.getElementById('resetBtn').style.display = "block";
+
+            document.getElementById('cardBox').classList.add("expanded");
+
+            
+
+            adjustFooterWidth();
+
+
+
+            const ctx = document.getElementById('emiChart').getContext('2d');
+
+            if (chart) chart.destroy();
+
+            chart = new Chart(ctx, {
+
+                type: 'doughnut',
+
+                data: {
+
+                    labels: ['Principal', 'Interest'],
+
+                    datasets: [{ data: [P, totalInterest], backgroundColor: ['#0b3d1c', '#ff6600'], borderWidth: 2 }]
+
+                },
+
+                options: {
+
+                    responsive: true, maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: { position: 'bottom', labels: { font: { family: "Poppins", size: 13 } } },
+
+                        tooltip: {
+
+                            callbacks: {
+
+                                label: function(tooltipItem) {
+
+                                    let label = tooltipItem.label || '';
+
+                                    if (label) {
+
+                                        label += ': ';
+
+                                    }
+
+                                    label += '₹' + tooltipItem.raw.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                                    return label;
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+
+
+            let balance = P;
+
+            let scheduleHTML = "<h3>📑 Amortization Schedule</h3>";
+
+            let currentDate = new Date();
+
+            let startMonth = currentDate.getMonth();
+
+            let startYear = currentDate.getFullYear();
+
+            const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+
+
+            for (let year = 0; year < years; year++) {
+
+                scheduleHTML += `<details open><summary>Year ${startYear + year}</summary>`;
+
+                scheduleHTML += "<table><tr><th>Month</th><th>Principal (₹)</th><th>Interest (₹)</th><th>Balance (₹)</th></tr>";
+
+
+
+                for (let m = 0; m < 12; m++) {
+
+                    let monthIndex = year * 12 + m;
+
+                    if (monthIndex >= n) break;
+
+
+
+                    let monthlyInterest = balance * r;
+
+                    let monthlyPrincipal = emi - monthlyInterest;
+
+                    balance -= monthlyPrincipal;
+
+
+
+                    let displayMonth = (startMonth + monthIndex) % 12;
+
+                    let displayYear = startYear + Math.floor((startMonth + monthIndex) / 12);
+
+                    
+
+                    scheduleHTML += `<tr>
+
+                        <td>${monthNames[displayMonth]} ${displayYear}</td>
+
+                        <td>${monthlyPrincipal.toFixed(2)}</td>
+
+                        <td>${monthlyInterest.toFixed(2)}</td>
+
+                        <td>${Math.abs(balance.toFixed(2))}</td>
+
+                    </tr>`;
+
+                }
+
+
+
+                scheduleHTML += "</table></details>";
+
+            }
+
+
+
+            const scheduleContainer = document.getElementById('scheduleContainer');
+
+            scheduleContainer.innerHTML = scheduleHTML;
+
+            scheduleContainer.classList.add("show");
+
+        }
+
+
+
+        function resetCalculator() {
+
+            document.getElementById('loanAmount').value = "";
+
+            document.getElementById('interestRate').value = "";
+
+            document.getElementById('loanTenure').value = "";
+
+            document.getElementById('resultsContainer').classList.remove("show");
+
+            document.getElementById('scheduleContainer').classList.remove("show");
+
+            document.getElementById('resetBtn').style.display = "none";
+
+            document.getElementById('cardBox').classList.remove("expanded");
+
+            if (chart) { chart.destroy(); chart = null; }
+
+            setTimeout(adjustFooterWidth, 610);
+
+        }
+
+    </script>
+
 </body>
+
 </html>
