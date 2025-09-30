@@ -431,7 +431,31 @@
             <p id="emiConclusionPara">Calculating this manually can be tedious and prone to errors. Our EMI calculator automates this process, providing you with instant, accurate results along with a detailed amortization schedule and visual charts to help you understand your loan repayment journey.</p>
         </div>
         <div class="orange-banner" id="faq-start">
-            <h3>Loan Calculator FAQs 🏦</h3>
+
+<h3 class="permanent-underline">Loan Calculator FAQs 🏦</h3>
+
+<style>
+.permanent-underline {
+  display: inline-block;
+  position: relative;
+  font-weight: 600;
+  cursor: default;
+}
+
+/* Animated underline */
+.permanent-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px; /* space under text */
+  width: 100%;
+  height: 6px; /* underline thickness */
+  background: #ff6600;
+  border-radius: 3px;
+  animation: pulseUnderline 2s ease-in-out infinite;
+}
+</style>
+
             <p>Here are some frequently asked questions (FAQs) about using this EMI calculator, based on common queries.</p>
         </div>
         <div class="faq-section">
