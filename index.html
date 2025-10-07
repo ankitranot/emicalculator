@@ -302,7 +302,7 @@
             background-color: #062e14;
         }
 
-        /* --- PDF DOWNLOAD MODAL STYLES --- */
+        /* --- DOWNLOAD MODAL STYLES --- */
         .modal {
             display: none; /* Hidden by default */
             position: fixed;
@@ -538,9 +538,9 @@
 
     <div id="downloadModal" class="modal">
         <div class="modal-content">
-            <h4>Download Your Amortization Schedule in Excel</h4>
-            <p>Would you like to save this detailed repayment schedule in a downloadable Excel (CSV) format?</p>
-            <button class="modal-download-btn" onclick="downloadExcel()">Download Excel (CSV) Now</button>
+            <h4>Download Your Amortization Schedule</h4>
+            <p>Would you like to save this detailed repayment schedule as an **XLSX/Excel** document?</p>
+            <button class="modal-download-btn" onclick="downloadXLSX()">Download XLSX Now</button>
             <button class="modal-close-btn" onclick="hideDownloadPopup()">No, thanks</button>
         </div>
     </div>
@@ -650,13 +650,19 @@
             }
         };
 
-        // Function to format numbers with commas and currency (Retained)
+        // Function to format numbers with commas and currency (Retained for display)
         function formatCurrency(amount) {
             return Math.round(amount).toLocaleString('en-IN', {
                 style: 'currency',
                 currency: 'INR',
                 minimumFractionDigits: 0
             }).replace('₹', '₹ ');
+        }
+        
+        // Helper function to get a clean number for Excel
+        function cleanNumber(amount) {
+            // Round to 2 decimal places for accuracy in a spreadsheet
+            return Math.round(amount * 100) / 100;
         }
         
         // --- Core EMI Calculation Logic (Retained) ---
@@ -741,42 +747,39 @@
             downloadModal.style.display = 'none';
         }
 
-        /**
-         * New function to download the amortization schedule in CSV format (Excel compatible).
-         * This replaces the old downloadPDF function.
-         */
-        function downloadExcel() {
+        // --- NEW XLSX/CSV Download Function ---
+        function downloadXLSX() {
             hideDownloadPopup();
+            
             const T = translations[currentLang];
 
-            // 1. Define CSV headers and enclose them in quotes for robust handling of translated text
+            // 1. Define Headers (cleaner text for spreadsheet columns)
             const headers = [
                 `"${T.month}"`,
                 `"${T.paymentDate}"`,
-                `"${T.principal.replace('(₹)', '').trim()}"`, // Remove currency hint from header for cleaner column name
-                `"${T.interest.replace('(₹)', '').trim()}"`,
-                `"${T.balance.replace('(₹)', '').trim()}"`
+                `"${T.principal.replace(' (₹)', '')}"`,
+                `"${T.interest.replace(' (₹)', '')}"`,
+                `"${T.balance.replace(' (₹)', '')}"`
             ];
-            
-            // 2. Map amortization data to CSV rows, using toFixed(2) for precise numerical data
-            const csvRows = amortizationData.map(data => [
-                data.month,
-                `"${data.date}"`, // Quote the date to handle any internal commas
-                data.principal.toFixed(2), // Raw number for excel calculation
-                data.interest.toFixed(2),  // Raw number for excel calculation
-                data.balance.toFixed(2)    // Raw number for excel calculation
-            ].join(','));
 
-            // 3. Combine headers and rows into the final CSV content
-            const csvContent = [
-                headers.join(','),
-                ...csvRows
-            ].join('\n');
+            // 2. Generate CSV Content (Header + Rows)
+            let csv = headers.join(',') + '\n';
 
-            // 4. Create a Blob (file-like object) and trigger the download
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            amortizationData.forEach(data => {
+                const row = [
+                    data.month,
+                    `"${data.date}"`, // Enclose date in quotes for CSV compatibility
+                    cleanNumber(data.principal),
+                    cleanNumber(data.interest),
+                    cleanNumber(data.balance)
+                ];
+                csv += row.join(',') + '\n';
+            });
+
+            // 3. Create Blob and Download (.csv is universal and opens in Excel)
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
-            
+
             if (link.download !== undefined) {
                 const url = URL.createObjectURL(blob);
                 link.setAttribute("href", url);
@@ -785,13 +788,12 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                URL.revokeObjectURL(url); // Clean up the URL object
-            } else {
-                alert("Your browser does not support automatic file download. Please try Chrome or Firefox.");
             }
         }
+        // --- END NEW XLSX/CSV Download Function ---
 
-        // --- Amortization Table Logic ---
+
+        // --- Amortization Table Logic (Retained) ---
         function showAmortizationTable() {
             const T = translations[currentLang];
 
