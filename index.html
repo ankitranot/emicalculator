@@ -10,6 +10,8 @@
         html {
             scroll-behavior: smooth;
         }
+        
+        /* --- DESKTOP/DEFAULT STYLES (ORIGINAL STATE) --- */
         body {
             font-family: "Poppins", sans-serif;
             background: #f2f7f3;
@@ -19,23 +21,22 @@
             padding: 20px;
             display: flex;
             justify-content: center;
-            /* MODIFIED: Align items in the center horizontally */
-            align-items: center; 
+            align-items: flex-start; 
             flex-direction: column;
         }
 
-        /* --- HEADER & NAVIGATION STYLES --- */
         .top-header-bar {
             width: 100%;
             height: 60px; 
             background-color: transparent; 
             display: flex;
-            justify-content: space-between; /* Push logo left, nav right */
+            justify-content: space-between; 
             align-items: center;
             padding: 0 20px;
             box-sizing: border-box;
             z-index: 1000;
             margin-bottom: 20px; 
+            position: relative; 
         }
 
         .logo-text {
@@ -46,9 +47,13 @@
             text-decoration: none;
         }
 
+        /* Desktop Nav: Visible and Horizontal */
         .top-nav {
-            display: flex;
+            display: flex; 
             gap: 20px; 
+            position: static; 
+            background: transparent; 
+            padding: 0;
         }
 
         .top-nav a {
@@ -59,12 +64,12 @@
             padding: 5px 0;
             transition: color 0.3s ease;
         }
-
-        .top-nav a:hover {
-            color: #ff6600; 
+        
+        /* Hamburger button is HIDDEN on desktop by default */
+        #menuToggle {
+            display: none;
         }
-        /* --- END NEW STYLES --- */
-
+        /* END DESKTOP/DEFAULT STYLES */
 
         .card-container {
             display: flex;
@@ -72,7 +77,7 @@
             align-items: center;
             width: 100%;
             max-width: 950px;
-            margin: 0 auto; /* This can be kept or removed; 'align-items: center' in body will center it */
+            margin: 0 auto;
         }
         
         .card {
@@ -85,6 +90,7 @@
             transition: max-width 0.6s ease, padding 0.6s ease;
             position: relative;
             margin-top: 0;
+            box-sizing: border-box;
         }
 
         .card.expanded {
@@ -149,9 +155,8 @@
         .btn-reset { background: #ff6600; margin-top: 12px; }
         .btn-reset:hover { background: #cc5200; }
         
-        /* Container for results and chart to appear side-by-side */
         .results-and-chart-container {
-            display: none; /* Hidden by default */
+            display: none; 
             flex-direction: column;
             align-items: center;
             width: 100%;
@@ -174,6 +179,7 @@
             margin-top: 15px;
         }
         canvas { width: 100% !important; height: 100% !important; }
+        
         details {
             margin: 10px 0;
             border: 1px solid #ccc;
@@ -207,7 +213,8 @@
             transition: width 0.3s ease;
         }
         
-        @media (min-width: 768px) {
+        /* Desktop Layout for Results (Retained) */
+        @media (min-width: 769px) {
             .card.expanded .results-and-chart-container.show {
                 flex-direction: row;
                 justify-content: space-between;
@@ -251,7 +258,6 @@
             max-width: 950px;
             margin-top: 30px;
             line-height: 1.6;
-            /* MODIFIED: Ensure text is left-aligned for headings and paragraphs */
             text-align: left; 
         }
         .emi-info h3, .emi-info h4 {
@@ -261,23 +267,6 @@
         .emi-info ul {
             padding-left: 20px;
         }
-        .language-switcher {
-            text-align: center;
-            margin: 25px 0 25px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .language-switcher select {
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-family: "Poppins", sans-serif;
-        }
-        
-        
-        
         
         .schedule-container {
             width: 100%;
@@ -285,6 +274,14 @@
         }
         .schedule-container.show {
             display: block;
+        }
+        
+        /* Centering Wrapper for the button (New) */
+        .center-btn-wrapper {
+            width: 100%;
+            display: none; /* Hidden by default, controlled by JS in calculateEMI */
+            justify-content: center;
+            margin-top: 20px; 
         }
         
         .show-schedule-btn {
@@ -297,114 +294,139 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.3s;
-            margin-top: 20px;
+            margin-top: 0; 
         }
         .show-schedule-btn:hover {
             background-color: #062e14;
         }
 
-        /* Responsive adjustments for smaller screens */
-        @media (max-width: 1024px) {
-            .card-container, .card {
-                width: 100%;
-                max-width: none;
-            }
-            body {
-                padding: 10px;
-            }
-            .card {
-                padding: 1.5rem;
-            }
-        }
-        
+        /* --- START MOBILE OPTIMIZATION (max-width: 768px) --- */
         @media (max-width: 768px) {
-            /* The fix is here: We REMOVED 'display: none' from .top-nav */
+            
+            body {
+                padding: 10px; 
+            }
+            
+            /* Hide the desktop navigation */
             .top-nav {
-                display: flex; /* Ensure it is visible */
-                flex-direction: column; /* Stack the links vertically */
-                position: absolute; /* Allows it to overlap content */
-                top: 60px; /* Positions it just below the header bar */
-                right: 20px; 
+                display: none; 
+                flex-direction: column;
+                position: fixed; 
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
                 background: #fff;
-                border: 1px solid #ccc;
-                border-radius: 8px;
-                padding: 10px 20px;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                gap: 10px;
-                width: 150px;
-                z-index: 1000;
+                padding-top: 80px; 
+                box-sizing: border-box;
+                z-index: 999; 
+                overflow-y: auto;
+                transition: opacity 0.3s ease;
+                gap: 0;
             }
 
+            /* Show the mobile navigation when active */
+            .top-nav.active {
+                display: flex; 
+            }
+            
+            .top-nav a {
+                font-size: 18px; 
+                padding: 15px 20px;
+                text-align: center;
+                border-bottom: 1px solid #f2f7f3; 
+            }
+
+            /* --- HAMBURGER MENU STYLES --- */
+            /* Show the toggle button */
+            #menuToggle {
+                display: block;
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+                z-index: 1001;
+                background: none;
+                border: none;
+                padding: 0;
+                position: absolute;
+                right: 10px; 
+            }
+            .hamburger-icon, .hamburger-icon::before, .hamburger-icon::after {
+                display: block;
+                position: absolute;
+                height: 3px;
+                width: 100%;
+                background: #0b3d1c;
+                border-radius: 3px;
+                transition: all 0.3s ease-in-out;
+            }
+            .hamburger-icon {
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            .hamburger-icon::before {
+                content: '';
+                top: -9px;
+            }
+            .hamburger-icon::after {
+                content: '';
+                top: 9px;
+            }
+            .hamburger-icon.active { background: transparent; }
+            .hamburger-icon.active::before { top: 0; transform: rotate(45deg); }
+            .hamburger-icon.active::after { top: 0; transform: rotate(-45deg); }
+            /* --- END HAMBURGER MENU STYLES --- */
+
+            /* Other Mobile Optimizations */
             .top-header-bar {
-                justify-content: space-between; /* Keep logo left, menu area right */
-            }
-            .logo-text {
-                margin: 0;
-            }
-            body {
-                padding: 10px 20px;
+                padding: 0 10px;
             }
             .card {
                 padding: 20px;
                 max-width: 100%;
                 border-radius: 30px;
-                margin-top: 0;
             }
-            h2 { font-size: 22px; }
-            label { font-size: 14px; margin-top: 15px; }
-            input { padding: 12px; font-size: 14px; }
-            .btn { padding: 14px; font-size: 16px; }
-
-            .result-label { font-size: 16px; }
-            .result-value { font-size: 24px; }
-            .result-label.highlighted { font-size: 20px; }
-            .result-value.highlighted { font-size: 32px; }
-
+            .card.expanded {
+                max-width: 100%;
+            }
+            h2 { font-size: 24px; }
+            input { padding: 12px; }
+            .chart-container {
+                height: 250px;
+                width: 100%;
+            }
+            .result-value { font-size: 28px; }
             table { font-size: 11px; }
-            th, td { padding: 6px; }
             .footer {
-                width: auto;
-                border-top: none;
                 font-size: 16px;
-                padding: 10px 0;
-                margin: 15px 0;
-            }
-            .footer-content {
-                display: inline-block;
-                border-top: 6px solid #ff6600;
-                border-radius: 8px;
-                padding-top: 10px;
             }
             .emi-info {
                 max-width: 100%;
-                padding: 15px;
-                margin-top: 20px;
-                text-align: left; /* Keep left aligned on mobile too */
-            }
-            .language-switcher {
-                text-align: center;
-                margin: 15px 0;
+                padding: 0 10px;
             }
         }
+        /* --- END MOBILE OPTIMIZATION --- */
     </style>
 </head>
 <body>
     
     <header class="top-header-bar">
-        <a href="#calculatorTitle" class="logo-text">EMI Calculator</a>
+        <a href="#calculatorTitle" class="logo-text" onclick="closeMenu()">EMI Calculator</a>
         
-        <nav class="top-nav">
-            <a href="#calculatorTitle">Home</a>
-            <a href="about.html">About us</a>
-            <a href="contact.html">Contact us</a>
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="terms.html">Terms & Condition</a>
+        <button id="menuToggle" aria-label="Toggle navigation menu">
+            <span class="hamburger-icon" id="hamburgerIcon"></span>
+        </button>
+        
+        <nav class="top-nav" id="topNav">
+            <a href="#calculatorTitle" onclick="closeMenu()">Home</a>
+            <a href="about.html" onclick="closeMenu()">About us</a>
+            <a href="contact.html" onclick="closeMenu()">Contact us</a>
+            <a href="privacy.html" onclick="closeMenu()">Privacy Policy</a>
+            <a href="terms.html" onclick="closeMenu()">Terms & Condition</a>
         </nav>
     </header>
 
     <div class="card-container">
-        
-        </div>
         <div class="card" id="cardBox">
             <h2 id="calculatorTitle">📊 Loan (EMI) Calculator</h2>
             <label id="labelLoanAmount">Loan Amount (₹)</label>
@@ -423,7 +445,10 @@
                 <div class="chart-container"><canvas id="emiChart"></canvas></div>
             </div>
             
-            <button class="show-schedule-btn" id="showScheduleBtn" style="display: none;" onclick="showAmortizationTable()">Show Amortization Schedule</button>
+            <div class="center-btn-wrapper">
+                <button class="show-schedule-btn" id="showScheduleBtn" onclick="showAmortizationTable()">Show Amortization Schedule</button>
+            </div>
+            
             <div class="schedule-container" id="scheduleContainer"></div>
         </div>
         
@@ -444,12 +469,7 @@
             <p id="emiConclusionPara">Calculating this manually can be tedious and prone to errors. Our EMI calculator automates this process, providing you with instant, accurate results along with a detailed amortization schedule and visual charts to help you understand your loan repayment journey.</p>
         </div>
         <div class="orange-banner" id="faq-start">
-
-
-
         </div>
-        
-        
     </div>
     
    <script>
@@ -464,9 +484,32 @@
         const resultsDiv = document.getElementById('results');
         const resetBtn = document.getElementById('resetBtn');
         const calculateBtn = document.getElementById('calculateBtn');
+        
+        const centerBtnWrapper = document.querySelector('.center-btn-wrapper');
+        
+        // JAVASCRIPT FOR HAMBURGER MENU
+        const menuToggle = document.getElementById('menuToggle');
+        const topNav = document.getElementById('topNav');
+        const hamburgerIcon = document.getElementById('hamburgerIcon');
+
+        function toggleMenu() {
+            topNav.classList.toggle('active');
+            hamburgerIcon.classList.toggle('active');
+            // Disable scrolling on body when menu is open
+            document.body.style.overflow = topNav.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        function closeMenu() {
+            topNav.classList.remove('active');
+            hamburgerIcon.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        menuToggle.addEventListener('click', toggleMenu);
+        // END JAVASCRIPT FOR HAMBURGER MENU
 
 
-        // --- Translation Data (Updated for Payment Date) ---
+        // --- Translation Data (Retained) ---
         const translations = {
             en: {
                 title: "📊 Loan (EMI) Calculator",
@@ -478,10 +521,10 @@
                 monthlyEmi: "Monthly <strong>EMI</strong>:",
                 totalPayment: "Total Payment:",
                 totalInterest: "Total Interest:",
-                amortizationSchedule: "📑 Amortization Schedule (Starting Next Month)", // Updated label
+                amortizationSchedule: "📑 Amortization Schedule (Starting Next Month)",
                 year: "Year",
-                month: "Payment No", // Changed 'Month' to 'Payment No'
-                paymentDate: "Payment Date", // NEW label for the calendar date column
+                month: "Payment No", 
+                paymentDate: "Payment Date", 
                 principal: "Principal (₹)",
                 interest: "Interest (₹)",
                 balance: "Balance (₹)",
@@ -509,10 +552,10 @@
                 monthlyEmi: "मासिक <strong>ईएमआई</strong>:",
                 totalPayment: "कुल भुगतान:",
                 totalInterest: "कुल ब्याज:",
-                amortizationSchedule: "📑 चुकौती सारणी (अगले महीने से शुरू)", // Updated label
+                amortizationSchedule: "📑 चुकौती सारणी (अगले महीने से शुरू)",
                 year: "वर्ष",
-                month: "किस्त संख्या", // Changed 'महीना' to 'किस्त संख्या'
-                paymentDate: "भुगतान की तिथि", // NEW label
+                month: "किस्त संख्या",
+                paymentDate: "भुगतान की तिथि",
                 principal: "मूलधन (₹)",
                 interest: "ब्याज (₹)",
                 balance: "बकाया (₹)",
@@ -528,11 +571,11 @@
                 formulaPara1: "मानक सूत्र है: EMI = [P x R x (1+R)^N] / [(1+R)^N-1]",
                 formulaPara2: "जहां: <ul><li><b>P</b> = मूल ऋण राशि</li><li><b>R</b> = मासिक ब्याज दर (वार्षिक दर / 12 / 100)</li><li><b>N</b> = महीनों में ऋण अवधि</li></ul>",
                 examplePara: "उदाहरण के लिए, यदि आप 10 साल (120 महीने) के लिए 10.5% की वार्षिक ब्याज दर पर ₹10,00,000 उधार लेते हैं, तो आपकी मासिक ईएमआई लगभग ₹13,493 होगी। इसका मतलब है कि आप ऋण अवधि के दौरान कुल ₹16,19,220 का भुगतान करेंगे, जिसमें से ₹6,19,220 ब्याज होगा।",
-                conclusionPara: "इसे मैन्युअल रूप से गणना करना थकाऊ और त्रुटियों की आशंका से भरा हो सकता है। हमारा ईएमआई कैलकुलेटर इस प्रक्रिया को स्वचालित करता है, आपको तुरंत, सटीक परिणाम प्रदान करता है, साथ ही आपको अपनी ऋण चुकौती यात्रा को समझने में मदद करने के लिए विस्तृत चुकौती सारणी और दृश्य चार्ट भी देता।"
+                conclusionPara: "Calculating this manually can be tedious and prone to errors. Our EMI calculator automates this process, providing you with instant, accurate results along with a detailed amortization schedule and visual charts to help you understand your loan repayment journey."
             }
         };
 
-        // Function to format numbers with commas and currency
+        // Function to format numbers with commas and currency (Retained)
         function formatCurrency(amount) {
             return Math.round(amount).toLocaleString('en-IN', {
                 style: 'currency',
@@ -541,7 +584,7 @@
             }).replace('₹', '₹ ');
         }
         
-        // --- Core EMI Calculation Logic ---
+        // --- Core EMI Calculation Logic (Retained) ---
         function calculateEMI() {
             const P = parseFloat(document.getElementById('loanAmount').value);
             const r = parseFloat(document.getElementById('interestRate').value) / 100 / 12; // Monthly rate
@@ -564,13 +607,10 @@
             
             // --- MODIFICATION: Set Start Date for Amortization ---
             const startDate = new Date();
-            // Typically, the first payment is due one month from loan disbursement.
-            // We set the date to the 1st of the next month for a clean starting point.
             startDate.setMonth(startDate.getMonth() + 1);
             startDate.setDate(1); 
             
             for (let i = 1; i <= n; i++) {
-                // Calculate the date for this payment
                 let paymentDate = new Date(startDate);
                 paymentDate.setMonth(startDate.getMonth() + i - 1);
                 
@@ -580,12 +620,10 @@
 
                 totalInterest += interestPayment;
                 
-                // Determine the correct locale for date formatting
                 const locale = currentLang === 'hi' ? 'hi-IN' : 'en-US';
 
                 amortizationData.push({
                     month: i,
-                    // Store the formatted Month and Year
                     date: paymentDate.toLocaleDateString(locale, { year: 'numeric', month: 'long' }),
                     principal: principalPayment,
                     interest: interestPayment,
@@ -602,7 +640,10 @@
             // UI Updates
             card.classList.add('expanded');
             resultsAndChartContainer.classList.add('show');
-            showScheduleBtn.style.display = 'block';
+            
+            // Show the centered button wrapper
+            centerBtnWrapper.style.display = 'flex'; 
+            
             resetBtn.style.display = 'block';
             calculateBtn.style.display = 'none';
 
@@ -614,7 +655,7 @@
              document.getElementById('resultsAndChartContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // --- Result Display (No change needed) ---
+        // --- Result Display (Retained) ---
         function displayResults(emi, totalPayment, totalInterest) {
             const T = translations[currentLang];
 
@@ -634,7 +675,7 @@
             `;
         }
 
-        // --- Chart Generation (No change needed) ---
+        // --- Chart Generation (Retained) ---
         function drawChart(P, totalInterest) {
             const ctx = document.getElementById('emiChart').getContext('2d');
             const T = translations[currentLang];
@@ -681,16 +722,18 @@
             });
         }
         
-        // --- Amortization Table (Modified to show Payment Date) ---
+        // --- Amortization Table (Restored/Retained) ---
         function showAmortizationTable() {
             const T = translations[currentLang];
 
+            // If schedule is currently showing, hide it
             if (scheduleContainer.classList.contains('show')) {
                 scheduleContainer.classList.remove('show');
                 showScheduleBtn.textContent = T.showSchedule;
                 return;
             }
             
+            // Otherwise, generate and show the schedule
             let tableHTML = `
                 <h3>${T.amortizationSchedule}</h3>
                 <div style="max-height: 400px; overflow-y: auto;">
@@ -733,7 +776,7 @@
             scheduleContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // --- Reset Function (No change needed) ---
+        // --- Reset Function (Retained) ---
         function resetCalculator() {
             document.getElementById('loanAmount').value = '';
             document.getElementById('interestRate').value = '';
@@ -750,15 +793,16 @@
             // UI Updates
             card.classList.remove('expanded');
             resultsAndChartContainer.classList.remove('show');
-            showScheduleBtn.style.display = 'none';
+            centerBtnWrapper.style.display = 'none'; // Hide the centered button wrapper
             resetBtn.style.display = 'none';
             calculateBtn.style.display = 'block';
             scheduleContainer.classList.remove('show');
         }
 
-        // --- Language Switcher (Minor update for initial load) ---
+        // --- Language Switcher (Retained) ---
         function setLanguage(lang) {
-            currentLang = lang || document.getElementById('language-select').value;
+            currentLang = lang || 'en'; 
+            
             const T = translations[currentLang];
 
             // Update calculator fields
@@ -786,17 +830,13 @@
             
             // If results are showing, redraw them in the new language
             if (resultsAndChartContainer.classList.contains('show')) {
-                // We re-run calculateEMI to regenerate amortizationData with new date formats
-                // This is simpler and guarantees consistency when switching language mid-display
                 calculateEMI(); 
             }
         }
         
-        // Note: There is no 'language-select' element in the HTML, 
-        // so this line will throw an error. I've commented out the 
-        // problematic line to prevent script failure on load. 
-        // If a language switcher is added, this line should be restored.
-        // setLanguage(document.getElementById('language-select').value); 
+        // Initial call to ensure labels are set (assuming 'en' by default)
+        setLanguage('en'); 
+        
     </script>
 
 </body>
