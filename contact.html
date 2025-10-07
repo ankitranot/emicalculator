@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | EMI Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Common styles for consistent look and feel */
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #f2f7f3;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+        .top-header-bar {
+            width: 100%;
+            height: 60px; 
+            background-color: transparent; 
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+            z-index: 1000;
+            margin-bottom: 20px; 
+        }
+        .logo-text {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: #0b3d1c; 
+            text-decoration: none;
+        }
+        .top-nav {
+            display: flex;
+            gap: 20px; 
+        }
+        .top-nav a {
+            color: #0b3d1c; 
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+        .top-nav a:hover {
+            color: #ff6600; 
+        }
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 950px;
+            margin: 0 auto;
+        }
+        .content-card { 
+            background: #fff;
+            padding: 50px;
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            width: 100%;
+            box-sizing: border-box;
+            line-height: 1.8;
+        }
+        .content-card h2 {
+            color: #0b3d1c;
+            font-size: 32px;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #ff6600;
+            padding-bottom: 10px;
+        }
+        .content-card h3 {
+             color: #ff6600;
+             margin-top: 30px;
+        }
+        .content-card p {
+            margin-bottom: 15px;
+        }
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .top-nav { display: none; }
+            .top-header-bar { justify-content: center; }
+            .logo-text { margin: auto; }
+            body { padding: 10px 20px; }
+            .content-card { padding: 30px 20px; }
+            .content-card h2 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="top-header-bar">
+        <a href="index.html" class="logo-text">EMI Calculator</a>
+        <nav class="top-nav">
+            <a href="index.html">Home</a>
+            <a href="about.html">About us</a>
+            <a href="contact.html">Contact us</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms & Condition</a>
+        </nav>
+    </header>
+
+    <div class="card-container">
+        <div class="content-card">
+            <h2>Contact Us</h2>
+            <p>We are here to assist you with any questions, feedback, or concerns you may have regarding the EMI calculator or its features.</p>
+            
+            <h3>Get In Touch</h3>
+            <p>The best way to reach us is via email:</p>
+            <ul>
+                <li><strong>For Support/Feedback:</strong> <a href="mailto:support@emicalc.com">support@emicalc.com</a></li>
+                <li><strong>For Business Inquiries:</strong> <a href="mailto:info@emicalc.com">info@emicalc.com</a></li>
+            </ul>
+
+            <h3>Connect with Us</h3>
+            <p>While we primarily offer support through email, you can follow us on social media (placeholder link).</p>
+            <p>We aim to respond to all inquiries within 1-2 business days.</p>
+        </div>
+    </div>
+</body>
+</html>contact.html
