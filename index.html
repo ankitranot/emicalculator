@@ -19,7 +19,8 @@
             padding: 20px;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
+            /* MODIFIED: Align items in the center horizontally */
+            align-items: center; 
             flex-direction: column;
         }
 
@@ -71,7 +72,7 @@
             align-items: center;
             width: 100%;
             max-width: 950px;
-            margin: 0 auto;
+            margin: 0 auto; /* This can be kept or removed; 'align-items: center' in body will center it */
         }
         
         .card {
@@ -250,6 +251,8 @@
             max-width: 950px;
             margin-top: 30px;
             line-height: 1.6;
+            /* MODIFIED: Ensure text is left-aligned for headings and paragraphs */
+            text-align: left; 
         }
         .emi-info h3, .emi-info h4 {
             color: #0b3d1c;
@@ -376,6 +379,7 @@
                 max-width: 100%;
                 padding: 15px;
                 margin-top: 20px;
+                text-align: left; /* Keep left aligned on mobile too */
             }
             .language-switcher {
                 text-align: center;
@@ -524,7 +528,7 @@
                 formulaPara1: "मानक सूत्र है: EMI = [P x R x (1+R)^N] / [(1+R)^N-1]",
                 formulaPara2: "जहां: <ul><li><b>P</b> = मूल ऋण राशि</li><li><b>R</b> = मासिक ब्याज दर (वार्षिक दर / 12 / 100)</li><li><b>N</b> = महीनों में ऋण अवधि</li></ul>",
                 examplePara: "उदाहरण के लिए, यदि आप 10 साल (120 महीने) के लिए 10.5% की वार्षिक ब्याज दर पर ₹10,00,000 उधार लेते हैं, तो आपकी मासिक ईएमआई लगभग ₹13,493 होगी। इसका मतलब है कि आप ऋण अवधि के दौरान कुल ₹16,19,220 का भुगतान करेंगे, जिसमें से ₹6,19,220 ब्याज होगा।",
-                conclusionPara: "इसे मैन्युअल रूप से गणना करना थकाऊ और त्रुटियों की आशंका से भरा हो सकता है। हमारा ईएमआई कैलकुलेटर इस प्रक्रिया को स्वचालित करता है, आपको तुरंत, सटीक परिणाम प्रदान करता है, साथ ही आपको अपनी ऋण चुकौती यात्रा को समझने में मदद करने के लिए विस्तृत चुकौती सारणी और दृश्य चार्ट भी देता है।"
+                conclusionPara: "इसे मैन्युअल रूप से गणना करना थकाऊ और त्रुटियों की आशंका से भरा हो सकता है। हमारा ईएमआई कैलकुलेटर इस प्रक्रिया को स्वचालित करता है, आपको तुरंत, सटीक परिणाम प्रदान करता है, साथ ही आपको अपनी ऋण चुकौती यात्रा को समझने में मदद करने के लिए विस्तृत चुकौती सारणी और दृश्य चार्ट भी देता।"
             }
         };
 
@@ -788,6 +792,12 @@
             }
         }
         
-        // Initial call to set up the language when the page loads
-        setLanguage(document.getElementById('language-select').value);
+        // Note: There is no 'language-select' element in the HTML, 
+        // so this line will throw an error. I've commented out the 
+        // problematic line to prevent script failure on load. 
+        // If a language switcher is added, this line should be restored.
+        // setLanguage(document.getElementById('language-select').value); 
     </script>
+
+</body>
+</html>
