@@ -455,13 +455,19 @@
     
     <script>
         let chart;
+        let amortizationData = []; // Store the detailed schedule
+        let currentLang = 'en';
+
         const card = document.getElementById('cardBox');
-        const footer = document.getElementById('footerLine');
         const resultsAndChartContainer = document.getElementById('resultsAndChartContainer');
         const scheduleContainer = document.getElementById('scheduleContainer');
         const showScheduleBtn = document.getElementById('showScheduleBtn');
         const resultsDiv = document.getElementById('results');
+        const resetBtn = document.getElementById('resetBtn');
+        const calculateBtn = document.getElementById('calculateBtn');
 
+
+        // --- Translation Data (Completed and Fixed) ---
         const translations = {
             en: {
                 title: "📊 Loan (EMI) Calculator",
@@ -516,6 +522,275 @@
                 infoTitle: "ईएमआई क्या है?",
                 infoPara1: "<b>समान मासिक किस्त (ईएमआई)</b> एक निश्चित भुगतान है जो आप एक निश्चित अवधि में ऋण चुकाने के लिए हर महीने एक ऋणदाता को करते हैं। इसे आपके चुकौती कार्यक्रम को सरल बनाने के लिए डिज़ाइन किया गया है, जिसमें <b>मूल ऋण राशि</b> और देय <b>ब्याज</b> दोनों को एक ही, अनुमानित मासिक भुगतान में जोड़ा जाता है।",
                 infoPara2: "इसे एक सुसंगत, प्रबंधनीय राशि के रूप में सोचें जो आपको व्यवस्थित रूप से अपना ऋण चुकाने में मदद करती है।",
-                infoPara3: "समय के साथ, आपकी ईएमआई की संरचना बदल जाती है। आपके ऋण के शुरुआती चरणों में, आपकी ईएमआई का एक बड़ा हिस्सा <b>ब्याज</b> चुकाने में जाता है। जैसे-जैसे आप भुगतान करना जारी रखते हैं, यह अनुपात बदलता है, और प्रत्येक ईएमआई का एक बड़ा हिस्सा <b>मूलधन</b> शेष को कम करने के लिए आवंटित किया जाता है। इस प्रक्रिया को <b>ऋण परिशोधन</b> कहा जाता है।",
+                infoPara3: "ओवर टाइम, आपकी ईएमआई की संरचना बदल जाती है। आपके ऋण के शुरुआती चरणों में, आपकी ईएमआई का एक बड़ा हिस्सा <b>ब्याज</b> चुकाने में जाता है। जैसे-जैसे आप भुगतान करना जारी रखते हैं, यह अनुपात बदलता है, और प्रत्येक ईएमआई का एक बड़ा हिस्सा <b>मूलधन</b> शेष को कम करने के लिए आवंटित किया जाता है। इस प्रक्रिया को <b>ऋण परिशोधन</b> कहा जाता है।",
                 formulaTitle: "ईएमआई सूत्र",
-                formulaPara1
+                formulaPara1: "मानक सूत्र है: EMI = [P x R x (1+R)^N] / [(1+R)^N-1]",
+                formulaPara2: "जहां: <ul><li><b>P</b> = मूल ऋण राशि</li><li><b>R</b> = मासिक ब्याज दर (वार्षिक दर / 12 / 100)</li><li><b>N</b> = महीनों में ऋण अवधि</li></ul>",
+                examplePara: "उदाहरण के लिए, यदि आप 10 साल (120 महीने) के लिए 10.5% की वार्षिक ब्याज दर पर ₹10,00,000 उधार लेते हैं, तो आपकी मासिक ईएमआई लगभग ₹13,493 होगी। इसका मतलब है कि आप ऋण अवधि के दौरान कुल ₹16,19,220 का भुगतान करेंगे, जिसमें से ₹6,19,220 ब्याज होगा।",
+                conclusionPara: "इसे मैन्युअल रूप से गणना करना थकाऊ और त्रुटियों की आशंका से भरा हो सकता है। हमारा ईएमआई कैलकुलेटर इस प्रक्रिया को स्वचालित करता है, आपको तुरंत, सटीक परिणाम प्रदान करता है, साथ ही आपको अपनी ऋण चुकौती यात्रा को समझने में मदद करने के लिए विस्तृत चुकौती सारणी और दृश्य चार्ट भी देता है।"
+            }
+        };
+
+        // Function to format numbers with commas and currency
+        function formatCurrency(amount) {
+            return Math.round(amount).toLocaleString('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                minimumFractionDigits: 0
+            }).replace('₹', '₹ ');
+        }
+        
+        // --- Core EMI Calculation Logic ---
+        function calculateEMI() {
+            const P = parseFloat(document.getElementById('loanAmount').value);
+            const r = parseFloat(document.getElementById('interestRate').value) / 100 / 12; // Monthly rate
+            const n = parseFloat(document.getElementById('loanTenure').value) * 12; // Total months
+
+            // Input Validation
+            if (isNaN(P) || isNaN(r) || isNaN(n) || P <= 0 || r <= 0 || n <= 0) {
+                alert("Please enter valid positive numbers for all fields.");
+                return;
+            }
+
+            // EMI Formula: M = P [ R(1 + R)^N / ((1 + R)^N – 1) ]
+            const emi = P * r * (Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+            
+            // Calculate Totals and Amortization Schedule
+            let totalInterest = 0;
+            let totalPayment = emi * n;
+            let balance = P;
+            amortizationData = []; // Reset schedule
+            
+            for (let i = 1; i <= n; i++) {
+                const interestPayment = balance * r;
+                const principalPayment = emi - interestPayment;
+                const newBalance = balance - principalPayment;
+
+                totalInterest += interestPayment;
+
+                amortizationData.push({
+                    month: i,
+                    year: Math.ceil(i / 12),
+                    principal: principalPayment,
+                    interest: interestPayment,
+                    balance: newBalance > 0 ? newBalance : 0 // Ensure balance doesn't go negative
+                });
+                
+                balance = newBalance;
+            }
+
+            // Display Results
+            displayResults(emi, totalPayment, totalInterest);
+            drawChart(P, totalInterest);
+            
+            // UI Updates
+            card.classList.add('expanded');
+            resultsAndChartContainer.classList.add('show');
+            showScheduleBtn.style.display = 'block';
+            resetBtn.style.display = 'block';
+            calculateBtn.style.display = 'none';
+
+            // Hide schedule if it was open from a previous calculation
+            scheduleContainer.classList.remove('show');
+            showScheduleBtn.textContent = translations[currentLang].showSchedule;
+
+             // Scroll to results
+             document.getElementById('resultsAndChartContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // --- Result Display ---
+        function displayResults(emi, totalPayment, totalInterest) {
+            const T = translations[currentLang];
+
+            resultsDiv.innerHTML = `
+                <div class="result-item">
+                    <span class="result-label highlighted">${T.monthlyEmi}</span>
+                    <span class="result-value highlighted">${formatCurrency(emi)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">${T.totalPayment}</span>
+                    <span class="result-value">${formatCurrency(totalPayment)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">${T.totalInterest}</span>
+                    <span class="result-value">${formatCurrency(totalInterest)}</span>
+                </div>
+            `;
+        }
+
+        // --- Chart Generation ---
+        function drawChart(P, totalInterest) {
+            const ctx = document.getElementById('emiChart').getContext('2d');
+            const T = translations[currentLang];
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [T.chartPrincipal, T.chartInterest],
+                    datasets: [{
+                        data: [P, totalInterest],
+                        backgroundColor: ['#0b3d1c', '#ff6600'],
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 14,
+                                    family: "'Poppins', sans-serif"
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Total Payment Breakdown',
+                            font: {
+                                size: 18,
+                                family: "'Poppins', sans-serif",
+                                weight: '600'
+                            },
+                            color: '#333'
+                        }
+                    }
+                }
+            });
+        }
+        
+        // --- Amortization Table ---
+        function showAmortizationTable() {
+            const T = translations[currentLang];
+
+            if (scheduleContainer.classList.contains('show')) {
+                scheduleContainer.classList.remove('show');
+                showScheduleBtn.textContent = T.showSchedule;
+                return;
+            }
+            
+            let tableHTML = `
+                <h3>${T.amortizationSchedule}</h3>
+                <div style="max-height: 400px; overflow-y: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>${T.month}</th>
+                            <th>${T.year}</th>
+                            <th>${T.principal}</th>
+                            <th>${T.interest}</th>
+                            <th>${T.balance}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            amortizationData.forEach(data => {
+                tableHTML += `
+                    <tr>
+                        <td>${data.month}</td>
+                        <td>${data.year}</td>
+                        <td>${formatCurrency(data.principal)}</td>
+                        <td>${formatCurrency(data.interest)}</td>
+                        <td>${formatCurrency(data.balance)}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+                </div>
+            `;
+
+            scheduleContainer.innerHTML = tableHTML;
+            scheduleContainer.classList.add('show');
+            showScheduleBtn.textContent = 'Hide Amortization Schedule';
+
+            // Scroll to the schedule table
+            scheduleContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // --- Reset Function ---
+        function resetCalculator() {
+            document.getElementById('loanAmount').value = '';
+            document.getElementById('interestRate').value = '';
+            document.getElementById('loanTenure').value = '';
+            
+            // Clear results and chart
+            resultsDiv.innerHTML = '';
+            scheduleContainer.innerHTML = '';
+            if (chart) {
+                chart.destroy();
+                chart = null;
+            }
+            
+            // UI Updates
+            card.classList.remove('expanded');
+            resultsAndChartContainer.classList.remove('show');
+            showScheduleBtn.style.display = 'none';
+            resetBtn.style.display = 'none';
+            calculateBtn.style.display = 'block';
+            scheduleContainer.classList.remove('show');
+        }
+
+        // --- Language Switcher (Completed and Fixed) ---
+        function setLanguage(lang) {
+            currentLang = lang || document.getElementById('language-select').value;
+            const T = translations[currentLang];
+
+            // Update calculator fields
+            document.getElementById('calculatorTitle').textContent = T.title;
+            document.getElementById('labelLoanAmount').textContent = T.loanAmount;
+            document.getElementById('labelInterestRate').textContent = T.interestRate;
+            document.getElementById('labelLoanTenure').textContent = T.loanTenure;
+            document.getElementById('calculateBtn').textContent = T.calculate;
+            document.getElementById('resetBtn').textContent = T.reset;
+            document.getElementById('showScheduleBtn').textContent = T.showSchedule;
+            
+            // Update Footer
+            document.getElementById('footerText').textContent = T.madeInIndia;
+
+            // Update EMI Info section
+            document.getElementById('emiInfoTitle').textContent = T.infoTitle;
+            document.getElementById('emiInfoPara1').innerHTML = T.infoPara1;
+            document.getElementById('emiInfoPara2').innerHTML = T.infoPara2;
+            document.getElementById('emiInfoPara3').innerHTML = T.infoPara3;
+            document.getElementById('emiFormulaTitle').textContent = T.formulaTitle;
+            document.getElementById('emiFormulaPara1').textContent = T.formulaPara1;
+            document.getElementById('emiFormulaPara2').innerHTML = T.formulaPara2;
+            document.getElementById('emiExamplePara').textContent = T.examplePara;
+            document.getElementById('emiConclusionPara').textContent = T.conclusionPara;
+            
+            // If results are showing, redraw them in the new language
+            if (resultsAndChartContainer.classList.contains('show')) {
+                // To display results and chart, we need the stored values
+                const P = parseFloat(document.getElementById('loanAmount').value);
+                const r = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
+                const n = parseFloat(document.getElementById('loanTenure').value) * 12;
+                
+                if (!isNaN(P) && !isNaN(n) && !isNaN(r) && P > 0) {
+                     const emi = P * r * (Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+                     const totalPayment = emi * n;
+                     const totalInterest = totalPayment - P;
+
+                    displayResults(emi, totalPayment, totalInterest);
+                    drawChart(P, totalInterest); // Redraw chart with new labels
+
+                    // If the schedule is open, refresh it
+                    if (scheduleContainer.classList.contains('show')) {
+                        showAmortizationTable(); 
+                    }
+                }
+            }
+        }
+        
+        // Initial call to set up the language when the page loads
+        setLanguage(document.getElementById('language-select').value);
+    </script>
