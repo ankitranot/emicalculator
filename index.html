@@ -453,7 +453,7 @@
         
     </div>
     
-    <script>
+   <script>
         let chart;
         let amortizationData = []; // Store the detailed schedule
         let currentLang = 'en';
@@ -467,7 +467,7 @@
         const calculateBtn = document.getElementById('calculateBtn');
 
 
-        // --- Translation Data (Completed and Fixed) ---
+        // --- Translation Data (Updated for Payment Date) ---
         const translations = {
             en: {
                 title: "📊 Loan (EMI) Calculator",
@@ -479,9 +479,10 @@
                 monthlyEmi: "Monthly <strong>EMI</strong>:",
                 totalPayment: "Total Payment:",
                 totalInterest: "Total Interest:",
-                amortizationSchedule: "📑 Amortization Schedule",
+                amortizationSchedule: "📑 Amortization Schedule (Starting Next Month)", // Updated label
                 year: "Year",
-                month: "Month",
+                month: "Payment #", // Changed 'Month' to 'Payment #'
+                paymentDate: "Payment Date", // NEW label for the calendar date column
                 principal: "Principal (₹)",
                 interest: "Interest (₹)",
                 balance: "Balance (₹)",
@@ -509,9 +510,10 @@
                 monthlyEmi: "मासिक <strong>ईएमआई</strong>:",
                 totalPayment: "कुल भुगतान:",
                 totalInterest: "कुल ब्याज:",
-                amortizationSchedule: "📑 चुकौती सारणी",
+                amortizationSchedule: "📑 चुकौती सारणी (अगले महीने से शुरू)", // Updated label
                 year: "वर्ष",
-                month: "महीना",
+                month: "किस्त संख्या", // Changed 'महीना' to 'किस्त संख्या'
+                paymentDate: "भुगतान की तिथि", // NEW label
                 principal: "मूलधन (₹)",
                 interest: "ब्याज (₹)",
                 balance: "बकाया (₹)",
@@ -561,19 +563,34 @@
             let balance = P;
             amortizationData = []; // Reset schedule
             
+            // --- MODIFICATION: Set Start Date for Amortization ---
+            const startDate = new Date();
+            // Typically, the first payment is due one month from loan disbursement.
+            // We set the date to the 1st of the next month for a clean starting point.
+            startDate.setMonth(startDate.getMonth() + 1);
+            startDate.setDate(1); 
+            
             for (let i = 1; i <= n; i++) {
+                // Calculate the date for this payment
+                let paymentDate = new Date(startDate);
+                paymentDate.setMonth(startDate.getMonth() + i - 1);
+                
                 const interestPayment = balance * r;
                 const principalPayment = emi - interestPayment;
                 const newBalance = balance - principalPayment;
 
                 totalInterest += interestPayment;
+                
+                // Determine the correct locale for date formatting
+                const locale = currentLang === 'hi' ? 'hi-IN' : 'en-US';
 
                 amortizationData.push({
                     month: i,
-                    year: Math.ceil(i / 12),
+                    // Store the formatted Month and Year
+                    date: paymentDate.toLocaleDateString(locale, { year: 'numeric', month: 'long' }),
                     principal: principalPayment,
                     interest: interestPayment,
-                    balance: newBalance > 0 ? newBalance : 0 // Ensure balance doesn't go negative
+                    balance: newBalance > 0 ? newBalance : 0 
                 });
                 
                 balance = newBalance;
@@ -598,7 +615,7 @@
              document.getElementById('resultsAndChartContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // --- Result Display ---
+        // --- Result Display (No change needed) ---
         function displayResults(emi, totalPayment, totalInterest) {
             const T = translations[currentLang];
 
@@ -618,7 +635,7 @@
             `;
         }
 
-        // --- Chart Generation ---
+        // --- Chart Generation (No change needed) ---
         function drawChart(P, totalInterest) {
             const ctx = document.getElementById('emiChart').getContext('2d');
             const T = translations[currentLang];
@@ -665,7 +682,7 @@
             });
         }
         
-        // --- Amortization Table ---
+        // --- Amortization Table (Modified to show Payment Date) ---
         function showAmortizationTable() {
             const T = translations[currentLang];
 
@@ -681,8 +698,8 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>${T.month}</th>
-                            <th>${T.year}</th>
+                            <th>${T.month}</th> 
+                            <th>${T.paymentDate}</th> 
                             <th>${T.principal}</th>
                             <th>${T.interest}</th>
                             <th>${T.balance}</th>
@@ -695,7 +712,7 @@
                 tableHTML += `
                     <tr>
                         <td>${data.month}</td>
-                        <td>${data.year}</td>
+                        <td>${data.date}</td> 
                         <td>${formatCurrency(data.principal)}</td>
                         <td>${formatCurrency(data.interest)}</td>
                         <td>${formatCurrency(data.balance)}</td>
@@ -717,7 +734,7 @@
             scheduleContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // --- Reset Function ---
+        // --- Reset Function (No change needed) ---
         function resetCalculator() {
             document.getElementById('loanAmount').value = '';
             document.getElementById('interestRate').value = '';
@@ -740,7 +757,7 @@
             scheduleContainer.classList.remove('show');
         }
 
-        // --- Language Switcher (Completed and Fixed) ---
+        // --- Language Switcher (Minor update for initial load) ---
         function setLanguage(lang) {
             currentLang = lang || document.getElementById('language-select').value;
             const T = translations[currentLang];
@@ -770,24 +787,9 @@
             
             // If results are showing, redraw them in the new language
             if (resultsAndChartContainer.classList.contains('show')) {
-                // To display results and chart, we need the stored values
-                const P = parseFloat(document.getElementById('loanAmount').value);
-                const r = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
-                const n = parseFloat(document.getElementById('loanTenure').value) * 12;
-                
-                if (!isNaN(P) && !isNaN(n) && !isNaN(r) && P > 0) {
-                     const emi = P * r * (Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-                     const totalPayment = emi * n;
-                     const totalInterest = totalPayment - P;
-
-                    displayResults(emi, totalPayment, totalInterest);
-                    drawChart(P, totalInterest); // Redraw chart with new labels
-
-                    // If the schedule is open, refresh it
-                    if (scheduleContainer.classList.contains('show')) {
-                        showAmortizationTable(); 
-                    }
-                }
+                // We re-run calculateEMI to regenerate amortizationData with new date formats
+                // This is simpler and guarantees consistency when switching language mid-display
+                calculateEMI(); 
             }
         }
         
