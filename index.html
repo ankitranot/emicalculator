@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loan (EMI) Calculator</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         html {
@@ -542,9 +538,9 @@
 
     <div id="downloadModal" class="modal">
         <div class="modal-content">
-            <h4>Download Your Amortization Schedule</h4>
-            <p>Would you like to save this detailed repayment schedule as a PDF document?</p>
-            <button class="modal-download-btn" onclick="downloadPDF()">Download PDF Now</button>
+            <h4>Download Your Amortization Schedule in Excel</h4>
+            <p>Would you like to save this detailed repayment schedule in a downloadable Excel (CSV) format?</p>
+            <button class="modal-download-btn" onclick="downloadExcel()">Download Excel (CSV) Now</button>
             <button class="modal-close-btn" onclick="hideDownloadPopup()">No, thanks</button>
         </div>
     </div>
@@ -745,69 +741,53 @@
             downloadModal.style.display = 'none';
         }
 
-        async function downloadPDF() {
-            // This function relies on the external libraries jspdf and html2canvas
+        /**
+         * New function to download the amortization schedule in CSV format (Excel compatible).
+         * This replaces the old downloadPDF function.
+         */
+        function downloadExcel() {
             hideDownloadPopup();
+            const T = translations[currentLang];
+
+            // 1. Define CSV headers and enclose them in quotes for robust handling of translated text
+            const headers = [
+                `"${T.month}"`,
+                `"${T.paymentDate}"`,
+                `"${T.principal.replace('(₹)', '').trim()}"`, // Remove currency hint from header for cleaner column name
+                `"${T.interest.replace('(₹)', '').trim()}"`,
+                `"${T.balance.replace('(₹)', '').trim()}"`
+            ];
             
-            // Clone the schedule table to remove the height limit for proper rendering
-            const tableToPrint = document.getElementById('scheduleContainer').cloneNode(true);
+            // 2. Map amortization data to CSV rows, using toFixed(2) for precise numerical data
+            const csvRows = amortizationData.map(data => [
+                data.month,
+                `"${data.date}"`, // Quote the date to handle any internal commas
+                data.principal.toFixed(2), // Raw number for excel calculation
+                data.interest.toFixed(2),  // Raw number for excel calculation
+                data.balance.toFixed(2)    // Raw number for excel calculation
+            ].join(','));
+
+            // 3. Combine headers and rows into the final CSV content
+            const csvContent = [
+                headers.join(','),
+                ...csvRows
+            ].join('\n');
+
+            // 4. Create a Blob (file-like object) and trigger the download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
             
-            // Remove the outer scrollable div and set max-height to none for full table capture
-            const tableDiv = tableToPrint.querySelector('div');
-            if (tableDiv) {
-                tableDiv.style.maxHeight = 'none'; 
-                tableDiv.style.overflow = 'visible';
-            }
-
-            // Temporarily append to body (off-screen) to render correctly for html2canvas
-            tableToPrint.style.position = 'absolute';
-            tableToPrint.style.left = '-9999px';
-            tableToPrint.style.width = '800px'; 
-            document.body.appendChild(tableToPrint);
-            
-            try {
-                // 1. Use html2canvas to capture the entire table as one large image
-                const canvas = await html2canvas(tableToPrint, {
-                    scale: 2, // Improve quality
-                    useCORS: true,
-                    scrollY: 0,
-                    windowHeight: tableToPrint.scrollHeight,
-                });
-
-                const imgData = canvas.toDataURL('image/jpeg', 1.0);
-                // The 'window.jspdf' object is made available by the external script
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const imgWidth = 200; // A4 width - 5mm margins on each side
-                const pageHeight = 295; // A4 height
-                const imgHeight = canvas.height * imgWidth / canvas.width;
-                let heightLeft = imgHeight;
-                let position = 0;
-
-                // 2. Add the first page
-                pdf.addImage(imgData, 'JPEG', 5, 5, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-
-                // 3. Loop to add new pages if content is longer than one page
-                while (heightLeft >= 0) {
-                    // Calculate the negative offset needed to display the next segment of the image
-                    position = heightLeft - imgHeight;
-                    
-                    pdf.addPage();
-                    // Add the image to the new page, starting at the calculated negative position
-                    pdf.addImage(imgData, 'JPEG', 5, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                }
-                
-                pdf.save('Amortization_Schedule.pdf');
-
-            } catch (error) {
-                console.error("PDF Download Error:", error);
-                // An alert to let the user know what happened
-                alert("Could not generate PDF. Please ensure your browser allows pop-ups and try again.");
-            } finally {
-                // Remove the temporary element
-                document.body.removeChild(tableToPrint);
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", "Amortization_Schedule.csv");
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url); // Clean up the URL object
+            } else {
+                alert("Your browser does not support automatic file download. Please try Chrome or Firefox.");
             }
         }
 
