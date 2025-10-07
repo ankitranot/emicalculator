@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loan (EMI) Calculator</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         html {
@@ -730,7 +732,7 @@
              document.getElementById('resultsAndChartContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         
-        // --- NEW: Download Popup Functions (Retained) ---
+        // --- Download Popup Functions ---
         function showDownloadPopup() {
             // Check if the amortization table is still visible before showing the popup
             if (scheduleContainer.classList.contains('show')) {
@@ -744,27 +746,27 @@
         }
 
         async function downloadPDF() {
+            // This function relies on the external libraries jspdf and html2canvas
             hideDownloadPopup();
-            const T = translations[currentLang];
             
             // Clone the schedule table to remove the height limit for proper rendering
             const tableToPrint = document.getElementById('scheduleContainer').cloneNode(true);
             
-            // Remove the outer scrollable div if it exists (for full table export)
+            // Remove the outer scrollable div and set max-height to none for full table capture
             const tableDiv = tableToPrint.querySelector('div');
             if (tableDiv) {
                 tableDiv.style.maxHeight = 'none'; 
                 tableDiv.style.overflow = 'visible';
             }
 
-            // Temporarily append to body (off-screen) to render correctly
+            // Temporarily append to body (off-screen) to render correctly for html2canvas
             tableToPrint.style.position = 'absolute';
             tableToPrint.style.left = '-9999px';
             tableToPrint.style.width = '800px'; 
             document.body.appendChild(tableToPrint);
             
             try {
-                // Use html2canvas to capture the table as an image
+                // 1. Use html2canvas to capture the entire table as one large image
                 const canvas = await html2canvas(tableToPrint, {
                     scale: 2, // Improve quality
                     useCORS: true,
@@ -773,21 +775,26 @@
                 });
 
                 const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                // The 'window.jspdf' object is made available by the external script
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'mm', 'a4');
-                const imgWidth = 200; // A4 width - margins
+                const imgWidth = 200; // A4 width - 5mm margins on each side
                 const pageHeight = 295; // A4 height
                 const imgHeight = canvas.height * imgWidth / canvas.width;
                 let heightLeft = imgHeight;
                 let position = 0;
 
+                // 2. Add the first page
                 pdf.addImage(imgData, 'JPEG', 5, 5, imgWidth, imgHeight);
                 heightLeft -= pageHeight;
 
-                // Add new pages if content is longer than one page
+                // 3. Loop to add new pages if content is longer than one page
                 while (heightLeft >= 0) {
+                    // Calculate the negative offset needed to display the next segment of the image
                     position = heightLeft - imgHeight;
+                    
                     pdf.addPage();
+                    // Add the image to the new page, starting at the calculated negative position
                     pdf.addImage(imgData, 'JPEG', 5, position, imgWidth, imgHeight);
                     heightLeft -= pageHeight;
                 }
@@ -796,14 +803,15 @@
 
             } catch (error) {
                 console.error("PDF Download Error:", error);
-                alert("Could not generate PDF. Please try again.");
+                // An alert to let the user know what happened
+                alert("Could not generate PDF. Please ensure your browser allows pop-ups and try again.");
             } finally {
                 // Remove the temporary element
                 document.body.removeChild(tableToPrint);
             }
         }
 
-        // --- Amortization Table Logic (Retained) ---
+        // --- Amortization Table Logic ---
         function showAmortizationTable() {
             const T = translations[currentLang];
 
@@ -861,7 +869,7 @@
             popupTimeout = setTimeout(showDownloadPopup, 10000);
         }
 
-        // --- Other functions (Retained) ---
+        // --- Other functions (Retained for completeness) ---
         function displayResults(emi, totalPayment, totalInterest) {
             const T = translations[currentLang];
 
