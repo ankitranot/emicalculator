@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loan (EMI) Calculator</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         html {
@@ -194,6 +196,8 @@
             border-collapse: collapse;
             font-size: 13px;
             margin-top: 8px;
+            /* Give the table a background so it renders correctly in PDF */
+            background: #fff; 
         }
         th, td {
             border: 1px solid #ccc;
@@ -276,10 +280,10 @@
             display: block;
         }
         
-        /* Centering Wrapper for the button (New) */
+        /* Centering Wrapper for the button */
         .center-btn-wrapper {
             width: 100%;
-            display: none; /* Hidden by default, controlled by JS in calculateEMI */
+            display: none; 
             justify-content: center;
             margin-top: 20px; 
         }
@@ -299,6 +303,67 @@
         .show-schedule-btn:hover {
             background-color: #062e14;
         }
+
+        /* --- PDF DOWNLOAD MODAL STYLES --- */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            position: relative;
+        }
+
+        .modal-content h4 {
+            color: #0b3d1c;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .modal-content button {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 5px;
+        }
+
+        .modal-download-btn {
+            background-color: #ff6600;
+            color: #fff;
+            border: none;
+        }
+        .modal-download-btn:hover {
+            background-color: #cc5200;
+        }
+        .modal-close-btn {
+            background-color: #ccc;
+            color: #333;
+            border: none;
+        }
+        .modal-close-btn:hover {
+            background-color: #aaa;
+        }
+        /* --- END MODAL STYLES --- */
 
         /* --- START MOBILE OPTIMIZATION (max-width: 768px) --- */
         @media (max-width: 768px) {
@@ -449,7 +514,8 @@
                 <button class="show-schedule-btn" id="showScheduleBtn" onclick="showAmortizationTable()">Show Amortization Schedule</button>
             </div>
             
-            <div class="schedule-container" id="scheduleContainer"></div>
+            <div class="schedule-container" id="scheduleContainer">
+                </div>
         </div>
         
         <div class="footer" id="footerLine">
@@ -471,11 +537,21 @@
         <div class="orange-banner" id="faq-start">
         </div>
     </div>
+
+    <div id="downloadModal" class="modal">
+        <div class="modal-content">
+            <h4>Download Your Amortization Schedule</h4>
+            <p>Would you like to save this detailed repayment schedule as a PDF document?</p>
+            <button class="modal-download-btn" onclick="downloadPDF()">Download PDF Now</button>
+            <button class="modal-close-btn" onclick="hideDownloadPopup()">No, thanks</button>
+        </div>
+    </div>
     
    <script>
         let chart;
-        let amortizationData = []; // Store the detailed schedule
+        let amortizationData = []; 
         let currentLang = 'en';
+        let popupTimeout; 
 
         const card = document.getElementById('cardBox');
         const resultsAndChartContainer = document.getElementById('resultsAndChartContainer');
@@ -484,9 +560,9 @@
         const resultsDiv = document.getElementById('results');
         const resetBtn = document.getElementById('resetBtn');
         const calculateBtn = document.getElementById('calculateBtn');
-        
         const centerBtnWrapper = document.querySelector('.center-btn-wrapper');
-        
+        const downloadModal = document.getElementById('downloadModal');
+
         // JAVASCRIPT FOR HAMBURGER MENU
         const menuToggle = document.getElementById('menuToggle');
         const topNav = document.getElementById('topNav');
@@ -495,7 +571,6 @@
         function toggleMenu() {
             topNav.classList.toggle('active');
             hamburgerIcon.classList.toggle('active');
-            // Disable scrolling on body when menu is open
             document.body.style.overflow = topNav.classList.contains('active') ? 'hidden' : 'auto';
         }
 
@@ -509,7 +584,7 @@
         // END JAVASCRIPT FOR HAMBURGER MENU
 
 
-        // --- Translation Data (Retained) ---
+        // --- Translation Data ---
         const translations = {
             en: {
                 title: "📊 Loan (EMI) Calculator",
@@ -532,6 +607,7 @@
                 chartPrincipal: "Principal",
                 chartInterest: "Interest",
                 showSchedule: "Show Amortization Schedule",
+                hideSchedule: "Hide Amortization Schedule",
                 infoTitle: "What is EMI?",
                 infoPara1: "An <b>Equated Monthly Installment (EMI)</b> is a fixed payment you make to a lender each month to repay a loan over a set period. It's designed to simplify your repayment schedule by combining both the <b>principal loan amount</b> and the <b>interest</b> due into a single, predictable monthly payment.",
                 infoPara2: "Think of it as a consistent, manageable sum that helps you systematically pay off your debt.",
@@ -563,6 +639,7 @@
                 chartPrincipal: "मूलधन",
                 chartInterest: "ब्याज",
                 showSchedule: "चुकौती सारणी दिखाएं",
+                hideSchedule: "चुकौती सारणी छिपाएं", 
                 infoTitle: "ईएमआई क्या है?",
                 infoPara1: "<b>समान मासिक किस्त (ईएमआई)</b> एक निश्चित भुगतान है जो आप एक निश्चित अवधि में ऋण चुकाने के लिए हर महीने एक ऋणदाता को करते हैं। इसे आपके चुकौती कार्यक्रम को सरल बनाने के लिए डिज़ाइन किया गया है, जिसमें <b>मूल ऋण राशि</b> और देय <b>ब्याज</b> दोनों को एक ही, अनुमानित मासिक भुगतान में जोड़ा जाता है।",
                 infoPara2: "इसे एक सुसंगत, प्रबंधनीय राशि के रूप में सोचें जो आपको व्यवस्थित रूप से अपना ऋण चुकाने में मदद करती है।",
@@ -571,7 +648,7 @@
                 formulaPara1: "मानक सूत्र है: EMI = [P x R x (1+R)^N] / [(1+R)^N-1]",
                 formulaPara2: "जहां: <ul><li><b>P</b> = मूल ऋण राशि</li><li><b>R</b> = मासिक ब्याज दर (वार्षिक दर / 12 / 100)</li><li><b>N</b> = महीनों में ऋण अवधि</li></ul>",
                 examplePara: "उदाहरण के लिए, यदि आप 10 साल (120 महीने) के लिए 10.5% की वार्षिक ब्याज दर पर ₹10,00,000 उधार लेते हैं, तो आपकी मासिक ईएमआई लगभग ₹13,493 होगी। इसका मतलब है कि आप ऋण अवधि के दौरान कुल ₹16,19,220 का भुगतान करेंगे, जिसमें से ₹6,19,220 ब्याज होगा।",
-                conclusionPara: "Calculating this manually can be tedious and prone to errors. Our EMI calculator automates this process, providing you with instant, accurate results along with a detailed amortization schedule and visual charts to help you understand your loan repayment journey."
+                conclusionPara: "Calculating this manually can be tedious and prone to errors. Our EMI calculator automates this process, providing you with instant, accurate results along as with a detailed amortization schedule and visual charts to help you understand your loan repayment journey."
             }
         };
 
@@ -605,7 +682,7 @@
             let balance = P;
             amortizationData = []; // Reset schedule
             
-            // --- MODIFICATION: Set Start Date for Amortization ---
+            // Set Start Date for Amortization
             const startDate = new Date();
             startDate.setMonth(startDate.getMonth() + 1);
             startDate.setDate(1); 
@@ -640,22 +717,151 @@
             // UI Updates
             card.classList.add('expanded');
             resultsAndChartContainer.classList.add('show');
-            
-            // Show the centered button wrapper
             centerBtnWrapper.style.display = 'flex'; 
-            
             resetBtn.style.display = 'block';
             calculateBtn.style.display = 'none';
 
-            // Hide schedule if it was open from a previous calculation
+            // Hide schedule and cancel any pending popup if recalculating
             scheduleContainer.classList.remove('show');
             showScheduleBtn.textContent = translations[currentLang].showSchedule;
+            hideDownloadPopup();
 
              // Scroll to results
              document.getElementById('resultsAndChartContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+        
+        // --- NEW: Download Popup Functions (Retained) ---
+        function showDownloadPopup() {
+            // Check if the amortization table is still visible before showing the popup
+            if (scheduleContainer.classList.contains('show')) {
+                downloadModal.style.display = 'flex';
+            }
+        }
 
-        // --- Result Display (Retained) ---
+        function hideDownloadPopup() {
+            clearTimeout(popupTimeout); // Cancel any pending timeout
+            downloadModal.style.display = 'none';
+        }
+
+        async function downloadPDF() {
+            hideDownloadPopup();
+            const T = translations[currentLang];
+            
+            // Clone the schedule table to remove the height limit for proper rendering
+            const tableToPrint = document.getElementById('scheduleContainer').cloneNode(true);
+            
+            // Remove the outer scrollable div if it exists (for full table export)
+            const tableDiv = tableToPrint.querySelector('div');
+            if (tableDiv) {
+                tableDiv.style.maxHeight = 'none'; 
+                tableDiv.style.overflow = 'visible';
+            }
+
+            // Temporarily append to body (off-screen) to render correctly
+            tableToPrint.style.position = 'absolute';
+            tableToPrint.style.left = '-9999px';
+            tableToPrint.style.width = '800px'; 
+            document.body.appendChild(tableToPrint);
+            
+            try {
+                // Use html2canvas to capture the table as an image
+                const canvas = await html2canvas(tableToPrint, {
+                    scale: 2, // Improve quality
+                    useCORS: true,
+                    scrollY: 0,
+                    windowHeight: tableToPrint.scrollHeight,
+                });
+
+                const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = 200; // A4 width - margins
+                const pageHeight = 295; // A4 height
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                pdf.addImage(imgData, 'JPEG', 5, 5, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                // Add new pages if content is longer than one page
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'JPEG', 5, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                
+                pdf.save('Amortization_Schedule.pdf');
+
+            } catch (error) {
+                console.error("PDF Download Error:", error);
+                alert("Could not generate PDF. Please try again.");
+            } finally {
+                // Remove the temporary element
+                document.body.removeChild(tableToPrint);
+            }
+        }
+
+        // --- Amortization Table Logic (Retained) ---
+        function showAmortizationTable() {
+            const T = translations[currentLang];
+
+            // If schedule is currently showing, hide it and the popup
+            if (scheduleContainer.classList.contains('show')) {
+                scheduleContainer.classList.remove('show');
+                showScheduleBtn.textContent = T.showSchedule;
+                hideDownloadPopup(); // Hide popup and cancel timer
+                return;
+            }
+            
+            // Otherwise, generate and show the schedule
+            let tableHTML = `
+                <h3>${T.amortizationSchedule}</h3>
+                <div style="max-height: 400px; overflow-y: auto;">
+                <table id="amortizationTable">
+                    <thead>
+                        <tr>
+                            <th>${T.month}</th> 
+                            <th>${T.paymentDate}</th> 
+                            <th>${T.principal}</th>
+                            <th>${T.interest}</th>
+                            <th>${T.balance}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            amortizationData.forEach(data => {
+                tableHTML += `
+                    <tr>
+                        <td>${data.month}</td>
+                        <td>${data.date}</td> 
+                        <td>${formatCurrency(data.principal)}</td>
+                        <td>${formatCurrency(data.interest)}</td>
+                        <td>${formatCurrency(data.balance)}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+                </div>
+            `;
+
+            scheduleContainer.innerHTML = tableHTML;
+            scheduleContainer.classList.add('show');
+            showScheduleBtn.textContent = T.hideSchedule; 
+
+            // Scroll to the schedule table
+            scheduleContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Show download popup after 10 seconds
+            popupTimeout = setTimeout(showDownloadPopup, 10000);
+        }
+
+        // --- Other functions (Retained) ---
         function displayResults(emi, totalPayment, totalInterest) {
             const T = translations[currentLang];
 
@@ -675,7 +881,6 @@
             `;
         }
 
-        // --- Chart Generation (Retained) ---
         function drawChart(P, totalInterest) {
             const ctx = document.getElementById('emiChart').getContext('2d');
             const T = translations[currentLang];
@@ -722,61 +927,6 @@
             });
         }
         
-        // --- Amortization Table (Restored/Retained) ---
-        function showAmortizationTable() {
-            const T = translations[currentLang];
-
-            // If schedule is currently showing, hide it
-            if (scheduleContainer.classList.contains('show')) {
-                scheduleContainer.classList.remove('show');
-                showScheduleBtn.textContent = T.showSchedule;
-                return;
-            }
-            
-            // Otherwise, generate and show the schedule
-            let tableHTML = `
-                <h3>${T.amortizationSchedule}</h3>
-                <div style="max-height: 400px; overflow-y: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>${T.month}</th> 
-                            <th>${T.paymentDate}</th> 
-                            <th>${T.principal}</th>
-                            <th>${T.interest}</th>
-                            <th>${T.balance}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-            
-            amortizationData.forEach(data => {
-                tableHTML += `
-                    <tr>
-                        <td>${data.month}</td>
-                        <td>${data.date}</td> 
-                        <td>${formatCurrency(data.principal)}</td>
-                        <td>${formatCurrency(data.interest)}</td>
-                        <td>${formatCurrency(data.balance)}</td>
-                    </tr>
-                `;
-            });
-
-            tableHTML += `
-                    </tbody>
-                </table>
-                </div>
-            `;
-
-            scheduleContainer.innerHTML = tableHTML;
-            scheduleContainer.classList.add('show');
-            showScheduleBtn.textContent = 'Hide Amortization Schedule';
-
-            // Scroll to the schedule table
-            scheduleContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        // --- Reset Function (Retained) ---
         function resetCalculator() {
             document.getElementById('loanAmount').value = '';
             document.getElementById('interestRate').value = '';
@@ -793,30 +943,29 @@
             // UI Updates
             card.classList.remove('expanded');
             resultsAndChartContainer.classList.remove('show');
-            centerBtnWrapper.style.display = 'none'; // Hide the centered button wrapper
+            centerBtnWrapper.style.display = 'none'; 
             resetBtn.style.display = 'none';
             calculateBtn.style.display = 'block';
             scheduleContainer.classList.remove('show');
+            
+            // Hide the download modal and cancel the timer
+            hideDownloadPopup();
         }
 
-        // --- Language Switcher (Retained) ---
         function setLanguage(lang) {
             currentLang = lang || 'en'; 
             
             const T = translations[currentLang];
-
-            // Update calculator fields
+            
+            // Update UI text 
             document.getElementById('calculatorTitle').textContent = T.title;
             document.getElementById('labelLoanAmount').textContent = T.loanAmount;
             document.getElementById('labelInterestRate').textContent = T.interestRate;
             document.getElementById('labelLoanTenure').textContent = T.loanTenure;
             document.getElementById('calculateBtn').textContent = T.calculate;
             document.getElementById('resetBtn').textContent = T.reset;
-            document.getElementById('showScheduleBtn').textContent = T.showSchedule;
+            document.getElementById('showScheduleBtn').textContent = scheduleContainer.classList.contains('show') ? T.hideSchedule : T.showSchedule;
             
-            // Update Footer
-            document.getElementById('footerText').textContent = T.madeInIndia;
-
             // Update EMI Info section
             document.getElementById('emiInfoTitle').textContent = T.infoTitle;
             document.getElementById('emiInfoPara1').innerHTML = T.infoPara1;
@@ -827,6 +976,7 @@
             document.getElementById('emiFormulaPara2').innerHTML = T.formulaPara2;
             document.getElementById('emiExamplePara').textContent = T.examplePara;
             document.getElementById('emiConclusionPara').textContent = T.conclusionPara;
+            document.getElementById('footerText').textContent = T.madeInIndia;
             
             // If results are showing, redraw them in the new language
             if (resultsAndChartContainer.classList.contains('show')) {
@@ -834,9 +984,8 @@
             }
         }
         
-        // Initial call to ensure labels are set (assuming 'en' by default)
+        // Initial setup
         setLanguage('en'); 
-        
     </script>
 
 </body>
