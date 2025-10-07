@@ -23,6 +23,48 @@
             flex-direction: column;
         }
 
+        /* --- NEW HEADER & NAVIGATION STYLES --- */
+        .top-header-bar {
+            width: 100%;
+            height: 60px; 
+            background-color: transparent; 
+            display: flex;
+            justify-content: space-between; /* Push logo left, nav right */
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+            z-index: 1000;
+            margin-bottom: 20px; /* Added margin to separate from content */
+        }
+
+        .logo-text {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: #0b3d1c; /* Green color for the logo */
+            text-decoration: none;
+        }
+
+        .top-nav {
+            display: flex;
+            gap: 20px; /* Space between links */
+        }
+
+        .top-nav a {
+            color: #0b3d1c; /* Green text color for links */
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        .top-nav a:hover {
+            color: #ff6600; /* Orange on hover */
+        }
+        /* --- END NEW STYLES --- */
+
+
         .card-container {
             display: flex;
             flex-direction: column;
@@ -237,18 +279,17 @@
             font-size: 14px;
         }
         
-        /* Orange Banner Section */
+        /* Orange Banner Section: Corrected to display block for visibility */
         .orange-banner {
-          display: none;
+          display: block;
             width: 100%;
             max-width: 950px;
-            background-color: ;
+            background-color: #ffe0b2; /* Added light orange background for better visibility */
             color: #000;
             text-align: center;
             padding: 25px 20px;
             border-radius: 12px;
             margin-top: 25px;
-            box-shadow:
             margin-bottom: 25px;
         }
         .orange-banner h3 {
@@ -261,30 +302,28 @@
             font-size: 16px;
             font-weight: 500;
         }
+        /* FAQ Section: Corrected to display block for visibility */
         .faq-section {
-          display: none;
+          display: block;
             margin-top: 25px;
             width: 100%;
-            max-width: 950px; /* match the card width */
+            max-width: 950px; 
         }
 
         .faq-section details {
             width: 100%;
-            display: none;
+            display: block; /* Corrected: details should be visible */
         }
 
         .faq-section summary {
-            display: ;        /* makes summary take full width */
+            display: block;        /* makes summary take full width */
             width: 100%;
-            padding-left:25px
+            padding-left:25px;
             font-size: 16px;
             font-weight: 500;
             border-radius: 8px;
             cursor: pointer;
             
-        }
-
-        
         }
 
         /* Optional: make answer text full width */
@@ -294,8 +333,9 @@
             margin-top: 8px;
             margin-bottom: 12px;
         }
+        /* Contact Section: Corrected to display block for visibility */
         .contact-text {
-          display: none;
+          display: block;
             max-width: 950px;
             margin-top: 30px;
             line-height: 1.6;
@@ -341,7 +381,17 @@
             }
         }
         
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
+            /* Hide the top-right nav on small screens for better mobile layout */
+            .top-nav {
+                display: none; 
+            }
+            .top-header-bar {
+                justify-content: center; /* Center logo when nav is hidden */
+            }
+            .logo-text {
+                margin: auto;
+            }
             body {
                 padding: 10px 20px;
             }
@@ -389,6 +439,19 @@
     </style>
 </head>
 <body>
+    
+    <header class="top-header-bar">
+        <a href="#calculatorTitle" class="logo-text">EMI Calculator</a>
+        
+        <nav class="top-nav">
+            <a href="#calculatorTitle">Home</a>
+            <a href="about.html">About us</a>
+            <a href="contact.html">Contact us</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms & Condition</a>
+        </nav>
+    </header>
+
     <div class="card-container">
         <div class="language-switcher">
             <label for="language-select">Language:</label>
@@ -484,6 +547,7 @@
                 <ul>
                     <li>The portion of your EMI that goes towards the principal.</li>
                     <li>The portion that goes towards the interest.</li>
+                    <li>Possibility of reducing interest through additional payments.</li>
                     <li>The remaining loan balance.</li>
                 </ul>
                 <p>In the early years of the loan, a larger part of your EMI pays off the interest. As you continue to make payments, this shifts, and more of your EMI is applied to the principal. The amortization schedule clearly illustrates this process, helping you track your progress.</p>
@@ -505,7 +569,7 @@
                 <ul>
                     <li><strong>Shorter tenure:</strong> Results in a higher monthly EMI but a lower total interest paid. This lets you become debt-free faster and saves you money in the long run.</li>
                     <li><strong>Longer tenure:</strong> Results in a lower monthly EMI but a higher total interest paid. This reduces your monthly financial burden, making it easier to manage cash flow.</li>
-                </ul>
+                    </ul>
                 <p>Use the calculator to compare different scenarios and find the right balance for your budget.</p>
             </details>
         </div>
@@ -513,6 +577,16 @@
             <h3>Contact Us</h3>
             <p>If you have any questions, feel free to reach out to us:</p>
             <p>Email: <a href="mailto:support@example.com">support@example.com</a></p>
+        </div>
+
+        <div class="emi-info" id="privacy-policy-section">
+            <h3 style="text-align: center;">Privacy Policy</h3>
+            <p>This is a placeholder for the Privacy Policy content. Your privacy is important to us. [Insert actual policy content here.]</p>
+        </div>
+
+        <div class="emi-info" id="terms-conditions-section">
+            <h3 style="text-align: center;">Terms & Condition</h3>
+            <p>This is a placeholder for the Terms & Conditions content. By using this calculator, you agree to these terms. [Insert actual terms content here.]</p>
         </div>
     </div>
     
