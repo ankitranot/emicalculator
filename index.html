@@ -23,7 +23,7 @@
             flex-direction: column;
         }
 
-        /* --- NEW HEADER & NAVIGATION STYLES --- */
+        /* --- HEADER & NAVIGATION STYLES --- */
         .top-header-bar {
             width: 100%;
             height: 60px; 
@@ -34,24 +34,24 @@
             padding: 0 20px;
             box-sizing: border-box;
             z-index: 1000;
-            margin-bottom: 20px; /* Added margin to separate from content */
+            margin-bottom: 20px; 
         }
 
         .logo-text {
             margin: 0;
             font-size: 24px;
             font-weight: 700;
-            color: #0b3d1c; /* Green color for the logo */
+            color: #0b3d1c; 
             text-decoration: none;
         }
 
         .top-nav {
             display: flex;
-            gap: 20px; /* Space between links */
+            gap: 20px; 
         }
 
         .top-nav a {
-            color: #0b3d1c; /* Green text color for links */
+            color: #0b3d1c; 
             text-decoration: none;
             font-weight: 500;
             font-size: 14px;
@@ -60,7 +60,7 @@
         }
 
         .top-nav a:hover {
-            color: #ff6600; /* Orange on hover */
+            color: #ff6600; 
         }
         /* --- END NEW STYLES --- */
 
@@ -80,14 +80,14 @@
             border-radius: 18px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             width: 100%;
-            max-width: 420px; /* Normal width */
+            max-width: 420px; 
             transition: max-width 0.6s ease, padding 0.6s ease;
             position: relative;
             margin-top: 0;
         }
 
         .card.expanded {
-            max-width: 950px; /* Expanded width for results */
+            max-width: 950px; 
             padding: 38px;
         }
 
@@ -382,15 +382,28 @@
         }
         
         @media (max-width: 768px) {
-            /* Hide the top-right nav on small screens for better mobile layout */
+            /* The fix is here: We REMOVED 'display: none' from .top-nav */
             .top-nav {
-                display: none; 
+                display: flex; /* Ensure it is visible */
+                flex-direction: column; /* Stack the links vertically */
+                position: absolute; /* Allows it to overlap content */
+                top: 60px; /* Positions it just below the header bar */
+                right: 20px; 
+                background: #fff;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                padding: 10px 20px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                gap: 10px;
+                width: 150px;
+                z-index: 1000;
             }
+
             .top-header-bar {
-                justify-content: center; /* Center logo when nav is hidden */
+                justify-content: space-between; /* Keep logo left, menu area right */
             }
             .logo-text {
-                margin: auto;
+                margin: 0;
             }
             body {
                 padding: 10px 20px;
@@ -655,220 +668,4 @@
                 infoPara2: "इसे एक सुसंगत, प्रबंधनीय राशि के रूप में सोचें जो आपको व्यवस्थित रूप से अपना ऋण चुकाने में मदद करती है।",
                 infoPara3: "समय के साथ, आपकी ईएमआई की संरचना बदल जाती है। आपके ऋण के शुरुआती चरणों में, आपकी ईएमआई का एक बड़ा हिस्सा <b>ब्याज</b> चुकाने में जाता है। जैसे-जैसे आप भुगतान करना जारी रखते हैं, यह अनुपात बदलता है, और प्रत्येक ईएमआई का एक बड़ा हिस्सा <b>मूलधन</b> शेष को कम करने के लिए आवंटित किया जाता है। इस प्रक्रिया को <b>ऋण परिशोधन</b> कहा जाता है।",
                 formulaTitle: "ईएमआई सूत्र",
-                formulaPara1: "गणना का मानक सूत्र है: EMI = [P x R x (1+R)^N] / [(1+R)^N-1]",
-                formulaPara2: "जहाँ: <ul><li><b>P</b> = मूल ऋण राशि</li><li><b>R</b> = मासिक ब्याज दर (वार्षिक दर / 12 / 100)</li><li><b>N</b> = ऋण अवधि महीनों में</li></ul>",
-                examplePara: "उदाहरण के लिए, यदि आप 10 साल (120 महीने) के लिए 10.5% की वार्षिक ब्याज दर पर ₹10,00,000 उधार लेते हैं, तो आपकी मासिक ईएमआई लगभग ₹13,493 होगी। इसका मतलब है कि आप ऋण अवधि के दौरान कुल ₹16,19,220 का भुगतान करेंगे, जिसमें से ₹6,19,220 ब्याज होगा।",
-                conclusionPara: "इसकी मैन्युअल रूप से गणना करना थकाऊ और त्रुटियों की संभावना वाला हो सकता है। हमारा ईएमआई कैलकुलेटर इस प्रक्रिया को स्वचालित करता है, जो आपको अपनी ऋण चुकौती यात्रा को समझने में मदद करने के लिए एक विस्तृत चुकौती सारणी और दृश्य चार्ट के साथ तुरंत, सटीक परिणाम प्रदान करता है।"
-            }
-        };
-
-        const monthNames = {
-            en: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
-            hi: ["जनवरी","फरवरी","मार्च","अप्रैल","मई","जून","जुलाई","अगस्त","सितंबर","अक्टूबर","नवंबर","दिसंबर"]
-        };
-
-        let generatedScheduleHTML = '';
-
-        function setLanguage() {
-            const lang = document.getElementById('language-select').value;
-            const currentText = translations[lang];
-
-            document.title = currentText.title.replace('📊 ', '');
-            document.getElementById('calculatorTitle').textContent = currentText.title;
-            document.getElementById('labelLoanAmount').textContent = currentText.loanAmount;
-            document.getElementById('loanAmount').placeholder = lang === 'en' ? "Enter loan amount" : "लोन की राशि दर्ज करें";
-            document.getElementById('labelInterestRate').textContent = currentText.interestRate;
-            document.getElementById('interestRate').placeholder = "e.g. 8.5";
-            document.getElementById('labelLoanTenure').textContent = currentText.loanTenure;
-            document.getElementById('loanTenure').placeholder = lang === 'en' ? "e.g. 5" : "उदा. 5";
-            document.getElementById('calculateBtn').textContent = currentText.calculate;
-            document.getElementById('resetBtn').textContent = currentText.reset;
-            document.getElementById('footerText').textContent = currentText.madeInIndia;
-            document.getElementById('showScheduleBtn').textContent = currentText.showSchedule;
-            document.getElementById('emiInfoTitle').textContent = currentText.infoTitle;
-            document.getElementById('emiInfoPara1').innerHTML = currentText.infoPara1;
-            document.getElementById('emiInfoPara2').textContent = currentText.infoPara2;
-            document.getElementById('emiInfoPara3').innerHTML = currentText.infoPara3;
-            document.getElementById('emiFormulaTitle').textContent = currentText.formulaTitle;
-            document.getElementById('emiFormulaPara1').textContent = currentText.formulaPara1;
-            document.getElementById('emiFormulaPara2').innerHTML = currentText.formulaPara2;
-            document.getElementById('emiExamplePara').textContent = currentText.examplePara;
-            document.getElementById('emiConclusionPara').textContent = currentText.conclusionPara;
-
-            const P = parseFloat(document.getElementById('loanAmount').value);
-            const annualRate = parseFloat(document.getElementById('interestRate').value);
-            const years = parseInt(document.getElementById('loanTenure').value);
-
-            if (P && annualRate && years) {
-                calculateEMI(false);
-            } else {
-                resultsAndChartContainer.classList.remove('show');
-                scheduleContainer.classList.remove('show');
-                showScheduleBtn.style.display = 'none';
-                resultsDiv.innerHTML = '';
-                card.classList.remove('expanded');
-            }
-        }
-
-        function adjustFooterWidth() {
-            if (window.innerWidth > 600) {
-                footer.style.width = card.offsetWidth + 'px';
-            } else {
-                footer.style.width = '100%';
-            }
-        }
-        window.addEventListener('resize', adjustFooterWidth);
-        adjustFooterWidth();
-
-        function calculateEMI(scrollToResults = true) {
-            const P = parseFloat(document.getElementById('loanAmount').value);
-            const annualRate = parseFloat(document.getElementById('interestRate').value);
-            const years = parseInt(document.getElementById('loanTenure').value);
-
-            if (!P || !annualRate || !years) {
-                const lang = document.getElementById('language-select').value;
-                alert(lang === 'en' ? "Please enter all values." : "कृपया सभी मान दर्ज करें।");
-                return;
-            }
-
-            const n = years * 12;
-            const r = annualRate / 100 / 12;
-            const emiCalc = P * r * (Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-            const emi = Math.round(emiCalc);
-            const totalPayment = Math.round(emiCalc * n);
-            const totalInterest = Math.round(totalPayment - P);
-
-            const lang = document.getElementById('language-select').value;
-            const currentText = translations[lang];
-
-            resultsDiv.innerHTML = `
-                <div class="result-item">
-                    <span class="result-label highlighted">${currentText.monthlyEmi}</span>
-                    <span class="result-value highlighted">₹${emi.toLocaleString('en-IN')}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">${currentText.totalPayment}</span>
-                    <span class="result-value">₹${totalPayment.toLocaleString('en-IN')}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">${currentText.totalInterest}</span>
-                    <span class="result-value">₹${totalInterest.toLocaleString('en-IN')}</span>
-                </div>
-            `;
-            
-            const ctx = document.getElementById('emiChart').getContext('2d');
-            if (chart) chart.destroy();
-            chart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: [currentText.chartPrincipal, currentText.chartInterest],
-                    datasets: [{ data: [P, totalInterest], backgroundColor: ['#0b3d1c', '#ff6600'], borderWidth: 2 }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { font: { family: "Poppins", size: 13 } } },
-                        tooltip: {
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    let label = tooltipItem.label || '';
-                                    if (label) { label += ': '; }
-                                    label += '₹' + Math.round(tooltipItem.raw).toLocaleString('en-IN');
-                                    return label;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Generate schedule but don't display it yet
-            let balance = P;
-            let scheduleHTML = `<div style="text-align: center;"><h3>${currentText.amortizationSchedule}</h3></div>`;
-            let currentDate = new Date();
-            let startMonth = currentDate.getMonth();
-            let startYear = currentDate.getFullYear();
-            const months = monthNames[lang];
-
-            for (let year = 0; year < years; year++) {
-                scheduleHTML += `<details><summary>${currentText.year} ${startYear + year}</summary>`;
-                scheduleHTML += `<table><tr><th>${currentText.month}</th><th>${currentText.principal}</th><th>${currentText.interest}</th><th>${currentText.balance}</th></tr>`;
-                
-                const monthsInYear = (year === years - 1) ? (n % 12 === 0 ? 12 : n % 12) : 12;
-
-                for (let i = 0; i < monthsInYear; i++) {
-                    const interestPayment = balance * r;
-                    const principalPayment = emiCalc - interestPayment;
-                    balance -= principalPayment;
-                    if (balance < 0) balance = 0; // Prevent negative balance
-
-                    const monthIndex = (startMonth + i) % 12;
-                    const displayMonth = months[monthIndex];
-                    
-                    scheduleHTML += `<tr>
-                        <td>${displayMonth}</td>
-                        <td>₹${Math.round(principalPayment).toLocaleString('en-IN')}</td>
-                        <td>₹${Math.round(interestPayment).toLocaleString('en-IN')}</td>
-                        <td>₹${Math.round(balance).toLocaleString('en-IN')}</td>
-                    </tr>`;
-                }
-                scheduleHTML += `</table></details>`;
-            }
-            generatedScheduleHTML = scheduleHTML;
-
-            // Show results and resize card
-            card.classList.add('expanded');
-            resultsAndChartContainer.classList.add('show');
-            document.getElementById('resetBtn').style.display = 'block';
-            showScheduleBtn.style.display = 'block';
-            
-            // Hide schedule if it was open
-            scheduleContainer.classList.remove('show');
-            scheduleContainer.innerHTML = '';
-
-            adjustFooterWidth();
-            
-            if (scrollToResults) {
-                resultsAndChartContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-
-        function showAmortizationTable() {
-            scheduleContainer.innerHTML = generatedScheduleHTML;
-            scheduleContainer.classList.toggle('show');
-            
-            if (scheduleContainer.classList.contains('show')) {
-                const lang = document.getElementById('language-select').value;
-                const currentText = translations[lang];
-                document.getElementById('showScheduleBtn').textContent = "Hide Amortization Schedule";
-                // Scroll to the schedule to make it visible
-                scheduleContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
-                const lang = document.getElementById('language-select').value;
-                const currentText = translations[lang];
-                document.getElementById('showScheduleBtn').textContent = currentText.showSchedule;
-            }
-        }
-
-        function resetCalculator() {
-            document.getElementById('loanAmount').value = '';
-            document.getElementById('interestRate').value = '';
-            document.getElementById('loanTenure').value = '';
-            resultsDiv.innerHTML = '';
-            scheduleContainer.innerHTML = '';
-            card.classList.remove('expanded');
-            resultsAndChartContainer.classList.remove('show');
-            scheduleContainer.classList.remove('show');
-            document.getElementById('resetBtn').style.display = 'none';
-            showScheduleBtn.style.display = 'none';
-            if (chart) chart.destroy();
-            
-        }
-
-        // Initialize language on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            setLanguage();
-        });
-    </script>
-</body>
-</html>
+                formulaPara1
