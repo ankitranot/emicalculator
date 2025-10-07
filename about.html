@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | EMI Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Common styles for consistent look and feel */
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #f2f7f3;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+        .top-header-bar {
+            width: 100%;
+            height: 60px; 
+            background-color: transparent; 
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+            z-index: 1000;
+            margin-bottom: 20px; 
+        }
+        .logo-text {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: #0b3d1c; 
+            text-decoration: none;
+        }
+        .top-nav {
+            display: flex;
+            gap: 20px; 
+        }
+        .top-nav a {
+            color: #0b3d1c; 
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+        .top-nav a:hover {
+            color: #ff6600; 
+        }
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 950px;
+            margin: 0 auto;
+        }
+        .content-card { 
+            background: #fff;
+            padding: 50px;
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            width: 100%;
+            box-sizing: border-box;
+            line-height: 1.8;
+        }
+        .content-card h2 {
+            color: #0b3d1c;
+            font-size: 32px;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #ff6600;
+            padding-bottom: 10px;
+        }
+        .content-card h3 {
+             color: #ff6600;
+             margin-top: 30px;
+        }
+        .content-card p {
+            margin-bottom: 15px;
+        }
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .top-nav { display: none; }
+            .top-header-bar { justify-content: center; }
+            .logo-text { margin: auto; }
+            body { padding: 10px 20px; }
+            .content-card { padding: 30px 20px; }
+            .content-card h2 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="top-header-bar">
+        <a href="index.html" class="logo-text">EMI Calculator</a>
+        <nav class="top-nav">
+            <a href="index.html">Home</a>
+            <a href="about.html">About us</a>
+            <a href="contact.html">Contact us</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms & Condition</a>
+        </nav>
+    </header>
+
+    <div class="card-container">
+        <div class="content-card">
+            <h2>About Our EMI Calculator</h2>
+            <p>Welcome! Our **EMI Calculator** is designed to provide you with a fast, accurate, and easy-to-use tool for planning your loans.</p>
+            <p>We believe in financial transparency. Our mission is to simplify complex loan calculations, helping you understand the true cost of borrowing and manage your debt effectively.</p>
+
+            <h3>What We Offer</h3>
+            <p>Our calculator goes beyond a simple monthly payment figure. We provide a detailed breakdown of the loan into **Principal** and **Interest**, along with a full **Amortization Schedule** so you can see exactly how your loan balance decreases month by month.</p>
+
+            <h3>Our Commitment</h3>
+            <p>We are committed to providing reliable calculations that empower you to make informed financial decisions, whether you're planning a home loan, car loan, or personal loan.</p>
+        </div>
+    </div>
+</body>
+</html>
