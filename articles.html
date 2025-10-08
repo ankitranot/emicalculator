@@ -295,9 +295,19 @@
         import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
         // --- FIREBASE INITIALIZATION AND AUTH ---
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        // REPLACE THE PLACEHOLDERS BELOW WITH YOUR ACTUAL VALUES FROM FIREBASE CONSOLE
+        const firebaseConfig = {
+          apiKey: "AIzaSyDHeBrgiztVtHOKDzYJdKyigUMNwSt_-Lo",
+    authDomain: "emicalculator-2f88b.firebaseapp.com",
+    projectId: "emicalculator-2f88b",
+    storageBucket: "emicalculator-2f88b.firebasestorage.app",
+    messagingSenderId: "506277600767",
+    appId: "1:506277600767:web:d1af085d87fbaae340dbca"
+        };
+
+       
+        const appId = firebaseConfig.appId;
+        const initialAuthToken = null; // We are not using a custom token for this simple setup.
 
         let db, auth, userId = null;
         let isAuthReady = false;
