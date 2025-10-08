@@ -6,11 +6,8 @@
     <title>Articles - Financial Insights</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* --- CORE STYLES (Copied from indexf.html) --- */
+        /* --- CORE STYLES --- */
+        html { scroll-behavior: smooth; }
         body {
             font-family: "Poppins", sans-serif;
             background: #f2f7f3; /* Light Green/Grey Background */
@@ -24,7 +21,6 @@
             flex-direction: column;
             min-height: 100vh; 
         }
-
         .top-header-bar {
             width: 100%;
             height: 60px; 
@@ -38,7 +34,6 @@
             margin-bottom: 20px; 
             position: relative; 
         }
-
         .logo-text {
             margin: 0;
             font-size: 24px;
@@ -46,8 +41,6 @@
             color: #0b3d1c; /* Dark Green */
             text-decoration: none;
         }
-
-        /* Desktop Nav: Visible and Horizontal */
         .top-nav {
             display: flex; 
             gap: 20px; 
@@ -55,7 +48,6 @@
             background: transparent; 
             padding: 0;
         }
-
         .top-nav a {
             color: #0b3d1c; /* Dark Green */
             text-decoration: none;
@@ -64,26 +56,17 @@
             padding: 5px 0;
             transition: color 0.3s ease;
         }
-        .top-nav a:hover {
-            color: #ff6600; /* Orange Accent */
-        }
-        
-        /* Hamburger button is HIDDEN on desktop by default */
-        #menuToggle {
-            display: none;
-        }
-        /* END DESKTOP/DEFAULT STYLES */
-
+        .top-nav a:hover { color: #ff6600; /* Orange Accent */ }
+        #menuToggle { display: none; }
         .card-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
-            max-width: 950px; /* Max width from calculator page */
+            max-width: 950px; 
             margin: 0 auto;
-            flex-grow: 1; /* Make sure content takes up space */
+            flex-grow: 1; 
         }
-        
         .card {
             background: #fff;
             padding: 38px;
@@ -93,8 +76,8 @@
             box-sizing: border-box;
             margin-top: 0;
             max-width: 950px; 
+            margin-bottom: 20px;
         }
-
         h2 {
             font-size: 28px;
             margin-bottom: 30px;
@@ -103,40 +86,36 @@
             text-align: center;
         }
         
-        /* --- ARTICLE SPECIFIC STYLES --- */
+        /* --- ARTICLE LIST STYLES --- */
         .article-list {
             display: grid;
             gap: 25px;
-            /* Simple 2-column layout on desktop */
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
         }
 
-        .article-link {
-            text-decoration: none;
-            color: inherit;
-        }
+        .article-link { text-decoration: none; color: inherit; }
 
         .article-snippet {
-            background: #f9fdf9; /* Very light green for article card */
+            background: #f9fdf9; 
             border: 1px solid #e0e0e0;
             padding: 20px;
             border-radius: 12px;
             transition: box-shadow 0.3s ease, transform 0.3s ease;
-            height: 100%; /* Ensures cards in a row have the same height */
+            height: 100%; 
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
         }
 
         .article-snippet:hover {
-            box-shadow: 0 6px 20px rgba(11, 61, 28, 0.15); /* Dark Green Shadow on hover */
+            box-shadow: 0 6px 20px rgba(11, 61, 28, 0.15); 
             transform: translateY(-3px);
         }
 
         .article-snippet h3 {
             font-size: 18px;
             font-weight: 700;
-            color: #0b3d1c; /* Dark Green */
+            color: #0b3d1c; 
             margin-top: 0;
             margin-bottom: 10px;
             line-height: 1.4;
@@ -146,7 +125,7 @@
             font-size: 14px;
             color: #555;
             margin-bottom: 15px;
-            flex-grow: 1; /* Pushes the "Read More" to the bottom */
+            flex-grow: 1; 
         }
 
         .read-more {
@@ -154,19 +133,82 @@
             color: #ff6600; /* Orange Accent */
             font-weight: 600;
             font-size: 13px;
-            margin-top: auto; /* Aligns to bottom */
+            margin-top: auto; 
             padding-top: 10px;
             border-top: 1px solid #eee;
         }
         
-        /* --- FOOTER STYLES (Copied from indexf.html) --- */
+        /* --- ADMIN FORM STYLES --- */
+        #adminToggleBtn {
+            margin-bottom: 20px;
+            padding: 12px 25px;
+            background: #0b3d1c;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #adminToggleBtn:hover { background: #062e14; }
+
+        #adminForm {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #e6f3e9; /* Lighter green for admin area */
+            border-radius: 15px;
+            border: 2px dashed #0b3d1c;
+        }
+
+        #adminForm label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #0b3d1c;
+            font-size: 14px;
+        }
+        #adminForm input, #adminForm textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-top: 5px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        #adminForm button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        /* --- UTILITY & LOADING STYLES --- */
+        .hidden { display: none; }
+        .loading { text-align: center; color: #ff6600; font-weight: 600; padding: 20px; }
+        .message-box {
+            background-color: #ff6600;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        /* --- FOOTER STYLES --- */
         .footer {
             color: #000;
             text-align: center;
             padding: 20px 0;
             font-size: 22px;
             font-weight: 800;
-            border-top: 6px solid #ff6600; /* Orange Accent */
+            border-top: 6px solid #ff6600; 
             border-radius: 10px 10px 0 0;
             margin: 25px 0 25px 0;
             width: 100%;
@@ -174,108 +216,26 @@
             box-sizing: border-box;
         }
         
-        /* --- MOBILE OPTIMIZATION (Copied from indexf.html) --- */
+        /* --- MOBILE OPTIMIZATION --- */
         @media (max-width: 768px) {
-            
-            body {
-                padding: 10px; 
-            }
-            
-            /* Hide the desktop navigation */
-            .top-nav {
-                display: none; 
-                flex-direction: column;
-                position: fixed; 
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: #fff;
-                padding-top: 80px; 
-                box-sizing: border-box;
-                z-index: 999; 
-                overflow-y: auto;
-                transition: opacity 0.3s ease;
-                gap: 0;
-            }
-
-            /* Show the mobile navigation when active */
-            .top-nav.active {
-                display: flex; 
-            }
-            
-            .top-nav a {
-                font-size: 18px; 
-                padding: 15px 20px;
-                text-align: center;
-                border-bottom: 1px solid #f2f7f3; 
-            }
-
-            /* --- HAMBURGER MENU STYLES --- */
-            /* Show the toggle button */
-            #menuToggle {
-                display: block;
-                width: 30px;
-                height: 30px;
-                cursor: pointer;
-                z-index: 1001;
-                background: none;
-                border: none;
-                padding: 0;
-                position: absolute;
-                right: 10px; 
-            }
-            .hamburger-icon, .hamburger-icon::before, .hamburger-icon::after {
-                display: block;
-                position: absolute;
-                height: 3px;
-                width: 100%;
-                background: #0b3d1c;
-                border-radius: 3px;
-                transition: all 0.3s ease-in-out;
-            }
-            .hamburger-icon {
-                top: 50%;
-                transform: translateY(-50%);
-            }
-            .hamburger-icon::before {
-                content: '';
-                top: -9px;
-            }
-            .hamburger-icon::after {
-                content: '';
-                top: 9px;
-            }
-            .hamburger-icon.active { background: transparent; }
-            .hamburger-icon.active::before { top: 0; transform: rotate(45deg); }
-            .hamburger-icon.active::after { top: 0; transform: rotate(-45deg); }
-            /* --- END HAMBURGER MENU STYLES --- */
-
-            /* Other Mobile Optimizations */
-            .top-header-bar {
-                padding: 0 10px;
-            }
-            .card {
-                padding: 20px;
-                max-width: 100%;
-                border-radius: 30px;
-            }
-            h2 { font-size: 24px; }
-            
-            /* Article list single column on mobile */
-            .article-list {
-                grid-template-columns: 1fr;
-            }
-            .footer {
-                font-size: 16px;
-            }
+            body { padding: 10px; }
+            .top-header-bar { padding: 0 10px; }
+            .card { padding: 20px; border-radius: 30px; }
+            /* Hamburger menu styles */
+            .top-nav { display: none; flex-direction: column; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; padding-top: 80px; box-sizing: border-box; z-index: 999; overflow-y: auto; gap: 0; }
+            .top-nav.active { display: flex; }
+            .top-nav a { font-size: 18px; padding: 15px 20px; text-align: center; border-bottom: 1px solid #f2f7f3; }
+            #menuToggle { display: block; position: absolute; right: 10px; }
+            .hamburger-icon { background: #0b3d1c; } /* Simplified mobile menu toggle */
+            .article-list { grid-template-columns: 1fr; }
+            .footer { font-size: 16px; }
         }
-        /* --- END MOBILE OPTIMIZATION --- */
     </style>
 </head>
 <body>
     
     <header class="top-header-bar">
+        <!-- Logo points to the calculator/home page -->
         <a href="indexf.html" class="logo-text" onclick="closeMenu()">EMI Calculator</a>
         
         <button id="menuToggle" aria-label="Toggle navigation menu">
@@ -293,73 +253,266 @@
     </header>
 
     <div class="card-container">
+        <!-- Admin/Upload Section -->
+        <button id="adminToggleBtn" class="hidden">Admin: Toggle New Post Form</button>
+        
+        <form id="adminForm" class="card hidden">
+            <h2>✍️ Publish a New Article</h2>
+            <div id="statusMessage" class="message-box hidden"></div>
+            
+            <label for="postTitle">Title</label>
+            <input type="text" id="postTitle" required placeholder="e.g., How Prepayments Save You Money">
+            
+            <label for="postSummary">Short Summary (Snippet for the list page)</label>
+            <textarea id="postSummary" rows="3" required placeholder="A brief, engaging summary..."></textarea>
+            
+            <label for="postContent">Full Article Content (Simple Text)</label>
+            <textarea id="postContent" rows="10" required placeholder="Write the full body of the article here..."></textarea>
+            
+            <button type="submit" id="publishBtn">Publish Article</button>
+        </form>
+
+        <!-- Main Articles Display Section -->
         <div class="card">
             <h2>📰 Read Our Latest Financial Insights</h2>
             
-            <div class="article-list">
-                
-                <a href="article1.html" class="article-link">
-                    <div class="article-snippet">
-                        <h3>The Power of Compounding: How to Make Your EMI Work for You</h3>
-                        <p>Discover the secrets of making small, consistent investments turn into substantial wealth over time. This principle is key for long-term financial freedom.</p>
-                        <span class="read-more">Read More &raquo;</span>
-                    </div>
-                </a>
-                
-                <a href="article2.html" class="article-link">
-                    <div class="article-snippet">
-                        <h3>Short vs. Long Tenure: Choosing the Right Loan Duration</h3>
-                        <p>Should you opt for a lower EMI with a longer term, or pay more monthly to save on interest? We break down the pros and cons to help you decide.</p>
-                        <span class="read-more">Read More &raquo;</span>
-                    </div>
-                </a>
-                
-                <a href="article3.html" class="article-link">
-                    <div class="article-snippet">
-                        <h3>Maximizing Savings: Tax Benefits on Home Loan Principal and Interest</h3>
-                        <p>Understand the sections of the Income Tax Act (like 80C and 24) that allow you to save money while repaying your home loan. Don't miss out on these deductions!</p>
-                        <span class="read-more">Read More &raquo;</span>
-                    </div>
-                </a>
-                
-                <a href="article4.html" class="article-link">
-                    <div class="article-snippet">
-                        <h3>Smart Prepayment Strategy: Reduce Your Interest Burden Significantly</h3>
-                        <p>Learn when and how to make lump-sum prepayments to cut down your loan tenure and save thousands on total interest. Timing is everything.</p>
-                        <span class="read-more">Read More &raquo;</span>
-                    </div>
-                </a>
-                
+            <div id="articlesLoading" class="loading">
+                Fetching articles in real-time...
             </div>
             
+            <div class="article-list" id="articleList">
+                <!-- Articles will be dynamically injected here by JavaScript -->
+            </div>
         </div>
         
         
     </div>
 
     
-   <script>
-        // JAVASCRIPT FOR HAMBURGER MENU (Copied for functionality)
+   <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        // --- FIREBASE INITIALIZATION AND AUTH ---
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let db, auth, userId = null;
+        let isAuthReady = false;
+
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+        
+        let articleCollectionRef = null;
+
+        // Public collection path for articles
+        const ARTICLE_COLLECTION_PATH = `artifacts/${appId}/public/data/articles`;
+
+        const authPromise = new Promise((resolve) => {
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    try {
+                        if (initialAuthToken) {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                        user = auth.currentUser;
+                    } catch (error) {
+                        console.error("Firebase Auth failed:", error);
+                        // Fallback to anonymous if custom token fails
+                        await signInAnonymously(auth);
+                        user = auth.currentUser;
+                    }
+                }
+                
+                userId = user ? user.uid : 'anonymous';
+                isAuthReady = true;
+                
+                // For simplicity, we assume any logged-in user can post for this demo.
+                // In a real app, you would check user roles here.
+                if (user && user.isAnonymous === false) { 
+                    document.getElementById('adminToggleBtn').classList.remove('hidden');
+                }
+                
+                articleCollectionRef = collection(db, ARTICLE_COLLECTION_PATH);
+                console.log("Firestore ready. User ID:", userId);
+                resolve();
+            });
+        });
+
+        // --- UI ELEMENTS ---
+        const articleList = document.getElementById('articleList');
+        const articlesLoading = document.getElementById('articlesLoading');
+        const adminToggleBtn = document.getElementById('adminToggleBtn');
+        const adminForm = document.getElementById('adminForm');
+        const publishBtn = document.getElementById('publishBtn');
+        const statusMessage = document.getElementById('statusMessage');
+
+        // --- HANDLER FUNCTIONS ---
+        
+        function showMessage(message, isError = false) {
+            statusMessage.textContent = message;
+            statusMessage.classList.remove('hidden');
+            statusMessage.style.backgroundColor = isError ? '#cc0000' : '#ff6600';
+            setTimeout(() => {
+                statusMessage.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Toggles the visibility of the admin form
+        adminToggleBtn.addEventListener('click', () => {
+            adminForm.classList.toggle('hidden');
+            adminToggleBtn.textContent = adminForm.classList.contains('hidden') 
+                ? 'Admin: Toggle New Post Form' 
+                : 'Admin: Hide New Post Form';
+        });
+
+
+        // Function to render articles dynamically
+        function renderArticles(articles) {
+            articleList.innerHTML = ''; // Clear existing articles
+            articlesLoading.classList.add('hidden');
+
+            if (articles.length === 0) {
+                articleList.innerHTML = '<p style="text-align: center; color: #555;">No articles published yet. Be the first!</p>';
+                return;
+            }
+
+            articles.forEach(article => {
+                const articleDate = new Date(article.timestamp).toLocaleDateString();
+                
+                // NOTE: Since we are not creating separate HTML files for each article 
+                // in this one-file solution, we are using an alert for the full content.
+                // In a real app, you would link to a dynamically generated article page.
+                const articleHTML = `
+                    <div class="article-link" onclick="displayFullArticle('${article.title}', '${article.content.replace(/'/g, "\\'")}')">
+                        <div class="article-snippet">
+                            <h3>${article.title}</h3>
+                            <p>${article.summary}</p>
+                            <span class="read-more">Read More (Published: ${articleDate}) &raquo;</span>
+                        </div>
+                    </div>
+                `;
+                articleList.innerHTML += articleHTML;
+            });
+        }
+        
+        // Make displayFullArticle globally available since it's used in the injected HTML
+        window.displayFullArticle = (title, content) => {
+             // Replaces the standard alert() with a custom modal simulation
+             const modal = document.createElement('div');
+             modal.style.cssText = `
+                 position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                 background: rgba(0,0,0,0.8); z-index: 9999; display: flex; 
+                 justify-content: center; align-items: center;
+             `;
+             modal.innerHTML = `
+                 <div style="background: white; padding: 30px; border-radius: 15px; max-width: 600px; max-height: 80vh; overflow-y: auto;">
+                     <h2 style="text-align: left; color: #ff6600; margin-top: 0;">${title}</h2>
+                     <p style="white-space: pre-wrap; margin-top: 20px;">${content}</p>
+                     <button onclick="document.body.removeChild(this.parentElement.parentElement)" style="margin-top: 20px; padding: 10px 20px; background: #0b3d1c; color: white; border: none; border-radius: 8px; cursor: pointer;">Close</button>
+                 </div>
+             `;
+             document.body.appendChild(modal);
+        };
+
+        // Submits the new article to Firestore
+        adminForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!isAuthReady || !userId) {
+                showMessage("Authentication not ready. Please wait.", true);
+                return;
+            }
+
+            const title = document.getElementById('postTitle').value.trim();
+            const summary = document.getElementById('postSummary').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+
+            if (!title || !summary || !content) {
+                showMessage("Please fill in all fields.", true);
+                return;
+            }
+            
+            publishBtn.disabled = true;
+            publishBtn.textContent = 'Publishing...';
+
+            try {
+                await addDoc(articleCollectionRef, {
+                    title: title,
+                    summary: summary,
+                    content: content,
+                    authorId: userId,
+                    timestamp: Date.now() 
+                });
+                
+                showMessage("Article published successfully!", false);
+                adminForm.reset();
+                adminForm.classList.add('hidden'); // Hide form after successful post
+                adminToggleBtn.textContent = 'Admin: Toggle New Post Form';
+
+            } catch (error) {
+                console.error("Error writing document: ", error);
+                showMessage(`Publish failed: ${error.message}`, true);
+            } finally {
+                publishBtn.disabled = false;
+                publishBtn.textContent = 'Publish Article';
+            }
+        });
+
+
+        // Listen for real-time article updates
+        async function listenForArticles() {
+            await authPromise; 
+            
+            const q = query(articleCollectionRef);
+            
+            onSnapshot(q, (snapshot) => {
+                const articles = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    // Ensure the timestamp is an integer for sorting and date display
+                    const timestamp = data.timestamp instanceof Date ? data.timestamp.getTime() : data.timestamp;
+                    articles.push({ id: doc.id, ...data, timestamp });
+                });
+                
+                // Sort by timestamp descending (newest first)
+                articles.sort((a, b) => b.timestamp - a.timestamp);
+                
+                renderArticles(articles);
+            }, (error) => {
+                articlesLoading.textContent = `Error fetching articles: ${error.message}`;
+                console.error("Firestore listen error:", error);
+            });
+        }
+        
+        // --- INITIALIZATION ---
+        window.onload = listenForArticles;
+        
+        // JAVASCRIPT FOR HAMBURGER MENU (Maintains consistency)
         const menuToggle = document.getElementById('menuToggle');
         const topNav = document.getElementById('topNav');
         const hamburgerIcon = document.getElementById('hamburgerIcon');
 
         function toggleMenu() {
             topNav.classList.toggle('active');
-            hamburgerIcon.classList.toggle('active');
-            // Prevent scrolling when mobile menu is open
+            // This is a CSS-based icon toggle in this file
+            const icon = menuToggle.querySelector('.hamburger-icon');
+            if (icon) icon.classList.toggle('active'); 
             document.body.style.overflow = topNav.classList.contains('active') ? 'hidden' : 'auto';
         }
-
         function closeMenu() {
             topNav.classList.remove('active');
-            hamburgerIcon.classList.remove('active');
+            const icon = menuToggle.querySelector('.hamburger-icon');
+            if (icon) icon.classList.remove('active');
             document.body.style.overflow = 'auto';
         }
-
-        menuToggle.addEventListener('click', toggleMenu);
+        if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
         // END JAVASCRIPT FOR HAMBURGER MENU
     </script>
-
 </body>
 </html>
