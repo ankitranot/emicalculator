@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles - Financial Insights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* --- CORE STYLES (Copied from indexf.html) --- */
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #f2f7f3; /* Light Green/Grey Background */
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            flex-direction: column;
+            min-height: 100vh; 
+        }
+
+        .top-header-bar {
+            width: 100%;
+            height: 60px; 
+            background-color: transparent; 
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+            z-index: 1000;
+            margin-bottom: 20px; 
+            position: relative; 
+        }
+
+        .logo-text {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: #0b3d1c; /* Dark Green */
+            text-decoration: none;
+        }
+
+        /* Desktop Nav: Visible and Horizontal */
+        .top-nav {
+            display: flex; 
+            gap: 20px; 
+            position: static; 
+            background: transparent; 
+            padding: 0;
+        }
+
+        .top-nav a {
+            color: #0b3d1c; /* Dark Green */
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+        .top-nav a:hover {
+            color: #ff6600; /* Orange Accent */
+        }
+        
+        /* Hamburger button is HIDDEN on desktop by default */
+        #menuToggle {
+            display: none;
+        }
+        /* END DESKTOP/DEFAULT STYLES */
+
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 950px; /* Max width from calculator page */
+            margin: 0 auto;
+            flex-grow: 1; /* Make sure content takes up space */
+        }
+        
+        .card {
+            background: #fff;
+            padding: 38px;
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 0;
+            max-width: 950px; 
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            font-weight: 800;
+            color: #0b3d1c; /* Dark Green */
+            text-align: center;
+        }
+        
+        /* --- ARTICLE SPECIFIC STYLES --- */
+        .article-list {
+            display: grid;
+            gap: 25px;
+            /* Simple 2-column layout on desktop */
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+        }
+
+        .article-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .article-snippet {
+            background: #f9fdf9; /* Very light green for article card */
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 12px;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            height: 100%; /* Ensures cards in a row have the same height */
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-snippet:hover {
+            box-shadow: 0 6px 20px rgba(11, 61, 28, 0.15); /* Dark Green Shadow on hover */
+            transform: translateY(-3px);
+        }
+
+        .article-snippet h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0b3d1c; /* Dark Green */
+            margin-top: 0;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .article-snippet p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
+            flex-grow: 1; /* Pushes the "Read More" to the bottom */
+        }
+
+        .read-more {
+            display: block;
+            color: #ff6600; /* Orange Accent */
+            font-weight: 600;
+            font-size: 13px;
+            margin-top: auto; /* Aligns to bottom */
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        /* --- FOOTER STYLES (Copied from indexf.html) --- */
+        .footer {
+            color: #000;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 22px;
+            font-weight: 800;
+            border-top: 6px solid #ff6600; /* Orange Accent */
+            border-radius: 10px 10px 0 0;
+            margin: 25px 0 25px 0;
+            width: 100%;
+            max-width: 950px;
+            box-sizing: border-box;
+        }
+        
+        /* --- MOBILE OPTIMIZATION (Copied from indexf.html) --- */
+        @media (max-width: 768px) {
+            
+            body {
+                padding: 10px; 
+            }
+            
+            /* Hide the desktop navigation */
+            .top-nav {
+                display: none; 
+                flex-direction: column;
+                position: fixed; 
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #fff;
+                padding-top: 80px; 
+                box-sizing: border-box;
+                z-index: 999; 
+                overflow-y: auto;
+                transition: opacity 0.3s ease;
+                gap: 0;
+            }
+
+            /* Show the mobile navigation when active */
+            .top-nav.active {
+                display: flex; 
+            }
+            
+            .top-nav a {
+                font-size: 18px; 
+                padding: 15px 20px;
+                text-align: center;
+                border-bottom: 1px solid #f2f7f3; 
+            }
+
+            /* --- HAMBURGER MENU STYLES --- */
+            /* Show the toggle button */
+            #menuToggle {
+                display: block;
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+                z-index: 1001;
+                background: none;
+                border: none;
+                padding: 0;
+                position: absolute;
+                right: 10px; 
+            }
+            .hamburger-icon, .hamburger-icon::before, .hamburger-icon::after {
+                display: block;
+                position: absolute;
+                height: 3px;
+                width: 100%;
+                background: #0b3d1c;
+                border-radius: 3px;
+                transition: all 0.3s ease-in-out;
+            }
+            .hamburger-icon {
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            .hamburger-icon::before {
+                content: '';
+                top: -9px;
+            }
+            .hamburger-icon::after {
+                content: '';
+                top: 9px;
+            }
+            .hamburger-icon.active { background: transparent; }
+            .hamburger-icon.active::before { top: 0; transform: rotate(45deg); }
+            .hamburger-icon.active::after { top: 0; transform: rotate(-45deg); }
+            /* --- END HAMBURGER MENU STYLES --- */
+
+            /* Other Mobile Optimizations */
+            .top-header-bar {
+                padding: 0 10px;
+            }
+            .card {
+                padding: 20px;
+                max-width: 100%;
+                border-radius: 30px;
+            }
+            h2 { font-size: 24px; }
+            
+            /* Article list single column on mobile */
+            .article-list {
+                grid-template-columns: 1fr;
+            }
+            .footer {
+                font-size: 16px;
+            }
+        }
+        /* --- END MOBILE OPTIMIZATION --- */
+    </style>
+</head>
+<body>
+    
+    <header class="top-header-bar">
+        <a href="indexf.html" class="logo-text" onclick="closeMenu()">EMI Calculator</a>
+        
+        <button id="menuToggle" aria-label="Toggle navigation menu">
+            <span class="hamburger-icon" id="hamburgerIcon"></span>
+        </button>
+        
+        <nav class="top-nav" id="topNav">
+            <a href="indexf.html" onclick="closeMenu()">Home</a>
+            <a href="articles.html" onclick="closeMenu()">Articles</a>
+            <a href="about.html" onclick="closeMenu()">About us</a>
+            <a href="contact.html" onclick="closeMenu()">Contact us</a>
+            <a href="privacy.html" onclick="closeMenu()">Privacy Policy</a>
+            <a href="terms.html" onclick="closeMenu()">Terms & Condition</a>
+        </nav>
+    </header>
+
+    <div class="card-container">
+        <div class="card">
+            <h2>📰 Read Our Latest Financial Insights</h2>
+            
+            <div class="article-list">
+                
+                <a href="article1.html" class="article-link">
+                    <div class="article-snippet">
+                        <h3>The Power of Compounding: How to Make Your EMI Work for You</h3>
+                        <p>Discover the secrets of making small, consistent investments turn into substantial wealth over time. This principle is key for long-term financial freedom.</p>
+                        <span class="read-more">Read More &raquo;</span>
+                    </div>
+                </a>
+                
+                <a href="article2.html" class="article-link">
+                    <div class="article-snippet">
+                        <h3>Short vs. Long Tenure: Choosing the Right Loan Duration</h3>
+                        <p>Should you opt for a lower EMI with a longer term, or pay more monthly to save on interest? We break down the pros and cons to help you decide.</p>
+                        <span class="read-more">Read More &raquo;</span>
+                    </div>
+                </a>
+                
+                <a href="article3.html" class="article-link">
+                    <div class="article-snippet">
+                        <h3>Maximizing Savings: Tax Benefits on Home Loan Principal and Interest</h3>
+                        <p>Understand the sections of the Income Tax Act (like 80C and 24) that allow you to save money while repaying your home loan. Don't miss out on these deductions!</p>
+                        <span class="read-more">Read More &raquo;</span>
+                    </div>
+                </a>
+                
+                <a href="article4.html" class="article-link">
+                    <div class="article-snippet">
+                        <h3>Smart Prepayment Strategy: Reduce Your Interest Burden Significantly</h3>
+                        <p>Learn when and how to make lump-sum prepayments to cut down your loan tenure and save thousands on total interest. Timing is everything.</p>
+                        <span class="read-more">Read More &raquo;</span>
+                    </div>
+                </a>
+                
+            </div>
+            
+        </div>
+        
+        <div class="footer" id="footerLine">
+            <span class="footer-content" id="footerText">🇮🇳 Made in India</span>
+        </div>
+    </div>
+
+    
+   <script>
+        // JAVASCRIPT FOR HAMBURGER MENU (Copied for functionality)
+        const menuToggle = document.getElementById('menuToggle');
+        const topNav = document.getElementById('topNav');
+        const hamburgerIcon = document.getElementById('hamburgerIcon');
+
+        function toggleMenu() {
+            topNav.classList.toggle('active');
+            hamburgerIcon.classList.toggle('active');
+            // Prevent scrolling when mobile menu is open
+            document.body.style.overflow = topNav.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        function closeMenu() {
+            topNav.classList.remove('active');
+            hamburgerIcon.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        menuToggle.addEventListener('click', toggleMenu);
+        // END JAVASCRIPT FOR HAMBURGER MENU
+    </script>
+
+</body>
+</html>
