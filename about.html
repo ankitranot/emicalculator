@@ -19,6 +19,7 @@
             justify-content: center;
             align-items: flex-start;
             flex-direction: column;
+            min-height: 100vh; /* Added for consistency */
         }
         .top-header-bar {
             width: 100%;
@@ -31,6 +32,8 @@
             box-sizing: border-box;
             z-index: 1000;
             margin-bottom: 20px; 
+            /* FIX: Ensure header is a reference point for the absolute positioned menu button */
+            position: relative; 
         }
         .logo-text {
             margin: 0;
@@ -38,6 +41,7 @@
             font-weight: 700;
             color: #0b3d1c; 
             text-decoration: none;
+            z-index: 1000; /* Added for consistency */
         }
         .top-nav {
             display: flex;
@@ -54,6 +58,12 @@
         .top-nav a:hover {
             color: #ff6600; 
         }
+        
+        /* FIX: Hide the toggle button by default (desktop view) */
+        #menuToggle {
+            display: none; 
+        }
+        
         .card-container {
             display: flex;
             flex-direction: column;
@@ -85,27 +95,143 @@
         .content-card p {
             margin-bottom: 15px;
         }
-        /* Mobile adjustments */
+        
+        /* ======================================= */
+        /* == FIX: MOBILE OPTIMIZATION STYLES (< 768px) == */
+        /* This replaces your minimal mobile adjustments block */
+        /* ======================================= */
         @media (max-width: 768px) {
-            .top-nav { display: none; }
-            .top-header-bar { justify-content: center; }
-            .logo-text { margin: auto; }
-            body { padding: 10px 20px; }
-            .content-card { padding: 30px 20px; }
-            .content-card h2 { font-size: 24px; }
+            body { 
+                padding: 10px; 
+            } 
+            .top-header-bar {
+                justify-content: space-between; /* Allow logo and button to separate */
+                padding: 0 10px; 
+            }
+            .logo-text { 
+                margin: 0; /* Remove auto margin */
+            }
+            .content-card { 
+                padding: 30px 20px; 
+            }
+            .content-card h2 { 
+                font-size: 24px; 
+            }
+            
+            /* --- ARTICLE CONTENT READABILITY FIXES (from previous step) --- */
+            .content-card p, .content-card ul {
+                font-size: 17px; 
+                line-height: 1.75; 
+            }
+            /* --- END ARTICLE CONTENT READABILITY FIXES --- */
+
+            /* --- TOGGLE MENU STYLES --- */
+            /* Hide the desktop navigation */
+            .top-nav {
+                display: none; 
+                flex-direction: column; 
+                position: fixed; 
+                top: 0; 
+                left: 0; 
+                width: 100%; 
+                height: 100%; 
+                background: #fff; 
+                padding-top: 80px; 
+                box-sizing: border-box; 
+                z-index: 999; 
+                overflow-y: auto; 
+                transition: opacity 0.3s ease;
+                gap: 0;
+            }
+
+            /* Show the mobile navigation when active */
+            .top-nav.active {
+                display: flex;
+                /* FIX: Ensure the vertical list of links is centered */
+                align-items: center;    
+                justify-content: flex-start; 
+            }
+
+            .top-nav a {
+                font-size: 18px; 
+                padding: 15px 20px; 
+                text-align: center; 
+                border-bottom: 1px solid #f2f7f3;
+                width: 100%; 
+                margin: 0; /* FIX: Remove potential margin causing right shift */
+            }
+
+            /* Show the toggle button */
+            #menuToggle {
+                display: block; 
+                width: 30px; 
+                height: 30px; 
+                cursor: pointer; 
+                z-index: 1001; 
+                background: none; 
+                border: none; 
+                padding: 0; 
+                position: absolute; 
+                right: 10px; 
+            }
+
+            .hamburger-icon, .hamburger-icon::before, .hamburger-icon::after {
+                display: block; 
+                position: absolute; 
+                height: 3px; 
+                width: 100%; 
+                background: #0b3d1c; 
+                border-radius: 3px; 
+                transition: all 0.3s ease-in-out;
+            }
+
+            .hamburger-icon {
+                top: 50%; 
+                transform: translateY(-50%);
+            }
+
+            .hamburger-icon::before {
+                content: ''; 
+                top: -9px;
+            }
+
+            .hamburger-icon::after {
+                content: ''; 
+                top: 9px;
+            }
+
+            .hamburger-icon.active {
+                background: transparent;
+            }
+
+            .hamburger-icon.active::before {
+                top: 0; 
+                transform: rotate(45deg);
+            }
+
+            .hamburger-icon.active::after {
+                top: 0; 
+                transform: rotate(-45deg);
+            } 
         }
+        /* --- END MOBILE OPTIMIZATION --- */
     </style>
 </head>
 <body>
     <header class="top-header-bar">
         <a href="index.html" class="logo-text">OK CALCY</a>
+        
+        <button id="menuToggle">
+            <span class="hamburger-icon" id="hamburgerIcon"></span>
+        </button>
         <nav class="top-nav" id="topNav">
-    <a href="index.html" onclick="closeMenu()">Home</a>
-    <a href="articles.html" onclick="closeMenu()">Articles</a>  <a href="about.html" onclick="closeMenu()">About us</a>
-    <a href="contact.html" onclick="closeMenu()">Contact us</a>
-    <a href="privacy.html" onclick="closeMenu()">Privacy Policy</a>
-    <a href="terms.html" onclick="closeMenu()">Terms & Condition</a>
-</nav>
+            <a href="index.html" onclick="closeMenu()">Home</a>
+            <a href="articles.html" onclick="closeMenu()">Articles</a>
+            <a href="about.html" onclick="closeMenu()">About us</a>
+            <a href="contact.html" onclick="closeMenu()">Contact us</a>
+            <a href="privacy.html" onclick="closeMenu()">Privacy Policy</a>
+            <a href="terms.html" onclick="closeMenu()">Terms & Condition</a>
+        </nav>
     </header>
 
     <div class="card-container">
@@ -126,5 +252,30 @@ We generate a full, easy-to-read <b>Amortization Schedule</b>. This comprehensiv
 What loan are you looking to calculate today?</p>
         </div>
     </div>
+    
+    <script>
+        // JAVASCRIPT FOR HAMBURGER MENU 
+        const menuToggle = document.getElementById('menuToggle');
+        const topNav = document.getElementById('topNav');
+        const hamburgerIcon = document.getElementById('hamburgerIcon');
+
+        function toggleMenu() {
+            topNav.classList.toggle('active');
+            const icon = document.getElementById('hamburgerIcon');
+            if (icon) icon.classList.toggle('active');
+            // Prevent scrolling when mobile menu is open
+            document.body.style.overflow = topNav.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        function closeMenu() {
+            topNav.classList.remove('active');
+            const icon = document.getElementById('hamburgerIcon');
+            if (icon) icon.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
+        // Note: The closeMenu function is used by the onclick attributes in the navigation links.
+    </script>
 </body>
 </html>
