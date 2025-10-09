@@ -179,21 +179,114 @@
             box-sizing: border-box;
         }
         
-        /* --- MOBILE OPTIMIZATION (MATCHING THE WEBSITE) --- */
+         /* ======================================= */
+        /* == FIX: MOBILE OPTIMIZATION STYLES == */
+        /* ======================================= */
         @media (max-width: 768px) {
-            
-            body { padding: 10px; }
-            /* Mobile Nav styles omitted for brevity but should be included */
-            #menuToggle { display: block; }
-            
-            /* Mobile Article Content adjustments */
-            .top-header-bar { padding: 0 10px; }
-            .card { padding: 20px; border-radius: 30px; }
-            .article-content h1 { font-size: 24px; }
-            .article-body h2 { font-size: 20px; }
-            .article-body h3 { font-size: 18px; }
-            .footer { font-size: 16px; }
+            body { 
+                padding: 10px; 
+            } 
+
+            /* Hide the desktop navigation */
+            .top-nav {
+                display: none; 
+                flex-direction: column; 
+                position: fixed; 
+                top: 0; 
+                left: 0; 
+                width: 100%; 
+                height: 100%; 
+                background: #fff; 
+                padding-top: 80px; 
+                box-sizing: border-box; 
+                z-index: 999; 
+                overflow-y: auto; 
+                transition: opacity 0.3s ease;
+                gap: 0;
+            }
+
+            /* Show the mobile navigation when active */
+            .top-nav.active {
+                display: flex;
+            }
+
+            .top-nav a {
+                font-size: 18px; 
+                padding: 15px 20px; 
+                text-align: center; 
+                border-bottom: 1px solid #f2f7f3;
+                width: 100%; /* Full width links for menu */
+            }
+
+            /* --- HAMBURGER MENU STYLES --- */
+            /* Show the toggle button only on mobile */
+            #menuToggle {
+                display: block; 
+                width: 30px; 
+                height: 30px; 
+                cursor: pointer; 
+                z-index: 1001; 
+                background: none; 
+                border: none; 
+                padding: 0; 
+                position: absolute; 
+                right: 10px; /* Position the button on the right */
+            }
+
+            .top-header-bar {
+                padding: 0 10px; 
+            }
+
+            /* Styling the three bars */
+            .hamburger-icon, .hamburger-icon::before, .hamburger-icon::after {
+                display: block; 
+                position: absolute; 
+                height: 3px; 
+                width: 100%; 
+                background: #0b3d1c; 
+                border-radius: 3px; 
+                transition: all 0.3s ease-in-out;
+            }
+
+            /* Center the middle bar */
+            .hamburger-icon {
+                top: 50%; 
+                transform: translateY(-50%);
+            }
+
+            /* Top bar */
+            .hamburger-icon::before {
+                content: ''; 
+                top: -9px;
+            }
+
+            /* Bottom bar */
+            .hamburger-icon::after {
+                content: ''; 
+                top: 9px;
+            }
+
+            /* Animation for the X (Active state) */
+            .hamburger-icon.active {
+                background: transparent;
+            }
+
+            .hamburger-icon.active::before {
+                top: 0; 
+                transform: rotate(45deg);
+            }
+
+            .hamburger-icon.active::after {
+                top: 0; 
+                transform: rotate(-45deg);
+            } 
+            /* --- END HAMBURGER MENU STYLES --- */
+
+            .content-card {
+                padding: 20px;
+            }
         }
+        /* --- END MOBILE OPTIMIZATION --- */
     </style>
 </head>
 <body>
