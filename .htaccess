@@ -19,6 +19,3 @@ RewriteCond %{REQUEST_FILENAME} !-d
 # If the path has no dot, internally serve the file with .html
 RewriteRule ^([^/.]+)$ $1.html [L]
 
-
-# Redirect old slug to the new slug
-Redirect 301 /article1.html /the-power-of-compounding
