@@ -1,0 +1,20 @@
+# ------------------------------------------------------------------
+# 1. Enable URL Rewriting
+# ------------------------------------------------------------------
+RewriteEngine On
+
+# ------------------------------------------------------------------
+# 2. Redirect Users from the old .html link to the clean link (SEO-friendly)
+# ------------------------------------------------------------------
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^.]+)\.html\ HTTP/
+RewriteRule ^([^.]+)\.html$ http://%{HTTP_HOST}/$1 [R=301,L]
+
+# ------------------------------------------------------------------
+# 3. Internally Map the Clean URL to the actual .html file
+# ------------------------------------------------------------------
+# Skip rewrite if the request is for a real file (e.g., image.png)
+RewriteCond %{REQUEST_FILENAME} !-f
+# Skip rewrite if the request is for a real directory
+RewriteCond %{REQUEST_FILENAME} !-d
+# If the path has no dot, internally serve the file with .html
+RewriteRule ^([^/.]+)$ $1.html [L]
