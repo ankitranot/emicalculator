@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
 
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-6DJZE54ELY"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6DJZE54ELY"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -112,11 +111,11 @@
             text-align: center;
         }
             
-                @media only screen and (max-width: 767px) {
-      h2 {
-        font-size: 32px !important;
-      }
-    }
+        @media only screen and (max-width: 767px) {
+            h2 {
+                font-size: 32px !important;
+            }
+        }
         
         /* --- ARTICLE SPECIFIC STYLES --- */
         .article-list {
@@ -175,20 +174,73 @@
             border-top: 1px solid #eee;
         }
         
-        /* --- FOOTER STYLES --- */
+        /* --- FOOTER STYLES (Unified Full-Width, No Line) --- */
         .footer {
-            color: #000;
-            text-align: center;
-            padding: 20px 0;
-            font-size: 22px;
-            font-weight: 800;
-            border-top: 6px solid #ff6600; /* Orange Accent */
-            border-radius: 10px 10px 0 0;
-            margin: 25px 0 25px 0;
+            /* Ensures full-width dark background */
             width: 100%;
-            max-width: 950px;
+            max-width: none;
+            background-color: #0b3d1c; /* Dark primary color background */
+            margin: 60px 0 0 0; 
+            padding: 40px 20px; /* Unified padding for the whole section */
+            text-align: center;
             box-sizing: border-box;
+            color: #fff;
         }
+
+        /* CTA elements */
+        .footer h4 {
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 25px; /* Spacing after CTA text */
+            font-weight: 700;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #ff6600; /* Orange accent color */
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .cta-button:hover {
+            background-color: #e55c00; 
+            transform: translateY(-2px);
+        }
+
+        /* Links and Copyright */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px; 
+            margin-bottom: 10px;
+            
+            /* Spacing between CTA button and links */
+            padding-top: 35px; 
+            /* Ensures no line is present */
+            border-top: none; 
+        }
+        .footer-links a {
+            color: #a3b8aa; 
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 5px;
+            transition: color 0.3s ease;
+        }
+        .footer-links a:hover {
+            color: #ff6600; 
+        }
+        .footer p {
+            margin: 5px 0;
+            font-size: 13px;
+            color: #a3b8aa;
+        }
+        /* --- END FOOTER STYLES --- */
         
         /* --- MOBILE OPTIMIZATION --- */
         @media (max-width: 768px) {
@@ -282,8 +334,19 @@
             .article-list {
                 grid-template-columns: 1fr;
             }
+            
+            /* Footer mobile adjustments */
             .footer {
-                font-size: 16px;
+                 padding: 30px 15px; 
+            }
+            .footer h4 {
+                font-size: 20px;
+            }
+            @media (max-width: 480px) {
+                .footer-links {
+                    flex-direction: column;
+                    gap: 15px;
+                }
             }
         }
     </style>
@@ -330,8 +393,18 @@
         </div>
         
     </div>
-
     
+    <footer class="footer">
+        <h4>Ready to plan your financial future?</h4>
+        <a href="index.html" class="cta-button">Calculate Your EMI Now</a>
+
+        <div class="footer-links">
+            <a href="mailto:support@okcalcy.com">Email Us</a>
+            <a href="https://instagram.com/okcalcy" target="_blank" rel="noopener noreferrer">Instagram</a>
+        </div>
+        <p>&copy; 2025 OK CALCY. All rights reserved.</p>
+    </footer>
+
    <script>
         // JAVASCRIPT FOR HAMBURGER MENU (Maintains consistency)
         const menuToggle = document.getElementById('menuToggle');
