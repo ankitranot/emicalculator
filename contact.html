@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
 
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-6DJZE54ELY"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6DJZE54ELY"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -24,7 +23,7 @@
             color: #333;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
+            padding: 0 20px 20px 20px; /* FIX: Removed top padding to move header to top */
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -111,7 +110,7 @@
         /* ======================================= */
         @media (max-width: 768px) {
             body { 
-                padding: 10px; 
+                padding: 0 10px 10px 10px; /* FIX: Removed top padding to move header to top */
             } 
             .top-header-bar {
                 justify-content: space-between; 
