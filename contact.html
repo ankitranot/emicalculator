@@ -88,6 +88,8 @@
             width: 100%;
             box-sizing: border-box;
             line-height: 1.8;
+            /* FIX: Ensure content is left-aligned */
+            text-align: left; 
         }
         .content-card h2 {
             color: #0b3d1c;
@@ -95,57 +97,51 @@
             margin-bottom: 25px;
             border-bottom: 3px solid #ff6600;
             padding-bottom: 10px;
+            /* FIX: Reset text-align and display for the heading/underline */
+            display: block; 
+            text-align: left;
         }
         
-        /* --- CONTACT FORM STYLES --- */
-        .contact-form label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #0b3d1c;
+        /* --- BUTTON LAYOUT AND STYLES --- */
+        .contact-buttons-wrapper {
+            margin: 40px 0 20px 0;
+            /* Use flex to align buttons horizontally */
+            display: flex; 
+            gap: 20px;
+            flex-wrap: wrap; /* Allows buttons to wrap on small screens */
+            align-items: center;
         }
-
-        .contact-form input[type="text"],
-        .contact-form input[type="email"],
-        .contact-form textarea {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-family: inherit;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        .contact-form input[type="text"]:focus,
-        .contact-form input[type="email"]:focus,
-        .contact-form textarea:focus {
-            border-color: #ff6600;
-            outline: none;
-        }
-
-        .contact-form textarea {
-            resize: vertical;
-            min-height: 150px;
-        }
-
-        .contact-form button {
+        
+        .contact-button {
             display: inline-block;
-            background-color: #ff6600; 
-            color: #fff;
             text-decoration: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
+            padding: 18px 40px; 
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 700;
             transition: background-color 0.3s ease, transform 0.2s;
             border: none;
             cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .contact-form button:hover {
+
+        /* Email Button Style (Orange) */
+        .mail-cta {
+            background-color: #ff6600; 
+            color: #fff;
+        }
+        .mail-cta:hover {
             background-color: #e55c00; 
+            transform: translateY(-2px);
+        }
+
+        /* Instagram Button Style (Dark Green - secondary CTA) */
+        .instagram-cta {
+            background-color: #0b3d1c;
+            color: #fff;
+        }
+        .instagram-cta:hover {
+            background-color: #082d13;
             transform: translateY(-2px);
         }
         
@@ -164,6 +160,19 @@
             }
             .content-card h2 { 
                 font-size: 24px; 
+            }
+            
+            /* Stack buttons vertically on small screens */
+            .contact-buttons-wrapper {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+            .contact-button {
+                font-size: 18px;
+                padding: 15px 30px;
+                width: 100%; /* Make buttons full width */
+                box-sizing: border-box;
             }
             
             /* --- TOGGLE MENU STYLES --- */
@@ -250,29 +259,21 @@
     <div class="card-container">
         <div class="content-card">
             <h2>Get In Touch</h2>
-            <p>Whether you have a question about our EMI calculations, need technical support, or want to discuss a partnership, we're here to help. Send us a message using the form below or reach out directly.</p>
+            <p>Whether you have a question about our EMI calculations, need technical support, or want to discuss a partnership, we're here to help. We strive to respond to all inquiries within one business day.</p>
            
-            <p style="font-weight: 600; color: #ff6600; margin-top: 20px;">
-                Direct Email: contact@okcalcy.in
-            </p>
+            <div class="contact-buttons-wrapper">
+                
+                <a href="mailto:contact@okcalcy.in" class="contact-button mail-cta">
+                    ✉️ Email Our Support
+                </a>
 
-            <form class="contact-form" action="mailto:contact@okcalcy.in" method="POST" enctype="text/plain">
-
-                <label for="name">Your Name</label>
-                <input type="text" id="name" name="name" required>
-
-                <label for="email">Your Email</label>
-                <input type="email" id="email" name="email" required>
-
-                <label for="subject">Subject</label>
-                <input type="text" id="subject" name="subject" required>
-
-                <label for="message">Message</label>
-                <textarea id="message" name="message" required></textarea>
-
-                <button type="submit">Send Message</button>
-            </form>
-        </div>
+                <a href="https://instagram.com/okcalcy" target="_blank" rel="noopener noreferrer" class="contact-button instagram-cta">
+                    📸 Follow on Instagram
+                </a>
+                
+            </div>
+            
+            </div>
     </div>
     
     <script>
