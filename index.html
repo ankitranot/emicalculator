@@ -1,7 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6DJZE54ELY"></script>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6DJZE54ELY"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -26,8 +28,7 @@
             color: #333;
             line-height: 1.6;
             margin: 0;
-            /* FIX APPLIED: Top padding set to 0 to remove the space at the top */
-            padding: 0 20px 20px 20px; 
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: flex-start; 
@@ -105,53 +106,6 @@
             margin-top: 0;
             box-sizing: border-box;
         }
-
-        /* --- CONTACT US PAGE STYLES MERGED & REDESIGNED --- */
-        .content-card { 
-            background: #fff;
-            /* Reduced padding for a more compact look */
-            padding: 30px; 
-            border-radius: 18px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            width: 100%;
-            box-sizing: border-box;
-            line-height: 1.6; /* Slightly tighter line height */
-            margin-top: 25px; 
-            margin-bottom: 25px; /* Add margin to separate from the end of the page */
-        }
-        .content-card h2 {
-            color: #0b3d1c;
-            font-size: 28px; /* Slightly smaller heading */
-            margin-bottom: 20px;
-            border-bottom: 3px solid #ff6600;
-            padding-bottom: 8px;
-        }
-        
-        /* New: Grid/Flex container for contact details */
-        .contact-info-grid {
-            display: flex;
-            flex-wrap: wrap; /* Allows wrapping on smaller screens */
-            gap: 30px; /* Space between the two columns */
-            margin-top: 20px;
-            justify-content: space-between;
-        }
-
-        .contact-detail {
-            flex: 1 1 45%; /* Allows two columns on desktop, full width on mobile */
-            min-width: 250px;
-        }
-
-        .contact-detail h3 {
-             color: #ff6600;
-             font-size: 18px; /* Smaller subheading */
-             margin-top: 0;
-             margin-bottom: 5px;
-        }
-        .contact-detail p {
-            margin-bottom: 0;
-            font-size: 15px;
-        }
-        /* --- END MERGED CONTACT STYLES --- */
 
         .card.expanded {
             max-width: 950px; 
@@ -238,7 +192,7 @@
             height: 280px;
             margin-top: 15px;
         }
-        canvas { width: 100 !important; height: 100 !important; }
+        canvas { width: 100% !important; height: 100% !important; }
         
         details {
             margin: 10px 0;
@@ -427,8 +381,7 @@
         @media (max-width: 768px) {
             
             body {
-                /* FIX APPLIED: Top padding set to 0 to remove the space at the top */
-                padding: 0 10px 10px 10px; 
+                padding: 10px; 
             }
             
             /* Hide the desktop navigation */
@@ -513,31 +466,6 @@
             .card.expanded {
                 max-width: 100%;
             }
-
-            /* MOBILE CONTACT CARD ADJUSTMENTS */
-             .content-card { 
-                padding: 20px; /* Further reduced padding */
-            }
-            .content-card h2 { 
-                font-size: 22px; 
-            }
-            .contact-info-grid {
-                flex-direction: column; /* Stacks columns on mobile */
-                gap: 15px; /* Reduced gap for stacking */
-            }
-            .contact-detail {
-                min-width: 100%;
-            }
-            .contact-detail h3 {
-                font-size: 16px;
-            }
-            .content-card p, .content-card ul {
-                font-size: 15px; /* Smaller font for contact details */
-                line-height: 1.6; 
-            }
-            /* END MOBILE CONTACT CARD ADJUSTMENTS */
-
-
             h2 { font-size: 24px; }
             input { padding: 12px; }
             .chart-container {
@@ -570,7 +498,7 @@
     <a href="/" onclick="closeMenu()">Home</a>
     <a href="/articles" onclick="closeMenu()">Articles</a>  
         <a href="/about" onclick="closeMenu()">About us</a>
-    <a href="#contact-section" onclick="closeMenu()">Contact us</a>
+    <a href="/contact" onclick="closeMenu()">Contact us</a>
     <a href="/privacy" onclick="closeMenu()">Privacy Policy</a>
     <a href="/terms" onclick="closeMenu()">Terms & Condition</a>
     </nav>
@@ -623,29 +551,6 @@
         </div>
     </div>
 
-    <div class="card-container" id="contact-section">
-        <div class="content-card">
-            <h2>Contact Us</h2>
-            <p>We are here to assist you with any questions, feedback, or concerns. Please reach out to us using the contact details below.</p>
-            
-            <div class="contact-info-grid">
-                
-                <div class="contact-detail">
-                    <h3>Get In Touch (Email)</h3>
-                    <p>The best way to reach us for support or queries is via email:</p>
-                    <p><strong><a href="mailto:contact@okcalcy.in">contact@okcalcy.in</a></strong></p>
-                    <p>We aim to respond to all inquiries within 1-2 business days.</p>
-                </div>
-                
-                <div class="contact-detail">
-                    <h3>Connect with Us (Social)</h3>
-                    <p>Follow us on social media for updates and announcements:</p>
-                    <p><strong>Instagram: <a href="https://www.instagram.com/okcalcy">@okcalcy</a></strong></p>
-                    <p>Note: We only offer support through email, not social media DMs.</p>
-                </div>
-            </div>
-        </div>
-    </div>
     <div id="downloadModal" class="modal">
         <div class="modal-content">
             <h4>Download Your Amortization Schedule</h4>
@@ -756,7 +661,7 @@
                 formulaPara1: "मानक सूत्र है: EMI = [P x R x (1+R)^N] / [(1+R)^N-1]",
                 formulaPara2: "जहां: <ul><li><b>P</b> = मूल ऋण राशि</li><li><b>R</b> = मासिक ब्याज दर (वार्षिक दर / 12 / 100)</li><li><b>N</b> = महीनों में ऋण अवधि</li></ul>",
                 examplePara: "उदाहरण के लिए, यदि आप 10 साल (120 महीने) के लिए 10.5% की वार्षिक ब्याज दर पर ₹10,00,000 उधार लेते हैं, तो आपकी मासिक ईएमआई लगभग ₹13,493 होगी। इसका मतलब है कि आप ऋण अवधि के दौरान कुल ₹16,19,220 का भुगतान करेंगे, जिसमें से ₹6,19,220 ब्याज होगा।",
-                conclusionPara: "Calculating this manually can be tedious and prone to errors. Our EMI calculator automates this process, providing you with instant, accurate results along with a detailed amortization schedule and visual charts to help you understand your loan repayment journey."
+                conclusionPara: "Calculating this manually can be tedious and prone to errors. Our EMI calculator automates this process, providing you with instant, accurate results along as with a detailed amortization schedule and visual charts to help you understand your loan repayment journey."
             }
         };
 
