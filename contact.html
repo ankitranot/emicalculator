@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6DJZE54ELY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6DJZE54ELY');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | OK CALCY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Common styles for consistent look and feel */
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #f2f7f3;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .top-header-bar {
+            width: 100%;
+            height: 60px; 
+            background-color: transparent; 
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+            z-index: 1000;
+            margin-bottom: 20px; 
+            position: relative; 
+        }
+        .logo-text {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: #0b3d1c; 
+            text-decoration: none;
+            z-index: 1000; 
+        }
+        .top-nav {
+            display: flex;
+            gap: 20px; 
+        }
+        .top-nav a {
+            color: #0b3d1c; 
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+        .top-nav a:hover {
+            color: #ff6600; 
+        }
+        
+        #menuToggle {
+            display: none; 
+        }
+        
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 950px;
+            margin: 0 auto;
+            flex-grow: 1; 
+        }
+        .content-card { 
+            background: #fff;
+            padding: 50px;
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            width: 100%;
+            box-sizing: border-box;
+            line-height: 1.8;
+        }
+        .content-card h2 {
+            color: #0b3d1c;
+            font-size: 32px;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #ff6600;
+            padding-bottom: 10px;
+        }
+        
+        /* --- CONTACT FORM STYLES --- */
+        .contact-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #0b3d1c;
+        }
+
+        .contact-form input[type="text"],
+        .contact-form input[type="email"],
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .contact-form input[type="text"]:focus,
+        .contact-form input[type="email"]:focus,
+        .contact-form textarea:focus {
+            border-color: #ff6600;
+            outline: none;
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .contact-form button {
+            display: inline-block;
+            background-color: #ff6600; 
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .contact-form button:hover {
+            background-color: #e55c00; 
+            transform: translateY(-2px);
+        }
+        
+        /* ======================================= */
+        /* == MOBILE OPTIMIZATION STYLES (< 768px) == */
+        /* ======================================= */
+        @media (max-width: 768px) {
+            body { 
+                padding: 10px; 
+            } 
+            .top-header-bar {
+                padding: 0 10px; 
+            }
+            .content-card { 
+                padding: 30px 20px; 
+            }
+            .content-card h2 { 
+                font-size: 24px; 
+            }
+            
+            /* --- TOGGLE MENU STYLES --- */
+            .top-nav {
+                display: none; 
+                flex-direction: column; 
+                position: fixed; 
+                top: 0; 
+                left: 0; 
+                width: 100%; 
+                height: 100%; 
+                background: #fff; 
+                padding-top: 80px; 
+                box-sizing: border-box; 
+                z-index: 999; 
+                overflow-y: auto; 
+                gap: 0;
+            }
+
+            .top-nav.active {
+                display: flex;
+                align-items: center;    
+                justify-content: flex-start; 
+            }
+
+            .top-nav a {
+                font-size: 18px; 
+                padding: 15px 20px; 
+                text-align: center; 
+                border-bottom: 1px solid #f2f7f3;
+                width: 100%; 
+                margin: 0; 
+            }
+
+            #menuToggle {
+                display: block; 
+                width: 30px; 
+                height: 30px; 
+                position: absolute; 
+                right: 10px; 
+            }
+
+            .hamburger-icon, .hamburger-icon::before, .hamburger-icon::after {
+                display: block; 
+                position: absolute; 
+                height: 3px; 
+                width: 100%; 
+                background: #0b3d1c; 
+                border-radius: 3px; 
+                transition: all 0.3s ease-in-out;
+            }
+
+            .hamburger-icon {
+                top: 50%; 
+                transform: translateY(-50%);
+            }
+
+            .hamburger-icon::before { content: ''; top: -9px; }
+            .hamburger-icon::after { content: ''; top: 9px; }
+            .hamburger-icon.active { background: transparent; }
+            .hamburger-icon.active::before { top: 0; transform: rotate(45deg); }
+            .hamburger-icon.active::after { top: 0; transform: rotate(-45deg); } 
+        }
+        /* --- END MOBILE OPTIMIZATION --- */
+    </style>
+</head>
+<body>
+    <header class="top-header-bar">
+        <a href="index.html" class="logo-text">OK CALCY</a>
+        
+        <button id="menuToggle">
+            <span class="hamburger-icon" id="hamburgerIcon"></span>
+        </button>
+        <nav class="top-nav" id="topNav">
+            <a href="/" onclick="closeMenu()">Home</a>
+            <a href="/articles" onclick="closeMenu()">Articles</a>  
+            <a href="/about" onclick="closeMenu()">About us</a>
+            <a href="/contact" onclick="closeMenu()">Contact us</a>
+            <a href="/privacy" onclick="closeMenu()">Privacy Policy</a>
+            <a href="/terms" onclick="closeMenu()">Terms & Condition</a>
+        </nav>
+    </header>
+
+    <div class="card-container">
+        <div class="content-card">
+            <h2>Get In Touch</h2>
+            <p>Whether you have a question about our EMI calculations, need technical support, or want to discuss a partnership, we're here to help. Send us a message using the form below or reach out directly.</p>
+           
+            <p style="font-weight: 600; color: #ff6600; margin-top: 20px;">
+                Direct Email: support@okcalcy.com
+            </p>
+
+            <form class="contact-form" action="submit_form_endpoint" method="POST">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Your Email</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" required>
+
+                <label for="message">Message</label>
+                <textarea id="message" name="message" required></textarea>
+
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // JAVASCRIPT FOR HAMBURGER MENU 
+        const menuToggle = document.getElementById('menuToggle');
+        const topNav = document.getElementById('topNav');
+        const hamburgerIcon = document.getElementById('hamburgerIcon');
+
+        function toggleMenu() {
+            topNav.classList.toggle('active');
+            const icon = document.getElementById('hamburgerIcon');
+            if (icon) icon.classList.toggle('active');
+            // Prevent scrolling when mobile menu is open
+            document.body.style.overflow = topNav.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        function closeMenu() {
+            topNav.classList.remove('active');
+            const icon = document.getElementById('hamburgerIcon');
+            if (icon) icon.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
+        // Note: The closeMenu function is used by the onclick attributes in the navigation links.
+    </script>
+</body>
+</html>
