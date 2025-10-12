@@ -23,8 +23,7 @@
             color: #333;
             line-height: 1.6;
             margin: 0;
-            /* FIX APPLIED: Top padding is now 0 */
-            padding: 0 20px 20px 20px; 
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -42,21 +41,26 @@
             box-sizing: border-box;
             z-index: 1000;
             margin-bottom: 20px; 
-            /* FIX: Ensure header is a reference point for the absolute positioned menu button */
             position: relative; 
         }
+
         .logo-text {
             margin: 0;
             font-size: 24px;
             font-weight: 700;
             color: #0b3d1c; 
             text-decoration: none;
-            z-index: 1000;
         }
+
+        /* Desktop Nav: Visible and Horizontal */
         .top-nav {
-            display: flex;
+            display: flex; 
             gap: 20px; 
+            position: static; 
+            background: transparent; 
+            padding: 0;
         }
+
         .top-nav a {
             color: #0b3d1c; 
             text-decoration: none;
@@ -65,15 +69,17 @@
             padding: 5px 0;
             transition: color 0.3s ease;
         }
+
         .top-nav a:hover {
             color: #ff6600; 
         }
-        
-        /* FIX: Hide the toggle button by default (desktop view) */
+
+        /* Hamburger button is HIDDEN on desktop by default */
         #menuToggle {
-            display: none; 
+            display: none;
         }
-        
+        /* End Header styles */
+
         .card-container {
             display: flex;
             flex-direction: column;
@@ -82,163 +88,150 @@
             max-width: 950px;
             margin: 0 auto;
         }
+        
         .content-card { 
             background: #fff;
-            padding: 50px;
+            /* FIX APPLIED: Changed top/bottom padding from 50px to 38px to match index.html's .card class. */
+            padding: 38px; 
             border-radius: 18px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             width: 100%;
             box-sizing: border-box;
-            line-height: 1.8;
+            line-height: 1.6; 
+            margin-top: 0; /* Remove extra margin */
         }
+        
         .content-card h2 {
             color: #0b3d1c;
             font-size: 32px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border-bottom: 3px solid #ff6600;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
+            text-align: center;
         }
         .content-card h3 {
              color: #ff6600;
-             margin-top: 30px;
+             font-size: 20px;
+             margin-top: 25px;
+             margin-bottom: 5px;
         }
         .content-card p {
             margin-bottom: 15px;
         }
 
-        /* ======================================= */
-        /* == FIX: MOBILE TOGGLE MENU STYLES (< 768px) == */
-        /* ======================================= */
+        /* --- MOBILE OPTIMIZATION (max-width: 768px) --- */
         @media (max-width: 768px) {
-            body { 
-                /* FIX APPLIED: Top padding is now 0 */
-                padding: 0 10px 10px 10px; 
-            } 
-            .top-header-bar {
-                justify-content: space-between; 
-                padding: 0 10px; 
-            }
-            .logo-text { 
-                margin: 0; 
+            
+            body {
+                padding: 10px; /* Adjusted padding for mobile */
             }
             
-            /* --- OPTIMIZED CARD READABILITY --- */
-            .content-card { 
-                padding: 30px 20px; 
-            }
-            .content-card h2 { 
-                font-size: 24px; 
-            }
-            .content-card p, .content-card ul {
-                font-size: 17px; 
-                line-height: 1.75; 
-            }
-            /* --- END OPTIMIZED CARD READABILITY --- */
-
-            /* --- TOGGLE MENU STYLES --- */
+            /* Hide the desktop navigation */
             .top-nav {
                 display: none; 
-                flex-direction: column; 
+                flex-direction: column;
                 position: fixed; 
-                top: 0; 
-                left: 0; 
-                width: 100%; 
-                height: 100%; 
-                background: #fff; 
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #fff;
                 padding-top: 80px; 
-                box-sizing: border-box; 
+                box-sizing: border-box;
                 z-index: 999; 
-                overflow-y: auto; 
+                overflow-y: auto;
                 transition: opacity 0.3s ease;
                 gap: 0;
             }
 
+            /* Show the mobile navigation when active */
             .top-nav.active {
-                display: flex;
-                align-items: center;    
-                justify-content: flex-start; 
+                display: flex; 
             }
-
+            
             .top-nav a {
                 font-size: 18px; 
-                padding: 15px 20px; 
-                text-align: center; 
-                border-bottom: 1px solid #f2f7f3;
-                width: 100%; 
-                margin: 0; 
+                padding: 15px 20px;
+                text-align: center;
+                border-bottom: 1px solid #f2f7f3; 
             }
 
+            /* --- HAMBURGER MENU STYLES --- */
             /* Show the toggle button */
             #menuToggle {
-                display: block; 
-                width: 30px; 
-                height: 30px; 
-                cursor: pointer; 
-                z-index: 1001; 
-                background: none; 
-                border: none; 
-                padding: 0; 
-                position: absolute; 
+                display: block;
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+                z-index: 1001;
+                background: none;
+                border: none;
+                padding: 0;
+                position: absolute;
                 right: 10px; 
             }
-
             .hamburger-icon, .hamburger-icon::before, .hamburger-icon::after {
-                display: block; 
-                position: absolute; 
-                height: 3px; 
-                width: 100%; 
-                background: #0b3d1c; 
-                border-radius: 3px; 
+                display: block;
+                position: absolute;
+                height: 3px;
+                width: 100%;
+                background: #0b3d1c;
+                border-radius: 3px;
                 transition: all 0.3s ease-in-out;
             }
-
             .hamburger-icon {
-                top: 50%; 
+                top: 50%;
                 transform: translateY(-50%);
             }
-
             .hamburger-icon::before {
-                content: ''; 
+                content: '';
                 top: -9px;
             }
-
             .hamburger-icon::after {
-                content: ''; 
+                content: '';
                 top: 9px;
             }
+            .hamburger-icon.active { background: transparent; }
+            .hamburger-icon.active::before { top: 0; transform: rotate(45deg); }
+            .hamburger-icon.active::after { top: 0; transform: rotate(-45deg); }
+            /* --- END HAMBURGER MENU STYLES --- */
 
-            .hamburger-icon.active {
-                background: transparent;
+            /* Other Mobile Optimizations */
+            .top-header-bar {
+                padding: 0 10px;
             }
 
-            .hamburger-icon.active::before {
-                top: 0; 
-                transform: rotate(45deg);
+             .content-card { 
+                padding: 20px; /* Mobile adjustment */
             }
-
-            .hamburger-icon.active::after {
-                top: 0; 
-                transform: rotate(-45deg);
-            } 
+            .content-card h2 { 
+                font-size: 24px; 
+            }
+            .content-card p {
+                font-size: 15px;
+            }
         }
         /* --- END MOBILE OPTIMIZATION --- */
+
     </style>
 </head>
 <body>
+    
     <header class="top-header-bar">
-        <a href="index.html" class="logo-text">OK CALCY</a>
+        <a href="/index.html" class="logo-text" onclick="closeMenu()">OK CALCY</a>
         
-        <button id="menuToggle">
+        <button id="menuToggle" aria-label="Toggle navigation menu">
             <span class="hamburger-icon" id="hamburgerIcon"></span>
         </button>
-       <nav class="top-nav" id="topNav">
-    <a href="/" onclick="closeMenu()">Home</a>
-    <a href="/articles" onclick="closeMenu()">Articles</a>  
-        <a href="/about" onclick="closeMenu()">About us</a>
-    <a href="/contact" onclick="closeMenu()">Contact us</a>
-    <a href="/privacy" onclick="closeMenu()">Privacy Policy</a>
-    <a href="/terms" onclick="closeMenu()">Terms & Condition</a>
-    </nav>
+        
+        <nav class="top-nav" id="topNav">
+            <a href="/index.html" onclick="closeMenu()">Home</a>
+            <a href="/articles.html" onclick="closeMenu()">Articles</a>  
+            <a href="/about.html" onclick="closeMenu()">About us</a>
+            <a href="/contact.html" onclick="closeMenu()">Contact us</a>
+            <a href="/privacy.html" onclick="closeMenu()">Privacy Policy</a>
+            <a href="/terms.html" onclick="closeMenu()">Terms & Condition</a>
+        </nav>
     </header>
 
     <div class="card-container">
